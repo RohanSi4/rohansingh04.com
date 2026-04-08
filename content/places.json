@@ -1,0 +1,95 @@
+[
+  {
+    "id": "barcelona-2026",
+    "name": "Barcelona",
+    "country": "Spain",
+    "lat": 41.3851,
+    "lng": 2.1734,
+    "visitedDate": "2026-03",
+    "notes": "spring break",
+    "photos": [],
+    "tripSlug": null
+  },
+  {
+    "id": "lisbon-2026",
+    "name": "Lisbon",
+    "country": "Portugal",
+    "lat": 38.7223,
+    "lng": -9.1393,
+    "visitedDate": "2026-03",
+    "notes": "spring break",
+    "photos": [],
+    "tripSlug": null
+  },
+  {
+    "id": "budapest-2026",
+    "name": "Budapest",
+    "country": "Hungary",
+    "lat": 47.4979,
+    "lng": 19.0402,
+    "visitedDate": "2026-03",
+    "notes": "spring break",
+    "photos": [],
+    "tripSlug": null
+  },
+  {
+    "id": "delhi-2019",
+    "name": "Delhi",
+    "country": "India",
+    "lat": 28.6139,
+    "lng": 77.209,
+    "visitedDate": "2019-01",
+    "notes": "family",
+    "photos": [],
+    "tripSlug": null,
+    "_needsDate": true
+  },
+  {
+    "id": "lucknow-2019",
+    "name": "Lucknow",
+    "country": "India",
+    "lat": 26.8467,
+    "lng": 80.9462,
+    "visitedDate": "2019-01",
+    "notes": "family",
+    "photos": [],
+    "tripSlug": null,
+    "_needsDate": true
+  },
+  {
+    "id": "san-jose-2023",
+    "name": "San José",
+    "country": "Costa Rica",
+    "lat": 9.9281,
+    "lng": -84.0907,
+    "visitedDate": "2023-01",
+    "notes": "",
+    "photos": [],
+    "tripSlug": null,
+    "_needsDate": true
+  },
+  {
+    "id": "panama-city-2023",
+    "name": "Panama City",
+    "country": "Panama",
+    "lat": 8.9824,
+    "lng": -79.5199,
+    "visitedDate": "2023-01",
+    "notes": "",
+    "photos": [],
+    "tripSlug": null,
+    "_needsDate": true
+  },
+  {
+    "id": "rio-2023",
+    "name": "Rio de Janeiro",
+    "country": "Brazil",
+    "lat": -22.9068,
+    "lng": -43.1729,
+    "visitedDate": "2023-01",
+    "notes": "",
+    "photos": [],
+    "tripSlug": null,
+    "_needsDate": true
+  }
+]

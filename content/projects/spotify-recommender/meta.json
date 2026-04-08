@@ -1,0 +1,13 @@
+{
+  "slug": "spotify-recommender",
+  "title": "Spotify Recommender",
+  "tagline": "collaborative filtering on listening history",
+  "tags": ["ml", "python"],
+  "startDate": "2024-01",
+  "endDate": "2024-05",
+  "status": "shipped",
+  "featured": true,
+  "githubUrl": "https://github.com/RohanSi4/spotifyrecommender",
+  "liveUrl": null,
+  "subProjects": []
+}

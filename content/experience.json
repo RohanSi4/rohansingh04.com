@@ -1,0 +1,42 @@
+[
+  {
+    "id": "freddie-mac-2025",
+    "title": "Software Engineer Intern",
+    "org": "Freddie Mac",
+    "startDate": "2025-05",
+    "endDate": "2025-08",
+    "location": "McLean, VA",
+    "bullets": [
+      "Built GraphQL endpoints reducing API payload size 60%",
+      "Authored Playwright POC that ran 4x faster than existing Selenium suite",
+      "Python + Jenkins pipeline cut data refresh from 2hr to 10min",
+      "Stack: Spring Boot, GraphQL, Python, Jenkins, AWS S3, MongoDB"
+    ]
+  },
+  {
+    "id": "biocomplexity-2024",
+    "title": "AI/ML Engineer",
+    "org": "Biocomplexity Institute, UVA",
+    "startDate": "2024-11",
+    "endDate": "2025-05",
+    "location": "Charlottesville, VA",
+    "bullets": [
+      "Graph-based anomaly detection on 2M+ node graphs",
+      "Improved AUC-ROC from 0.55 to 0.76",
+      "Stack: cuGraph, NetworkX, Python, supercomputing infrastructure"
+    ]
+  },
+  {
+    "id": "cubic-2024",
+    "title": "Software Engineer Intern",
+    "org": "Cubic Corporation",
+    "startDate": "2024-06",
+    "endDate": "2024-08",
+    "location": "Remote",
+    "bullets": [
+      "Built React + Docusaurus user guide portal for 10,000+ users",
+      "Reduced support tickets 85%",
+      "Stack: React, Docusaurus, AWS"
+    ]
+  }
+]

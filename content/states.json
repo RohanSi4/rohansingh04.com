@@ -1,0 +1,107 @@
+[
+  { "code": "AL", "name": "Alabama", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "AK", "name": "Alaska", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "AZ", "name": "Arizona", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "AR", "name": "Arkansas", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "CA", "name": "California", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  {
+    "code": "CO", "name": "Colorado", "visited": true,
+    "notes": "Denver", "photos": [], "cities": ["Denver"], "visitedDate": null
+  },
+  {
+    "code": "CT", "name": "Connecticut", "visited": true,
+    "photos": [], "cities": [], "visitedDate": null
+  },
+  {
+    "code": "DE", "name": "Delaware", "visited": true,
+    "notes": "Rehoboth Beach", "photos": [], "cities": ["Rehoboth Beach"], "visitedDate": null
+  },
+  {
+    "code": "FL", "name": "Florida", "visited": true,
+    "photos": [], "cities": [], "visitedDate": null
+  },
+  {
+    "code": "GA", "name": "Georgia", "visited": true,
+    "photos": [], "cities": [], "visitedDate": null
+  },
+  { "code": "HI", "name": "Hawaii", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "ID", "name": "Idaho", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  {
+    "code": "IL", "name": "Illinois", "visited": true,
+    "notes": "Chicago", "photos": [], "cities": ["Chicago"], "visitedDate": null
+  },
+  { "code": "IN", "name": "Indiana", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "IA", "name": "Iowa", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "KS", "name": "Kansas", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "KY", "name": "Kentucky", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "LA", "name": "Louisiana", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  {
+    "code": "ME", "name": "Maine", "visited": true,
+    "notes": "Portland", "photos": [], "cities": ["Portland"], "visitedDate": null
+  },
+  {
+    "code": "MD", "name": "Maryland", "visited": true,
+    "photos": [], "cities": [], "visitedDate": null
+  },
+  {
+    "code": "MA", "name": "Massachusetts", "visited": true,
+    "notes": "Boston, Natick", "photos": [], "cities": ["Boston", "Natick"], "visitedDate": null
+  },
+  { "code": "MI", "name": "Michigan", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "MN", "name": "Minnesota", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "MS", "name": "Mississippi", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "MO", "name": "Missouri", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "MT", "name": "Montana", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "NE", "name": "Nebraska", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "NV", "name": "Nevada", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "NH", "name": "New Hampshire", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  {
+    "code": "NJ", "name": "New Jersey", "visited": true,
+    "photos": [], "cities": [], "visitedDate": null
+  },
+  { "code": "NM", "name": "New Mexico", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  {
+    "code": "NY", "name": "New York", "visited": true,
+    "notes": "NYC", "photos": [], "cities": ["New York City"], "visitedDate": null
+  },
+  {
+    "code": "NC", "name": "North Carolina", "visited": true,
+    "photos": [], "cities": [], "visitedDate": null
+  },
+  { "code": "ND", "name": "North Dakota", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "OH", "name": "Ohio", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "OK", "name": "Oklahoma", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "OR", "name": "Oregon", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  {
+    "code": "PA", "name": "Pennsylvania", "visited": true,
+    "notes": "Pittsburgh", "photos": [], "cities": ["Pittsburgh"], "visitedDate": null
+  },
+  { "code": "RI", "name": "Rhode Island", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  {
+    "code": "SC", "name": "South Carolina", "visited": true,
+    "notes": "Myrtle Beach", "photos": [], "cities": ["Myrtle Beach"], "visitedDate": null
+  },
+  { "code": "SD", "name": "South Dakota", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "TN", "name": "Tennessee", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "TX", "name": "Texas", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "UT", "name": "Utah", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  { "code": "VT", "name": "Vermont", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  {
+    "code": "VA", "name": "Virginia", "visited": true, "isHome": true,
+    "notes": "home", "photos": [], "cities": ["Charlottesville", "Loudoun County"], "visitedDate": null
+  },
+  { "code": "WA", "name": "Washington", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  {
+    "code": "WV", "name": "West Virginia", "visited": true,
+    "photos": [], "cities": [], "visitedDate": null
+  },
+  {
+    "code": "WI", "name": "Wisconsin", "visited": true,
+    "notes": "semester at UW", "photos": [], "cities": ["Madison"], "visitedDate": null
+  },
+  { "code": "WY", "name": "Wyoming", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  {
+    "code": "DC", "name": "District of Columbia", "visited": true,
+    "photos": [], "cities": ["Washington, DC"], "visitedDate": null
+  }
+]

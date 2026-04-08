@@ -1,0 +1,52 @@
+[
+  {
+    "id": "uva-cs",
+    "type": "school",
+    "title": "BSCS, Data Science minor",
+    "org": "University of Virginia",
+    "startDate": "2024-08",
+    "endDate": "2027-05",
+    "location": "Charlottesville, VA",
+    "summary": "Transferred from UW-Madison. Currently CS 3130, CS 4750 Databases, CS 4501 Carbon Efficient Computing, DS 2004, STS 4500."
+  },
+  {
+    "id": "freddie-mac-2025",
+    "type": "work",
+    "title": "Software Engineer Intern",
+    "org": "Freddie Mac",
+    "startDate": "2025-05",
+    "endDate": "2025-08",
+    "location": "McLean, VA",
+    "summary": "Spring Boot, GraphQL with 60% payload reduction, Playwright POC 4x faster, Python+Jenkins pipeline cut refresh from 2hr to 10min, AWS S3/MongoDB."
+  },
+  {
+    "id": "biocomplexity-2024",
+    "type": "work",
+    "title": "AI/ML Engineer",
+    "org": "Biocomplexity Institute, UVA",
+    "startDate": "2024-11",
+    "endDate": "2025-05",
+    "location": "Charlottesville, VA",
+    "summary": "Graph-based anomaly detection on 2M+ node graphs, AUC-ROC 0.55 to 0.76. cuGraph and NetworkX on supercomputing infrastructure."
+  },
+  {
+    "id": "cubic-2024",
+    "type": "work",
+    "title": "Software Engineer Intern",
+    "org": "Cubic Corporation",
+    "startDate": "2024-06",
+    "endDate": "2024-08",
+    "location": "Remote",
+    "summary": "Built React + Docusaurus user guide portal serving 10,000+ users, 85% support ticket reduction. AWS hosted."
+  },
+  {
+    "id": "uw-madison",
+    "type": "school",
+    "title": "Started CS at UW-Madison",
+    "org": "University of Wisconsin-Madison",
+    "startDate": "2023-08",
+    "endDate": "2024-05",
+    "location": "Madison, WI",
+    "summary": "Transferred to UVA after one year."
+  }
+]

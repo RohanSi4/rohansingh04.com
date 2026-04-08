@@ -1,0 +1,13 @@
+{
+  "slug": "health-tracker-ios",
+  "title": "Health Tracker iOS App",
+  "tagline": "iOS app for logging workouts and health metrics",
+  "tags": ["swift", "ios"],
+  "startDate": "2023-06",
+  "endDate": "2023-12",
+  "status": "archived",
+  "featured": false,
+  "githubUrl": "https://github.com/RohanSi4/Health-Tracker-IOS-App",
+  "liveUrl": null,
+  "subProjects": []
+}

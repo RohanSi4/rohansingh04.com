@@ -1,0 +1,13 @@
+{
+  "slug": "movie-recommender",
+  "title": "Movie Recommender System",
+  "tagline": "LightGBM ranking model with NDCG +11.8%",
+  "tags": ["ml", "go", "python"],
+  "startDate": "2024-01",
+  "endDate": "2024-05",
+  "status": "shipped",
+  "featured": true,
+  "githubUrl": "https://github.com/RohanSi4/MovieReccomenderSystem",
+  "liveUrl": null,
+  "subProjects": []
+}
