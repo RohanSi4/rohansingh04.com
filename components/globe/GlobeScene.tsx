@@ -2,7 +2,7 @@
 
 import { useRef, useState, useCallback } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Stars } from "@react-three/drei";
+import { OrbitControls, Stars, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { latLngToXyz } from "@/lib/geo";
 import type { Place } from "@/lib/types";
@@ -13,14 +13,11 @@ const PIN_OFFSET = 0.04;
 
 // --- Earth sphere ---
 function Earth() {
+  const texture = useTexture("/textures/earth.jpg");
   return (
     <mesh>
       <sphereGeometry args={[GLOBE_R, 64, 64]} />
-      <meshStandardMaterial
-        color="#1a2f3a"
-        roughness={0.8}
-        metalness={0.1}
-      />
+      <meshStandardMaterial map={texture} roughness={0.7} metalness={0.05} />
     </mesh>
   );
 }
@@ -139,8 +136,9 @@ export default function GlobeScene({ places }: Props) {
         onPointerUp={() => setInteracting(false)}
       >
         <color attach="background" args={["#000000"]} />
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[5, 3, 5]} intensity={1.2} />
+        <ambientLight intensity={1.2} />
+        <directionalLight position={[5, 3, 5]} intensity={1.8} />
+        <directionalLight position={[-5, -2, -3]} intensity={0.4} />
         <Stars radius={100} depth={50} count={3000} factor={4} fade />
 
         <AutoRotate paused={interacting || selected !== null}>
