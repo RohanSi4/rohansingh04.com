@@ -13,7 +13,7 @@ const PIN_OFFSET = 0.04;
 
 // --- Earth sphere ---
 function Earth() {
-  const texture = useTexture("/textures/earth.jpg");
+  const texture = useTexture("/textures/earth_day.jpg");
   return (
     <mesh>
       <sphereGeometry args={[GLOBE_R, 64, 64]} />
