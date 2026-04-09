@@ -26,7 +26,9 @@ export function latLngToXyz(
   const theta = (lng * Math.PI) / 180;
   const x = radius * Math.cos(phi) * Math.cos(theta);
   const y = radius * Math.sin(phi);
-  const z = radius * Math.cos(phi) * Math.sin(theta);
+  // Three.js SphereGeometry UV maps longitude via sin(phi+π) = -sin(lng_rad),
+  // so Z must be negated to align pins with the equirectangular texture.
+  const z = -radius * Math.cos(phi) * Math.sin(theta);
   return [x, y, z];
 }
 
@@ -38,7 +40,7 @@ export function xyzToLatLng(
 ): { lat: number; lng: number } {
   const radius = Math.sqrt(x * x + y * y + z * z);
   const lat = (Math.asin(y / radius) * 180) / Math.PI;
-  const lng = (Math.atan2(z, x) * 180) / Math.PI;
+  const lng = -(Math.atan2(z, x) * 180) / Math.PI;
   return { lat, lng };
 }
 

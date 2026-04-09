@@ -37,6 +37,32 @@ function Atmosphere() {
   );
 }
 
+// --- Cloud layer ---
+function CloudLayer() {
+  const texture = useTexture("/textures/clouds.png");
+  const mesh = useRef<THREE.Mesh>(null);
+
+  useFrame((_, delta) => {
+    if (mesh.current) {
+      // clouds drift slightly faster than earth rotation
+      mesh.current.rotation.y += delta * 0.015;
+    }
+  });
+
+  return (
+    <mesh ref={mesh}>
+      <sphereGeometry args={[GLOBE_R * 1.008, 64, 64]} />
+      <meshStandardMaterial
+        alphaMap={texture}
+        color="white"
+        transparent
+        opacity={0.6}
+        depthWrite={false}
+      />
+    </mesh>
+  );
+}
+
 // --- Location pin ---
 function Pin({
   place,
@@ -143,6 +169,7 @@ export default function GlobeScene({ places }: Props) {
 
         <AutoRotate paused={interacting || selected !== null}>
           <Earth />
+          <CloudLayer />
           <Atmosphere />
           {places.map((p) => (
             <Pin
