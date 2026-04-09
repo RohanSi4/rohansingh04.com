@@ -42,3 +42,22 @@ export function daysSince(isoDate: string): number {
   const now = Date.now();
   return Math.floor((now - then) / (1000 * 60 * 60 * 24));
 }
+
+/**
+ * Relative time for live widget display (e.g. "2h ago").
+ * Only used for dynamic health/activity data -- not static copy.
+ */
+export function relativeTime(isoString: string): string {
+  const diffMs = Date.now() - new Date(isoString).getTime();
+  const mins = Math.floor(diffMs / 60_000);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
+/** Format a step count with commas. */
+export function formatSteps(n: number): string {
+  return n.toLocaleString("en-US");
+}
