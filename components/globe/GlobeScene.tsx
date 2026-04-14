@@ -319,6 +319,7 @@ export default function GlobeScene({ places: initialPlaces, isAdmin }: Props) {
   const [editing, setEditing] = useState(false);
   const [adding, setAdding] = useState(false);
   const [interacting, setInteracting] = useState(false);
+  const rotateTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleHover = useCallback((p: Place | null) => setHovered(p), []);
   const handleClick = useCallback((p: Place) => {
@@ -352,8 +353,13 @@ export default function GlobeScene({ places: initialPlaces, isAdmin }: Props) {
       <Canvas
         camera={{ position: [0, 0, 4], fov: 45 }}
         gl={{ antialias: true }}
-        onPointerDown={() => setInteracting(true)}
-        onPointerUp={() => setInteracting(false)}
+        onPointerDown={() => {
+          if (rotateTimer.current) clearTimeout(rotateTimer.current);
+          setInteracting(true);
+        }}
+        onPointerUp={() => {
+          rotateTimer.current = setTimeout(() => setInteracting(false), 5000);
+        }}
       >
         <color attach="background" args={["#000000"]} />
         <ambientLight intensity={1.2} />
