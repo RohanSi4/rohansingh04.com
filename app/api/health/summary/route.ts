@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
+import { getHealthKV } from "@/lib/kv-data";
+import { healthMock } from "@/lib/health-mock";
 
-// stub -- real implementation in phase 5
 export async function GET() {
-  return NextResponse.json(
-    { error: "not implemented" },
-    { status: 501 }
-  );
+  const data = await getHealthKV();
+  return NextResponse.json(data ?? healthMock);
 }

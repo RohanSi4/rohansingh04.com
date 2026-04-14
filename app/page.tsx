@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { healthMock } from "@/lib/health-mock";
+import { getHealthKV } from "@/lib/kv-data";
 import { getFeaturedProjects } from "@/lib/content";
 import HealthStatusLine from "@/components/widgets/HealthStatusLine";
 import HealthHeroCards from "@/components/widgets/HealthHeroCards";
@@ -15,10 +16,12 @@ export const metadata: Metadata = {
   description: "cs student at uva. building things.",
 };
 
-export default function HomePage() {
-  // phase 5: replace healthMock with a fetch to /api/health/summary
-  const health = healthMock;
-  const featured = getFeaturedProjects().slice(0, 3);
+export default async function HomePage() {
+  const [healthKV, featured] = await Promise.all([
+    getHealthKV(),
+    Promise.resolve(getFeaturedProjects().slice(0, 3)),
+  ]);
+  const health = healthKV ?? healthMock;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">

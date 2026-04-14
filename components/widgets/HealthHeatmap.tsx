@@ -25,6 +25,8 @@ type TooltipState = {
 export default function HealthHeatmap({ heatmap }: Props) {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
 
+  if (!heatmap || heatmap.length === 0) return null;
+
   // heatmap[0] = oldest day. figure out which day-of-week it starts on
   // so we can offset the grid correctly (same layout as GitHub's heatmap)
   const firstDate = new Date(heatmap[0].date + "T12:00:00Z");
