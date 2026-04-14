@@ -34,3 +34,11 @@ export async function getHealthKV(): Promise<HealthSummary | null> {
 export async function setHealthKV(data: HealthSummary): Promise<void> {
   await kv.set("health", data);
 }
+
+export async function getBestStreakKV(): Promise<number> {
+  return (await kv.get<number>("health:bestStreak")) ?? 0;
+}
+
+export async function setBestStreakKV(n: number): Promise<void> {
+  await kv.set("health:bestStreak", n);
+}
