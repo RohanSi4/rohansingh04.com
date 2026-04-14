@@ -7,12 +7,11 @@ export const metadata: Metadata = {
   description: "places rohan has visited",
 };
 
-export default function TravelListPage() {
-  const places = getPlaces().sort((a, b) =>
+export default async function TravelListPage() {
+  const places = (await getPlaces()).sort((a, b) =>
     b.visitedDate.localeCompare(a.visitedDate)
   );
 
-  // group by year
   const byYear = places.reduce<Record<string, typeof places>>((acc, p) => {
     const year = p.visitedDate.slice(0, 4);
     (acc[year] ??= []).push(p);

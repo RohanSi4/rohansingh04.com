@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPlaces } from "@/lib/content";
+import { isAdmin } from "@/lib/admin-auth";
 import GlobeLoader from "@/components/globe/GlobeLoader";
 
 export const metadata: Metadata = {
@@ -8,12 +9,12 @@ export const metadata: Metadata = {
   description: "places rohan has been",
 };
 
-export default function GlobePage() {
-  const places = getPlaces();
+export default async function GlobePage() {
+  const [places, admin] = await Promise.all([getPlaces(), isAdmin()]);
 
   return (
     <div className="relative w-full h-[calc(100vh-3.5rem)] bg-black">
-      <GlobeLoader places={places} />
+      <GlobeLoader places={places} isAdmin={admin} />
       <Link
         href="/travel-list"
         className="absolute bottom-6 left-6 text-white/40 hover:text-white/70 text-sm transition-colors font-mono"

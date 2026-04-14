@@ -23,12 +23,14 @@ export function getHistory(): HistoryEntry[] {
   return readJson<HistoryEntry[]>("history.json");
 }
 
-export function getPlaces(): Place[] {
-  return readJson<Place[]>("places.json");
+export async function getPlaces(): Promise<Place[]> {
+  const { getPlacesKV } = await import("./kv-data");
+  return getPlacesKV();
 }
 
-export function getStates(): StateEntry[] {
-  return readJson<StateEntry[]>("states.json");
+export async function getStates(): Promise<StateEntry[]> {
+  const { getStatesKV } = await import("./kv-data");
+  return getStatesKV();
 }
 
 /** Return all project meta.json files, sorted by startDate desc.

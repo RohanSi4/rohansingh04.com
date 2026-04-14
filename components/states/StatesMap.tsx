@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { StateEntry } from "@/lib/types";
+import PhotoUpload from "@/components/admin/PhotoUpload";
 
 // tile grid layout: [col, row] (0-indexed, 12 cols × 9 rows)
 // West coast on left, East coast on right. AK/HI bottom-left.
@@ -41,22 +42,53 @@ const ROWS = 9;
 const W = COLS * CELL + (COLS - 1) * GAP;
 const H = ROWS * CELL + (ROWS - 1) * GAP;
 
-function cx(col: number) {
-  return col * (CELL + GAP);
-}
-function cy(row: number) {
-  return row * (CELL + GAP);
-}
+function cx(col: number) { return col * (CELL + GAP); }
+function cy(row: number) { return row * (CELL + GAP); }
 
 interface Props {
   states: StateEntry[];
+  isAdmin: boolean;
 }
 
-export default function StatesMap({ states }: Props) {
+export default function StatesMap({ states: initialStates, isAdmin }: Props) {
+  const [states, setStates] = useState<StateEntry[]>(initialStates);
   const [selected, setSelected] = useState<StateEntry | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [editForm, setEditForm] = useState<StateEntry | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const byCode = Object.fromEntries(states.map((s) => [s.code, s]));
   const visitedCount = states.filter((s) => s.visited).length;
+
+  function openEdit(state: StateEntry) {
+    setEditForm({ ...state });
+    setEditing(true);
+  }
+
+  function setField(field: string, value: unknown) {
+    setEditForm((f) => f ? { ...f, [field]: value } : f);
+  }
+
+  async function saveEdit() {
+    if (!editForm) return;
+    setSaving(true);
+    const res = await fetch(`/api/admin/states/${editForm.code}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editForm),
+    });
+    if (res.ok) {
+      const updated: StateEntry = await res.json();
+      setStates((ss) => ss.map((s) => s.code === updated.code ? updated : s));
+      setSelected(updated);
+      setEditing(false);
+    }
+    setSaving(false);
+  }
+
+  function removePhoto(url: string) {
+    setEditForm((f) => f ? { ...f, photos: (f.photos ?? []).filter((p) => p !== url) } : f);
+  }
 
   return (
     <div>
@@ -87,11 +119,7 @@ export default function StatesMap({ states }: Props) {
                 aria-label={state?.name ?? code}
               >
                 <rect
-                  x={x}
-                  y={y}
-                  width={CELL}
-                  height={CELL}
-                  rx={4}
+                  x={x} y={y} width={CELL} height={CELL} rx={4}
                   className={
                     visited
                       ? "fill-accent opacity-80 hover:opacity-100 transition-opacity"
@@ -101,10 +129,8 @@ export default function StatesMap({ states }: Props) {
                   strokeWidth={1}
                 />
                 <text
-                  x={x + CELL / 2}
-                  y={y + CELL / 2 + 1}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
+                  x={x + CELL / 2} y={y + CELL / 2 + 1}
+                  textAnchor="middle" dominantBaseline="middle"
                   className="font-mono select-none pointer-events-none"
                   fontSize={10}
                   fill={visited ? "var(--bg)" : "var(--muted)"}
@@ -121,45 +147,139 @@ export default function StatesMap({ states }: Props) {
       {selected && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={() => setSelected(null)}
+          onClick={() => { setSelected(null); setEditing(false); }}
         >
           <div
-            className="bg-bg border border-border rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl"
+            className="bg-bg border border-border rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h2 className="font-serif text-xl">{selected.name}</h2>
-                <p className="text-xs font-mono text-muted mt-1">
-                  {selected.code}
-                </p>
+                <p className="text-xs font-mono text-muted mt-1">{selected.code}</p>
               </div>
               <button
-                onClick={() => setSelected(null)}
+                onClick={() => { setSelected(null); setEditing(false); }}
                 className="text-muted hover:text-fg transition-colors text-lg leading-none ml-4"
                 aria-label="close"
-              >
-                ×
-              </button>
+              >×</button>
             </div>
 
-            {selected.visited ? (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-accent inline-block" />
-                  <span className="text-sm text-accent">visited</span>
+            {!editing ? (
+              <>
+                {selected.visited ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-accent inline-block" />
+                      <span className="text-sm text-accent">visited</span>
+                    </div>
+                    {selected.visitedDate && (
+                      <p className="text-sm text-muted">{selected.visitedDate}</p>
+                    )}
+                    {selected.cities && selected.cities.length > 0 && (
+                      <p className="text-sm text-muted">{selected.cities.join(", ")}</p>
+                    )}
+                    {selected.notes && (
+                      <p className="text-sm text-muted">{selected.notes}</p>
+                    )}
+                    {selected.photos && selected.photos.length > 0 && (
+                      <div className="grid grid-cols-3 gap-1 mt-2">
+                        {selected.photos.map((url) => (
+                          <img key={url} src={url} alt="" className="w-full aspect-square object-cover rounded" />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted">not yet visited</p>
+                )}
+                {isAdmin && (
+                  <button
+                    onClick={() => openEdit(selected)}
+                    className="mt-4 w-full text-xs font-mono text-muted hover:text-fg border border-border hover:border-fg/30 rounded py-1.5 transition-colors"
+                  >
+                    edit
+                  </button>
+                )}
+              </>
+            ) : editForm && (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <label className="text-xs font-mono text-muted">visited</label>
+                  <button
+                    onClick={() => setField("visited", !editForm.visited)}
+                    className={`w-10 h-5 rounded-full transition-colors ${editForm.visited ? "bg-accent" : "bg-surface border border-border"}`}
+                  >
+                    <span className={`block w-4 h-4 rounded-full bg-white mx-auto transition-transform ${editForm.visited ? "translate-x-2.5" : "-translate-x-2.5"}`} />
+                  </button>
                 </div>
-                {selected.visitedDate && (
-                  <p className="text-sm text-muted">{selected.visitedDate}</p>
+
+                <div>
+                  <label className="text-[10px] font-mono text-muted uppercase">visited date</label>
+                  <input
+                    value={editForm.visitedDate ?? ""}
+                    onChange={(e) => setField("visitedDate", e.target.value)}
+                    placeholder="YYYY-MM"
+                    className="w-full bg-surface border border-border rounded px-2 py-1 text-xs font-mono focus:outline-none focus:border-accent mt-0.5"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-mono text-muted uppercase">cities (comma separated)</label>
+                  <input
+                    value={(editForm.cities ?? []).join(", ")}
+                    onChange={(e) => setField("cities", e.target.value.split(",").map((s) => s.trim()).filter(Boolean))}
+                    className="w-full bg-surface border border-border rounded px-2 py-1 text-xs font-mono focus:outline-none focus:border-accent mt-0.5"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-mono text-muted uppercase">notes</label>
+                  <input
+                    value={editForm.notes ?? ""}
+                    onChange={(e) => setField("notes", e.target.value)}
+                    className="w-full bg-surface border border-border rounded px-2 py-1 text-xs font-mono focus:outline-none focus:border-accent mt-0.5"
+                  />
+                </div>
+
+                {(editForm.photos ?? []).length > 0 && (
+                  <div>
+                    <label className="text-[10px] font-mono text-muted uppercase">photos</label>
+                    <div className="grid grid-cols-3 gap-1 mt-1">
+                      {(editForm.photos ?? []).map((url) => (
+                        <div key={url} className="relative group">
+                          <img src={url} alt="" className="w-full aspect-square object-cover rounded" />
+                          <button
+                            onClick={() => removePhoto(url)}
+                            className="absolute inset-0 bg-black/60 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center"
+                          >×</button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
-                {selected.cities && selected.cities.length > 0 && (
-                  <p className="text-sm text-muted">
-                    {selected.cities.join(", ")}
-                  </p>
-                )}
+
+                <PhotoUpload
+                  folder={`states/${editForm.code.toLowerCase()}`}
+                  onUploaded={(url) => setField("photos", [...(editForm.photos ?? []), url])}
+                />
+
+                <div className="flex gap-2 pt-1">
+                  <button
+                    onClick={saveEdit}
+                    disabled={saving}
+                    className="flex-1 bg-accent text-bg text-xs font-mono py-1.5 rounded hover:opacity-90 disabled:opacity-40"
+                  >
+                    {saving ? "saving..." : "save"}
+                  </button>
+                  <button
+                    onClick={() => setEditing(false)}
+                    className="px-3 text-muted border border-border text-xs font-mono py-1.5 rounded hover:border-fg/30"
+                  >
+                    cancel
+                  </button>
+                </div>
               </div>
-            ) : (
-              <p className="text-sm text-muted">not yet visited</p>
             )}
           </div>
         </div>

@@ -12,6 +12,12 @@ const GlobeScene = dynamic(() => import("./GlobeScene"), {
   ),
 });
 
-export default function GlobeLoader({ places }: { places: Place[] }) {
-  return <GlobeScene places={places} />;
+export default function GlobeLoader({
+  places,
+  isAdmin,
+}: {
+  places: Place[];
+  isAdmin: boolean;
+}) {
+  return <GlobeScene places={places} isAdmin={isAdmin} />;
 }
