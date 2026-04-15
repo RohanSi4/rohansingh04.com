@@ -3,11 +3,10 @@ export type HealthSummary = {
 
   today: {
     steps: number;
-    lastWorkout: {
-      type: string;       // e.g. "Traditional Strength Training"
-      durationMin: number;
-      endedAt: string;    // ISO timestamp
-    } | null;
+    exerciseMinutes: number;
+    activeCalories: number;
+    distanceMi: number;
+    restingHeartRate: number | null;
   };
 
   streak: {
@@ -16,43 +15,29 @@ export type HealthSummary = {
   };
 
   thisMonth: {
-    workouts: number;
-    workoutsDeltaVsLastMonth: number; // signed integer
-    miles: number;
-    sportBreakdown: Record<string, number>; // e.g. { "Lift": 12, "Run": 4 }
-    weeklyBars: number[];               // workouts per week, length 4 or 5
+    activeDays: number;
+    activeDaysDeltaVsLastMonth: number;
+    distanceMi: number;
+    activeCalories: number;
+    weeklyMinutes: number[]; // exercise minutes per week, length 4
   };
 
   thisYear: {
-    miles: number;
-    workouts: number;
+    distanceMi: number;
+    activeDays: number;
   };
 
   allTime: {
-    workouts: number;
-    sinceDate: string; // ISO date -- Nov 2023 for rohan
+    activeDays: number;
+    sinceDate: string;
   };
 
   // exactly 365 entries, ordered oldest to newest
   heatmap: Array<{
-    date: string;         // YYYY-MM-DD
-    intensity: number;    // 0-4, github style (0 = rest, 4 = max effort)
-    primaryType: string | null;
+    date: string;          // YYYY-MM-DD
+    intensity: number;     // 0-4 based on exercise minutes
+    exerciseMinutes: number;
   }>;
-
-  sportMix90d: Record<string, number>; // sport -> workout count
-
-  recentWorkouts: Array<{
-    type: string;
-    durationMin: number;
-    distanceMi: number | null;
-    endedAt: string; // ISO timestamp
-  }>; // last 5
-
-  // future fields -- not in v1. shortcut won't send them, components won't
-  // render them. defined here so adding them later requires no schema migration.
-  restingHeartRate?: number; // bpm
-  vo2Max?: number;           // mL/kg/min
 };
 
 // project meta.json shape

@@ -6,7 +6,6 @@ import HealthStatusLine from "@/components/widgets/HealthStatusLine";
 import HealthHeroCards from "@/components/widgets/HealthHeroCards";
 import HealthHeatmap from "@/components/widgets/HealthHeatmap";
 import HealthSportMix from "@/components/widgets/HealthSportMix";
-import HealthRecentWorkouts from "@/components/widgets/HealthRecentWorkouts";
 import SpotifyNowPlaying from "@/components/widgets/SpotifyNowPlaying";
 import GithubLatestCommit from "@/components/widgets/GithubLatestCommit";
 import ProjectCard from "@/components/projects/ProjectCard";
@@ -32,7 +31,6 @@ export default async function HomePage() {
         <HealthHeroCards data={health} />
         <HealthHeatmap heatmap={health.heatmap} />
         <HealthSportMix data={health} />
-        <HealthRecentWorkouts workouts={health.recentWorkouts} />
       </section>
 
       {/* ── live widgets ───────────────────────────────────────── */}

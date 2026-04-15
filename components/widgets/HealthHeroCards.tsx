@@ -5,7 +5,6 @@ interface Props {
   data: HealthSummary;
 }
 
-// furthest city from Charlottesville the year's mileage has "reached"
 const DESTINATIONS = [
   { city: "richmond, va", miles: 70 },
   { city: "washington, dc", miles: 120 },
@@ -29,7 +28,7 @@ interface CardProps {
   label: string;
   value: string;
   sub: string;
-  delta?: number; // signed, shown as +2 or -1
+  delta?: number;
 }
 
 function StatCard({ label, value, sub, delta }: CardProps) {
@@ -40,11 +39,7 @@ function StatCard({ label, value, sub, delta }: CardProps) {
       <div className="mt-2 flex items-center gap-2">
         <p className="text-xs text-muted">{sub}</p>
         {delta !== undefined && delta !== 0 && (
-          <span
-            className={`text-xs font-mono ${
-              delta > 0 ? "text-accent" : "text-muted"
-            }`}
-          >
+          <span className={`text-xs font-mono ${delta > 0 ? "text-accent" : "text-muted"}`}>
             {delta > 0 ? `+${delta}` : delta}
           </span>
         )}
@@ -60,19 +55,19 @@ export default function HealthHeroCards({ data }: Props) {
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
       <StatCard
         label="this month"
-        value={String(thisMonth.workouts)}
-        sub="workouts"
-        delta={thisMonth.workoutsDeltaVsLastMonth}
+        value={String(thisMonth.activeDays)}
+        sub="active days"
+        delta={thisMonth.activeDaysDeltaVsLastMonth}
       />
       <StatCard
         label="this year"
-        value={thisYear.miles.toFixed(1)}
-        sub={getCityEquivalent(thisYear.miles)}
+        value={thisYear.distanceMi.toFixed(1)}
+        sub={getCityEquivalent(thisYear.distanceMi)}
       />
       <StatCard
         label="all time"
-        value={String(allTime.workouts)}
-        sub={`since ${formatDate(allTime.sinceDate)}`}
+        value={String(allTime.activeDays)}
+        sub={`active days since ${formatDate(allTime.sinceDate)}`}
       />
       <StatCard
         label="streak"

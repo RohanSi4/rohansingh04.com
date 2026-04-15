@@ -1,146 +1,121 @@
 import type { HealthSummary } from "./types";
 
-export type RawWorkout = {
-  type: string;
-  durationMin: number;
-  distanceMi: number | null;
-  endedAt: string; // ISO timestamp
+export type DailyEntry = {
+  date: string; // YYYY-MM-DD
+  steps: number;
+  exerciseMinutes: number;
+  activeCalories: number;
+  distanceMi: number;
+  restingHeartRate: number | null;
 };
 
-export type RawIngest = {
-  steps: number;
-  workouts: RawWorkout[];
-};
+// What the iOS shortcut sends
+export type RawIngest = DailyEntry;
 
 function toDateStr(d: Date): string {
   return d.toISOString().split("T")[0];
 }
 
-function computeStreak(workoutDates: Set<string>, now: Date): number {
+function minutesToIntensity(mins: number): number {
+  if (mins === 0) return 0;
+  if (mins < 21) return 1;
+  if (mins < 41) return 2;
+  if (mins < 61) return 3;
+  return 4;
+}
+
+function computeStreak(byDate: Record<string, DailyEntry>, now: Date): number {
   let streak = 0;
   const d = new Date(now);
-  // if no workout today yet, start from yesterday
-  if (!workoutDates.has(toDateStr(d))) d.setDate(d.getDate() - 1);
-  while (workoutDates.has(toDateStr(d))) {
+  if (!byDate[toDateStr(d)]?.exerciseMinutes) d.setDate(d.getDate() - 1);
+  while (byDate[toDateStr(d)]?.exerciseMinutes > 0) {
     streak++;
     d.setDate(d.getDate() - 1);
   }
   return streak;
 }
 
-function computeIntensity(workouts: RawWorkout[]): number {
-  if (workouts.length === 0) return 0;
-  const totalMin = workouts.reduce((s, w) => s + w.durationMin, 0);
-  if (workouts.length >= 2 || totalMin >= 90) return 4;
-  if (totalMin >= 60) return 3;
-  if (totalMin >= 30) return 2;
-  return 1;
-}
-
-function buildHeatmap(byDate: Record<string, RawWorkout[]>, now: Date): HealthSummary["heatmap"] {
+function buildHeatmap(byDate: Record<string, DailyEntry>, now: Date): HealthSummary["heatmap"] {
   const entries: HealthSummary["heatmap"] = [];
   const d = new Date(now);
   d.setDate(d.getDate() - 364);
   for (let i = 0; i < 365; i++) {
     const date = toDateStr(d);
-    const day = byDate[date] ?? [];
-    entries.push({ date, intensity: computeIntensity(day), primaryType: day[0]?.type ?? null });
+    const entry = byDate[date];
+    const mins = entry?.exerciseMinutes ?? 0;
+    entries.push({ date, intensity: minutesToIntensity(mins), exerciseMinutes: mins });
     d.setDate(d.getDate() + 1);
   }
   return entries;
 }
 
-function weeklyBarsForMonth(workouts: RawWorkout[], now: Date): number[] {
+function weeklyMinutesForMonth(entries: DailyEntry[]): number[] {
   const bars = [0, 0, 0, 0];
-  for (const w of workouts) {
-    const day = new Date(w.endedAt).getDate() - 1; // 0-indexed
-    bars[Math.min(Math.floor(day / 7), 3)]++;
+  for (const e of entries) {
+    const day = new Date(e.date + "T12:00:00Z").getUTCDate() - 1;
+    bars[Math.min(Math.floor(day / 7), 3)] += e.exerciseMinutes;
   }
   return bars;
 }
 
-export function computeHealthSummary(raw: RawIngest, prevBestStreak: number): HealthSummary {
+export function computeHealthSummary(log: DailyEntry[], prevBestStreak: number): HealthSummary {
   const now = new Date();
+  const byDate: Record<string, DailyEntry> = {};
+  for (const e of log) byDate[e.date] = e;
 
-  // sort newest first
-  const sorted = [...raw.workouts].sort(
-    (a, b) => new Date(b.endedAt).getTime() - new Date(a.endedAt).getTime()
-  );
+  const today = byDate[toDateStr(now)];
 
-  // group by date
-  const byDate: Record<string, RawWorkout[]> = {};
-  for (const w of sorted) {
-    const date = toDateStr(new Date(w.endedAt));
-    (byDate[date] ??= []).push(w);
-  }
-  const workoutDates = new Set(Object.keys(byDate));
-
-  // streak
-  const currentStreak = computeStreak(workoutDates, now);
-  const bestStreak = Math.max(prevBestStreak, currentStreak);
-
-  // month boundaries
   const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   const thisYearStart = new Date(now.getFullYear(), 0, 1);
-  const ago90 = new Date(now); ago90.setDate(ago90.getDate() - 90);
 
-  const thisMonth = sorted.filter(w => new Date(w.endedAt) >= thisMonthStart);
-  const lastMonth = sorted.filter(w => {
-    const d = new Date(w.endedAt);
+  const thisMonth = log.filter(e => new Date(e.date + "T12:00:00Z") >= thisMonthStart);
+  const lastMonth = log.filter(e => {
+    const d = new Date(e.date + "T12:00:00Z");
     return d >= lastMonthStart && d < thisMonthStart;
   });
-  const thisYear = sorted.filter(w => new Date(w.endedAt) >= thisYearStart);
-  const last90 = sorted.filter(w => new Date(w.endedAt) >= ago90);
+  const thisYear = log.filter(e => new Date(e.date + "T12:00:00Z") >= thisYearStart);
 
-  const sportBreakdown: Record<string, number> = {};
-  for (const w of thisMonth) sportBreakdown[w.type] = (sportBreakdown[w.type] ?? 0) + 1;
+  const thisMonthActive = thisMonth.filter(e => e.exerciseMinutes > 0);
+  const lastMonthActive = lastMonth.filter(e => e.exerciseMinutes > 0);
 
-  const sportMix90d: Record<string, number> = {};
-  for (const w of last90) sportMix90d[w.type] = (sportMix90d[w.type] ?? 0) + 1;
+  const currentStreak = computeStreak(byDate, now);
+  const bestStreak = Math.max(prevBestStreak, currentStreak);
 
-  const sinceDate = sorted.length > 0
-    ? toDateStr(new Date(sorted[sorted.length - 1].endedAt))
-    : toDateStr(now);
+  const sorted = [...log].sort((a, b) => a.date.localeCompare(b.date));
+  const sinceDate = sorted[0]?.date ?? toDateStr(now);
 
   return {
     updatedAt: now.toISOString(),
 
     today: {
-      steps: raw.steps,
-      lastWorkout: sorted[0]
-        ? { type: sorted[0].type, durationMin: sorted[0].durationMin, endedAt: sorted[0].endedAt }
-        : null,
+      steps: today?.steps ?? 0,
+      exerciseMinutes: today?.exerciseMinutes ?? 0,
+      activeCalories: today?.activeCalories ?? 0,
+      distanceMi: today?.distanceMi ?? 0,
+      restingHeartRate: today?.restingHeartRate ?? null,
     },
 
     streak: { currentDays: currentStreak, bestDays: bestStreak },
 
     thisMonth: {
-      workouts: thisMonth.length,
-      workoutsDeltaVsLastMonth: thisMonth.length - lastMonth.length,
-      miles: Math.round(thisMonth.reduce((s, w) => s + (w.distanceMi ?? 0), 0) * 10) / 10,
-      sportBreakdown,
-      weeklyBars: weeklyBarsForMonth(thisMonth, now),
+      activeDays: thisMonthActive.length,
+      activeDaysDeltaVsLastMonth: thisMonthActive.length - lastMonthActive.length,
+      distanceMi: Math.round(thisMonth.reduce((s, e) => s + e.distanceMi, 0) * 10) / 10,
+      activeCalories: Math.round(thisMonth.reduce((s, e) => s + e.activeCalories, 0)),
+      weeklyMinutes: weeklyMinutesForMonth(thisMonth),
     },
 
     thisYear: {
-      miles: Math.round(thisYear.reduce((s, w) => s + (w.distanceMi ?? 0), 0) * 10) / 10,
-      workouts: thisYear.length,
+      distanceMi: Math.round(thisYear.reduce((s, e) => s + e.distanceMi, 0) * 10) / 10,
+      activeDays: thisYear.filter(e => e.exerciseMinutes > 0).length,
     },
 
     allTime: {
-      workouts: sorted.length,
+      activeDays: log.filter(e => e.exerciseMinutes > 0).length,
       sinceDate,
     },
 
     heatmap: buildHeatmap(byDate, now),
-    sportMix90d,
-
-    recentWorkouts: sorted.slice(0, 5).map(w => ({
-      type: w.type,
-      durationMin: w.durationMin,
-      distanceMi: w.distanceMi,
-      endedAt: w.endedAt,
-    })),
   };
 }

@@ -139,7 +139,7 @@ export default function HealthHeatmap({ heatmap }: Props) {
             <p className="text-muted">
               {tooltip.entry.intensity === 0
                 ? "rest"
-                : (tooltip.entry.primaryType ?? "workout").toLowerCase()}
+                : `${tooltip.entry.exerciseMinutes} min active`}
             </p>
           </div>
         )}

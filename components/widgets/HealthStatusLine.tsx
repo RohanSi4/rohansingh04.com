@@ -1,5 +1,5 @@
 import type { HealthSummary } from "@/lib/types";
-import { formatSteps, relativeTime } from "@/lib/dates";
+import { formatSteps } from "@/lib/dates";
 
 interface Props {
   data: HealthSummary;
@@ -7,14 +7,14 @@ interface Props {
 
 export default function HealthStatusLine({ data }: Props) {
   const { today, streak } = data;
-  const steps = formatSteps(today.steps);
+  const parts: string[] = [`${formatSteps(today.steps)} steps`];
 
-  const parts: string[] = [`${steps} steps`];
+  if (today.exerciseMinutes > 0) {
+    parts.push(`${today.exerciseMinutes} min active`);
+  }
 
-  if (today.lastWorkout) {
-    const type = today.lastWorkout.type.toLowerCase();
-    const ago = relativeTime(today.lastWorkout.endedAt);
-    parts.push(`last workout: ${type}, ${ago}`);
+  if (today.restingHeartRate) {
+    parts.push(`${today.restingHeartRate} bpm resting`);
   }
 
   if (streak.currentDays > 0) {
