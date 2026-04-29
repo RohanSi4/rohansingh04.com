@@ -1,13 +1,13 @@
 {
   "slug": "movie-recommender",
   "title": "Movie Recommender System",
-  "tagline": "LightGBM ranking model with NDCG +11.8%",
-  "tags": ["ml", "go", "python"],
+  "tagline": "production-style movie ranking system with offline ML and a Go serving layer",
+  "tags": ["ml", "go", "python", "next.js"],
   "startDate": "2024-01",
   "endDate": "2024-05",
   "status": "shipped",
   "featured": true,
   "githubUrl": "https://github.com/RohanSi4/MovieReccomenderSystem",
-  "liveUrl": null,
+  "liveUrl": "https://movie-reccomender-system-red.vercel.app/",
   "subProjects": []
 }

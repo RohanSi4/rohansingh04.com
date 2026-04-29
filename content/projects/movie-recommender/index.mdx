@@ -1,3 +1,80 @@
 # movie recommender system
 
-writeup coming soon.
+A production-style movie recommendation and ranking system that combines an
+offline machine learning pipeline, a low-latency Go service, and a lightweight
+Next.js demo UI.
+
+The goal was to build something closer to a real MLE system than a notebook:
+raw data comes in, features are built and validated, a ranking model is trained
+offline, and an online service returns ranked recommendations with lightweight
+explanations.
+
+## what it does
+
+- recommends movies for a MovieLens `user_id` based on historical ratings
+- searches movies by title and returns similar recommendations from a selected
+  movie
+- enriches MovieLens data with TMDB metadata, including genres, popularity,
+  release year, runtime, and poster URLs
+- returns ranked movie cards through a Next.js frontend backed by a Go API
+
+## architecture
+
+The system is split into three pieces:
+
+- **offline ML pipeline:** Python scripts ingest MovieLens CSVs, enrich metadata
+  from TMDB, build feature tables, create a training set, train a LightGBM
+  ranking model, and export service data
+- **online ranking service:** a Go API handles candidate generation, feature
+  lookup, ranking, and response formatting for `/search`, `/rank`, and movie
+  detail endpoints
+- **demo UI:** a Next.js frontend lets someone search by movie title or enter a
+  user id, then renders ranked results as movie cards
+
+## ranking flow
+
+For user-based recommendations, the service accepts a request like:
+
+```json
+{
+  "user_id": 123,
+  "k": 25
+}
+```
+
+For movie-based recommendations, it can rank similar titles from a selected
+movie:
+
+```json
+{
+  "movie_id": 550,
+  "k": 25
+}
+```
+
+The response includes the ranked movies, score, poster URL, and simple reason
+strings such as genre matches or popularity signals. The current Go service uses
+a heuristic score over exported feature tables, while the LightGBM model is
+trained and saved offline. Wiring the model into online inference is the next
+step.
+
+## stack
+
+- Python for data ingestion, feature engineering, evaluation, and LightGBM
+  training
+- Go for the online ranking service
+- Next.js and Tailwind for the demo UI
+- MovieLens for ratings data
+- TMDB for movie metadata and posters
+
+## what i learned
+
+This project forced the recommendation problem into separate offline and online
+concerns. The useful part was not just training a model, but designing the
+interface between feature generation, exported service data, ranking endpoints,
+and a frontend that could explain results quickly.
+
+It also made the tradeoff between model quality and serving complexity more
+concrete. The offline LightGBM pipeline gives a stronger ranking path, while the
+Go heuristic keeps the demo simple and fast until full model inference is wired
+into the service.
