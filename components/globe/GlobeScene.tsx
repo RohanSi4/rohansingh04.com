@@ -117,6 +117,7 @@ function AdminEditPanel({
   const [form, setForm] = useState({ ...place });
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   function set(field: string, value: unknown) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -124,12 +125,14 @@ function AdminEditPanel({
 
   async function save() {
     setSaving(true);
+    setSaveError("");
     const res = await fetch(`/api/admin/places/${place.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
     if (res.ok) onSaved(await res.json());
+    else setSaveError(`save failed (${res.status})`);
     setSaving(false);
   }
 
@@ -202,6 +205,8 @@ function AdminEditPanel({
           folder={`places/${place.id}`}
           onUploaded={(url) => set("photos", [...form.photos, url])}
         />
+
+        {saveError && <p className="text-xs text-red-400 font-mono">{saveError}</p>}
 
         <div className="flex gap-2 pt-1">
           <button
