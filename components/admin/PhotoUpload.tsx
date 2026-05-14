@@ -10,10 +10,12 @@ interface Props {
 export default function PhotoUpload({ folder, onUploaded }: Props) {
   const [dragging, setDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   async function upload(file: File) {
     setUploading(true);
+    setError("");
     const form = new FormData();
     form.append("file", file);
     form.append("folder", folder);
@@ -21,6 +23,8 @@ export default function PhotoUpload({ folder, onUploaded }: Props) {
     if (res.ok) {
       const { url } = await res.json();
       onUploaded(url);
+    } else {
+      setError(`upload failed (${res.status})`);
     }
     setUploading(false);
   }
@@ -31,24 +35,27 @@ export default function PhotoUpload({ folder, onUploaded }: Props) {
   }
 
   return (
-    <div
-      onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
-      onDragLeave={() => setDragging(false)}
-      onDrop={(e) => { e.preventDefault(); setDragging(false); handleFiles(e.dataTransfer.files); }}
-      onClick={() => inputRef.current?.click()}
-      className={`border border-dashed rounded p-3 text-center cursor-pointer transition-colors text-xs font-mono ${
-        dragging ? "border-accent text-accent" : "border-border text-muted hover:border-accent/50"
-      }`}
-    >
-      {uploading ? "uploading..." : "drop photos or click to add"}
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        multiple
-        className="hidden"
-        onChange={(e) => handleFiles(e.target.files)}
-      />
+    <div>
+      <div
+        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={(e) => { e.preventDefault(); setDragging(false); handleFiles(e.dataTransfer.files); }}
+        onClick={() => inputRef.current?.click()}
+        className={`border border-dashed rounded p-3 text-center cursor-pointer transition-colors text-xs font-mono ${
+          dragging ? "border-accent text-accent" : "border-border text-muted hover:border-accent/50"
+        }`}
+      >
+        {uploading ? "uploading..." : "drop photos or click to add"}
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={(e) => handleFiles(e.target.files)}
+        />
+      </div>
+      {error && <p className="text-xs text-red-400 font-mono mt-1">{error}</p>}
     </div>
   );
 }
