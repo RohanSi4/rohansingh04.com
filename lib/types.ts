@@ -2,12 +2,19 @@ export type HealthSummary = {
   updatedAt: string; // ISO timestamp
 
   today: {
-    steps: number;
     exerciseMinutes: number;
     activeCalories: number;
     distanceMi: number;
-    restingHeartRate: number | null;
+    sport: string | null;
   };
+
+  lastActivity: {
+    date: string;
+    sport: string;
+    name: string;
+    movingMins: number;
+    distanceMi: number;
+  } | null;
 
   streak: {
     currentDays: number;

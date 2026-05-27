@@ -37,11 +37,18 @@ export const healthMock: HealthSummary = {
   updatedAt: "2026-04-14T09:22:00Z",
 
   today: {
-    steps: 8431,
     exerciseMinutes: 52,
     activeCalories: 480,
     distanceMi: 3.1,
-    restingHeartRate: 58,
+    sport: "Run",
+  },
+
+  lastActivity: {
+    date: "2026-04-14",
+    sport: "Run",
+    name: "morning run",
+    movingMins: 52,
+    distanceMi: 3.1,
   },
 
   streak: {

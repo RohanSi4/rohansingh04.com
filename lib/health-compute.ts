@@ -1,16 +1,5 @@
 import type { HealthSummary } from "./types";
-
-export type DailyEntry = {
-  date: string; // YYYY-MM-DD
-  steps: number;
-  exerciseMinutes: number;
-  activeCalories: number;
-  distanceMi: number;
-  restingHeartRate: number | null;
-};
-
-// What the iOS shortcut sends
-export type RawIngest = DailyEntry;
+import type { StravaActivity } from "./strava";
 
 function toDateStr(d: Date): string {
   return d.toISOString().split("T")[0];
@@ -24,98 +13,137 @@ function minutesToIntensity(mins: number): number {
   return 4;
 }
 
-function computeStreak(byDate: Record<string, DailyEntry>, now: Date): number {
+type DayBucket = {
+  movingMins: number;
+  distanceMi: number;
+  calories: number;
+  sports: string[];
+};
+
+function bucketByDate(activities: StravaActivity[]): Record<string, DayBucket> {
+  const by: Record<string, DayBucket> = {};
+  for (const a of activities) {
+    if (!by[a.date]) by[a.date] = { movingMins: 0, distanceMi: 0, calories: 0, sports: [] };
+    by[a.date].movingMins += a.movingMins;
+    by[a.date].distanceMi += a.distanceMi;
+    by[a.date].calories += a.calories;
+    by[a.date].sports.push(a.sport);
+  }
+  return by;
+}
+
+function computeStreak(by: Record<string, DayBucket>, now: Date): number {
   let streak = 0;
   const d = new Date(now);
-  if (!byDate[toDateStr(d)]?.exerciseMinutes) d.setDate(d.getDate() - 1);
-  while (byDate[toDateStr(d)]?.exerciseMinutes > 0) {
+  if (!by[toDateStr(d)]?.movingMins) d.setDate(d.getDate() - 1);
+  while (by[toDateStr(d)]?.movingMins > 0) {
     streak++;
     d.setDate(d.getDate() - 1);
   }
   return streak;
 }
 
-function buildHeatmap(byDate: Record<string, DailyEntry>, now: Date): HealthSummary["heatmap"] {
+function buildHeatmap(by: Record<string, DayBucket>, now: Date): HealthSummary["heatmap"] {
   const entries: HealthSummary["heatmap"] = [];
   const d = new Date(now);
   d.setDate(d.getDate() - 364);
   for (let i = 0; i < 365; i++) {
     const date = toDateStr(d);
-    const entry = byDate[date];
-    const mins = entry?.exerciseMinutes ?? 0;
+    const bucket = by[date];
+    const mins = bucket?.movingMins ?? 0;
     entries.push({ date, intensity: minutesToIntensity(mins), exerciseMinutes: mins });
     d.setDate(d.getDate() + 1);
   }
   return entries;
 }
 
-function weeklyMinutesForMonth(entries: DailyEntry[]): number[] {
+function weeklyMinutesForMonth(by: Record<string, DayBucket>, monthStart: Date): number[] {
   const bars = [0, 0, 0, 0];
-  for (const e of entries) {
-    const day = new Date(e.date + "T12:00:00Z").getUTCDate() - 1;
-    bars[Math.min(Math.floor(day / 7), 3)] += e.exerciseMinutes;
+  const monthStr = toDateStr(monthStart).slice(0, 7);
+  for (const [date, bucket] of Object.entries(by)) {
+    if (!date.startsWith(monthStr)) continue;
+    const day = new Date(date + "T12:00:00Z").getUTCDate() - 1;
+    bars[Math.min(Math.floor(day / 7), 3)] += bucket.movingMins;
   }
   return bars;
 }
 
-export function computeHealthSummary(log: DailyEntry[], prevBestStreak: number): HealthSummary {
+export function computeHealthSummary(activities: StravaActivity[], prevBestStreak: number): HealthSummary {
   const now = new Date();
-  const byDate: Record<string, DailyEntry> = {};
-  for (const e of log) byDate[e.date] = e;
-
-  const today = byDate[toDateStr(now)];
+  const by = bucketByDate(activities);
+  const todayStr = toDateStr(now);
+  const todayBucket = by[todayStr];
 
   const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   const thisYearStart = new Date(now.getFullYear(), 0, 1);
 
-  const thisMonth = log.filter(e => new Date(e.date + "T12:00:00Z") >= thisMonthStart);
-  const lastMonth = log.filter(e => {
-    const d = new Date(e.date + "T12:00:00Z");
-    return d >= lastMonthStart && d < thisMonthStart;
+  const activeDates = Object.keys(by).filter(d => by[d].movingMins > 0);
+
+  const thisMonthActive = activeDates.filter(d => new Date(d + "T12:00:00Z") >= thisMonthStart);
+  const lastMonthActive = activeDates.filter(d => {
+    const dt = new Date(d + "T12:00:00Z");
+    return dt >= lastMonthStart && dt < thisMonthStart;
   });
-  const thisYear = log.filter(e => new Date(e.date + "T12:00:00Z") >= thisYearStart);
+  const thisYearActive = activeDates.filter(d => new Date(d + "T12:00:00Z") >= thisYearStart);
 
-  const thisMonthActive = thisMonth.filter(e => e.exerciseMinutes > 0);
-  const lastMonthActive = lastMonth.filter(e => e.exerciseMinutes > 0);
+  const thisMonthDistanceMi = Object.entries(by)
+    .filter(([d]) => new Date(d + "T12:00:00Z") >= thisMonthStart)
+    .reduce((s, [, b]) => s + b.distanceMi, 0);
 
-  const currentStreak = computeStreak(byDate, now);
+  const thisMonthCalories = Object.entries(by)
+    .filter(([d]) => new Date(d + "T12:00:00Z") >= thisMonthStart)
+    .reduce((s, [, b]) => s + b.calories, 0);
+
+  const thisYearDistanceMi = Object.entries(by)
+    .filter(([d]) => new Date(d + "T12:00:00Z") >= thisYearStart)
+    .reduce((s, [, b]) => s + b.distanceMi, 0);
+
+  const currentStreak = computeStreak(by, now);
   const bestStreak = Math.max(prevBestStreak, currentStreak);
 
-  const sorted = [...log].sort((a, b) => a.date.localeCompare(b.date));
-  const sinceDate = sorted[0]?.date ?? toDateStr(now);
+  const sorted = [...activities].sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
+  const last = sorted[0] ?? null;
+  const sinceDate = sorted[sorted.length - 1]?.date ?? todayStr;
 
   return {
     updatedAt: now.toISOString(),
 
     today: {
-      steps: today?.steps ?? 0,
-      exerciseMinutes: today?.exerciseMinutes ?? 0,
-      activeCalories: today?.activeCalories ?? 0,
-      distanceMi: today?.distanceMi ?? 0,
-      restingHeartRate: today?.restingHeartRate ?? null,
+      exerciseMinutes: todayBucket?.movingMins ?? 0,
+      activeCalories: todayBucket?.calories ?? 0,
+      distanceMi: Math.round((todayBucket?.distanceMi ?? 0) * 100) / 100,
+      sport: todayBucket?.sports.at(-1) ?? null,
     },
+
+    lastActivity: last ? {
+      date: last.date,
+      sport: last.sport,
+      name: last.name,
+      movingMins: last.movingMins,
+      distanceMi: last.distanceMi,
+    } : null,
 
     streak: { currentDays: currentStreak, bestDays: bestStreak },
 
     thisMonth: {
       activeDays: thisMonthActive.length,
       activeDaysDeltaVsLastMonth: thisMonthActive.length - lastMonthActive.length,
-      distanceMi: Math.round(thisMonth.reduce((s, e) => s + e.distanceMi, 0) * 10) / 10,
-      activeCalories: Math.round(thisMonth.reduce((s, e) => s + e.activeCalories, 0)),
-      weeklyMinutes: weeklyMinutesForMonth(thisMonth),
+      distanceMi: Math.round(thisMonthDistanceMi * 10) / 10,
+      activeCalories: Math.round(thisMonthCalories),
+      weeklyMinutes: weeklyMinutesForMonth(by, thisMonthStart),
     },
 
     thisYear: {
-      distanceMi: Math.round(thisYear.reduce((s, e) => s + e.distanceMi, 0) * 10) / 10,
-      activeDays: thisYear.filter(e => e.exerciseMinutes > 0).length,
+      distanceMi: Math.round(thisYearDistanceMi * 10) / 10,
+      activeDays: thisYearActive.length,
     },
 
     allTime: {
-      activeDays: log.filter(e => e.exerciseMinutes > 0).length,
+      activeDays: activeDates.length,
       sinceDate,
     },
 
-    heatmap: buildHeatmap(byDate, now),
+    heatmap: buildHeatmap(by, now),
   };
 }
