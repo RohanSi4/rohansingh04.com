@@ -51,7 +51,9 @@ function buildHeatmap(by: Record<string, DayBucket>, now: Date): HealthSummary["
     const date = toDateStr(d);
     const bucket = by[date];
     const mins = bucket?.movingMins ?? 0;
-    entries.push({ date, intensity: minutesToIntensity(mins), exerciseMinutes: mins });
+    const sport = bucket?.sports.at(-1) ?? null;
+    const distanceMi = Math.round((bucket?.distanceMi ?? 0) * 10) / 10;
+    entries.push({ date, intensity: minutesToIntensity(mins), exerciseMinutes: mins, sport, distanceMi });
     d.setDate(d.getDate() + 1);
   }
   return entries;
@@ -143,6 +145,14 @@ export function computeHealthSummary(activities: StravaActivity[], prevBestStrea
       activeDays: activeDates.length,
       sinceDate,
     },
+
+    recentActivities: sorted.slice(0, 15).map(a => ({
+      date: a.date,
+      sport: a.sport,
+      name: a.name,
+      movingMins: a.movingMins,
+      distanceMi: a.distanceMi,
+    })),
 
     heatmap: buildHeatmap(by, now),
   };

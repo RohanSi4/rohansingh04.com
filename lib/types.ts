@@ -39,11 +39,22 @@ export type HealthSummary = {
     sinceDate: string;
   };
 
+  // last 15 activities, newest first
+  recentActivities: Array<{
+    date: string;
+    sport: string;
+    name: string;
+    movingMins: number;
+    distanceMi: number;
+  }>;
+
   // exactly 365 entries, ordered oldest to newest
   heatmap: Array<{
     date: string;          // YYYY-MM-DD
     intensity: number;     // 0-4 based on exercise minutes
     exerciseMinutes: number;
+    sport: string | null;  // primary sport for the day
+    distanceMi: number;
   }>;
 };
 

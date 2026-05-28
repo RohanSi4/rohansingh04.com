@@ -29,8 +29,8 @@ export async function setStatesKV(states: StateEntry[]): Promise<void> {
 
 export async function getHealthKV(): Promise<HealthSummary | null> {
   const data = await kv.get<HealthSummary>("health");
-  // discard if it's an old schema (pre-strava rewrite)
-  if (!data || !("lastActivity" in data)) return null;
+  // discard if it's an old schema (missing new fields)
+  if (!data || !("lastActivity" in data) || !("recentActivities" in data)) return null;
   return data;
 }
 

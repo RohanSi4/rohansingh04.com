@@ -7,6 +7,16 @@ interface Props {
   heatmap: HealthSummary["heatmap"];
 }
 
+function sportLabel(sport: string): string {
+  const map: Record<string, string> = {
+    Run: "run", Ride: "ride", Swim: "swim", Hike: "hike", Walk: "walk",
+    WeightTraining: "weights", Yoga: "yoga", Workout: "workout",
+    VirtualRide: "virtual ride", EBikeRide: "ebike", Rowing: "row",
+    Elliptical: "elliptical", StairStepper: "stairs",
+  };
+  return map[sport] ?? sport.toLowerCase();
+}
+
 const CELL = 12;
 const GAP = 2;
 const UNIT = CELL + GAP;
@@ -127,7 +137,7 @@ export default function HealthHeatmap({ heatmap }: Props) {
         {/* tooltip -- positioned relative to the scrollable container */}
         {tooltip && (
           <div
-            className="absolute pointer-events-none z-20 px-2 py-1.5 rounded text-xs
+            className="absolute pointer-events-none z-20 px-2.5 py-2 rounded text-xs
                         bg-surface border border-border text-fg shadow-sm"
             style={{
               left: tooltip.svgX + CELL + 4,
@@ -135,12 +145,20 @@ export default function HealthHeatmap({ heatmap }: Props) {
               whiteSpace: "nowrap",
             }}
           >
-            <p className="font-mono">{tooltip.entry.date}</p>
-            <p className="text-muted">
-              {tooltip.entry.intensity === 0
-                ? "rest"
-                : `${tooltip.entry.exerciseMinutes} min active`}
-            </p>
+            <p className="font-mono text-muted mb-0.5">{tooltip.entry.date}</p>
+            {tooltip.entry.intensity === 0 ? (
+              <p className="text-muted">rest day</p>
+            ) : (
+              <div className="space-y-0.5">
+                {tooltip.entry.sport && (
+                  <p className="text-fg capitalize">{sportLabel(tooltip.entry.sport)}</p>
+                )}
+                <p className="text-muted">
+                  {tooltip.entry.exerciseMinutes} min
+                  {tooltip.entry.distanceMi > 0 && ` · ${tooltip.entry.distanceMi.toFixed(1)} mi`}
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>

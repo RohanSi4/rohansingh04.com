@@ -21,12 +21,14 @@ function buildHeatmap(): HealthSummary["heatmap"] {
     const isRest = (dow === 0 && h % 5 < 3) || (dow !== 0 && h % 11 === 0);
 
     if (isRest) {
-      entries.push({ date, intensity: 0, exerciseMinutes: 0 });
+      entries.push({ date, intensity: 0, exerciseMinutes: 0, sport: null, distanceMi: 0 });
     } else {
       const base = dow === 1 || dow === 3 || dow === 5 ? 3 : 2;
       const intensity = h % 7 === 0 ? 4 : h % 9 === 0 ? 1 : base;
       const mins = [0, 15, 30, 50, 75][intensity];
-      entries.push({ date, intensity, exerciseMinutes: mins });
+      const sport = h % 3 === 0 ? "Ride" : "Run";
+      const distanceMi = sport === "Run" ? Math.round((mins / 10) * 10) / 10 : Math.round((mins / 4) * 10) / 10;
+      entries.push({ date, intensity, exerciseMinutes: mins, sport, distanceMi });
     }
   }
 
@@ -73,6 +75,16 @@ export const healthMock: HealthSummary = {
     activeDays: 412,
     sinceDate: "2023-11-01",
   },
+
+  recentActivities: [
+    { date: "2026-04-14", sport: "Run", name: "morning run", movingMins: 52, distanceMi: 3.1 },
+    { date: "2026-04-13", sport: "Ride", name: "sunday spin", movingMins: 48, distanceMi: 12.4 },
+    { date: "2026-04-12", sport: "Run", name: "easy 5k", movingMins: 31, distanceMi: 3.1 },
+    { date: "2026-04-11", sport: "WeightTraining", name: "upper body", movingMins: 45, distanceMi: 0 },
+    { date: "2026-04-10", sport: "Run", name: "tempo run", movingMins: 38, distanceMi: 4.2 },
+    { date: "2026-04-09", sport: "Ride", name: "afternoon ride", movingMins: 62, distanceMi: 16.1 },
+    { date: "2026-04-08", sport: "Run", name: "morning run", movingMins: 29, distanceMi: 3.0 },
+  ],
 
   heatmap: buildHeatmap(),
 };
