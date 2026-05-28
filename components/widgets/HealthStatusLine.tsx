@@ -18,28 +18,35 @@ export default function HealthStatusLine({ data }: Props) {
   const { today, lastActivity, streak } = data;
   const parts: string[] = [];
 
-  if (today.sport) {
-    parts.push(sportLabel(today.sport));
+  const todayStr = new Date().toISOString().split("T")[0];
+  const todayIsActive = today.sport != null;
+
+  if (todayIsActive) {
+    // show actual activity name if last activity was today
+    const activityName =
+      lastActivity && lastActivity.date === todayStr
+        ? lastActivity.name.toLowerCase()
+        : sportLabel(today.sport!);
+    parts.push(activityName);
+    if (today.exerciseMinutes > 0) parts.push(`${today.exerciseMinutes} min`);
+    if (today.distanceMi > 0) parts.push(`${today.distanceMi.toFixed(1)} mi`);
   } else if (lastActivity) {
     const daysAgo = Math.round(
       (Date.now() - new Date(lastActivity.date).getTime()) / (1000 * 60 * 60 * 24)
     );
-    parts.push(daysAgo === 0 ? sportLabel(lastActivity.sport) : `last: ${sportLabel(lastActivity.sport)} ${daysAgo}d ago`);
-  }
-
-  if (today.exerciseMinutes > 0) {
-    parts.push(`${today.exerciseMinutes} min`);
-  }
-
-  if (today.distanceMi > 0) {
-    parts.push(`${today.distanceMi.toFixed(1)} mi`);
+    const sportStr = sportLabel(lastActivity.sport);
+    parts.push(
+      daysAgo === 0
+        ? lastActivity.name.toLowerCase()
+        : `last: ${sportStr} ${daysAgo}d ago`
+    );
   }
 
   if (streak.currentDays > 0) {
     parts.push(`${streak.currentDays}-day streak`);
   }
 
-  const label = today.sport ? "today" : "recent";
+  const label = todayIsActive ? "today" : "recent";
 
   return (
     <p className="text-sm text-muted font-mono mb-8">

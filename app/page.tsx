@@ -5,7 +5,6 @@ import { getFeaturedProjects } from "@/lib/content";
 import HealthStatusLine from "@/components/widgets/HealthStatusLine";
 import HealthHeroCards from "@/components/widgets/HealthHeroCards";
 import HealthHeatmap from "@/components/widgets/HealthHeatmap";
-import HealthSportMix from "@/components/widgets/HealthSportMix";
 import SpotifyNowPlaying from "@/components/widgets/SpotifyNowPlaying";
 import GithubLatestCommit from "@/components/widgets/GithubLatestCommit";
 import ProjectCard from "@/components/projects/ProjectCard";
@@ -30,7 +29,6 @@ export default async function HomePage() {
         <HealthStatusLine data={health} />
         <HealthHeroCards data={health} />
         <HealthHeatmap heatmap={health.heatmap} />
-        <HealthSportMix data={health} />
       </section>
 
       {/* ── live widgets ───────────────────────────────────────── */}
