@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
 import { setStravaTokensKV } from "@/lib/strava";
 
 export async function GET(req: NextRequest) {
@@ -41,12 +42,14 @@ export async function GET(req: NextRequest) {
     expiresAt: data.expires_at,
   });
 
-  // kick off initial sync
+  // kick off initial sync after redirect is sent
   const syncUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/strava/sync`;
-  fetch(syncUrl, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${process.env.HEALTH_INGEST_TOKEN}` },
-  }).catch(() => {});
+  after(async () => {
+    await fetch(syncUrl, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${process.env.CRON_SECRET}` },
+    }).catch(() => {});
+  });
 
   return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL}/?strava=connected`);
 }
