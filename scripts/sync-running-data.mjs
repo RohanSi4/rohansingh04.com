@@ -288,22 +288,43 @@ async function localEnvValue(name) {
 }
 
 async function publishSnapshot(serialized) {
-  const token = process.env.RUNNING_DASHBOARD_TOKEN
-    ?? process.env.HEALTH_INGEST_TOKEN
-    ?? await localEnvValue("RUNNING_DASHBOARD_TOKEN")
-    ?? await localEnvValue("HEALTH_INGEST_TOKEN");
-  if (!token) throw new Error("Cannot publish: RUNNING_DASHBOARD_TOKEN or HEALTH_INGEST_TOKEN is not configured.");
+  const configuredTokens = [
+    process.env.RUNNING_DASHBOARD_TOKEN,
+    process.env.HEALTH_INGEST_TOKEN,
+    process.env.CRON_SECRET,
+    await localEnvValue("RUNNING_DASHBOARD_TOKEN"),
+    await localEnvValue("HEALTH_INGEST_TOKEN"),
+    await localEnvValue("CRON_SECRET"),
+  ].filter(Boolean);
+  if (configuredTokens.length === 0) {
+    throw new Error("Cannot publish: no dashboard automation token is configured.");
+  }
 
   const url = process.env.RUNNING_DASHBOARD_URL
     ?? "https://rohansingh04.com/api/running/ingest";
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      authorization: `Bearer ${token}`,
-      "content-type": "application/json",
-    },
-    body: serialized,
-  });
+  // `vercel env pull` can leave an unmatched quote in a local value even though
+  // Vercel's deployed value is normalized. Try the exact local representation
+  // first, then the safely de-quoted representation only on an auth failure.
+  const tokenCandidates = [];
+  for (const token of configuredTokens) {
+    tokenCandidates.push(token);
+    if ((token.startsWith("\"") || token.startsWith("'")) && token.at(-1) !== token[0]) {
+      tokenCandidates.push(token.slice(1));
+    }
+  }
+  let response;
+  for (const candidate of [...new Set(tokenCandidates)]) {
+    response = await fetch(url, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${candidate}`,
+        "content-type": "application/json",
+      },
+      body: serialized,
+    });
+    if (response.status !== 401) break;
+  }
+  if (!response) throw new Error("Dashboard publish failed before making a request.");
   if (!response.ok) {
     throw new Error(`Dashboard publish failed: ${response.status} ${await response.text()}`);
   }

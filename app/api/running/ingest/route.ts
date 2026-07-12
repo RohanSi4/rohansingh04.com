@@ -8,7 +8,11 @@ const MAX_SNAPSHOT_BYTES = 1_500_000;
 
 function authorized(req: NextRequest): boolean {
   const auth = req.headers.get("authorization") ?? "";
-  return [process.env.RUNNING_DASHBOARD_TOKEN, process.env.HEALTH_INGEST_TOKEN]
+  return [
+    process.env.RUNNING_DASHBOARD_TOKEN,
+    process.env.HEALTH_INGEST_TOKEN,
+    process.env.CRON_SECRET,
+  ]
     .filter((token): token is string => Boolean(token))
     .some((token) => auth === `Bearer ${token}`);
 }

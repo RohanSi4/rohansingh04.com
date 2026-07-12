@@ -43,7 +43,8 @@ just works.
 the richer local FIT archive is published automatically after `npm run import`
 in the sibling marathon repo. it can also be pushed on demand with
 `pnpm publish:running`, which reads either running token above from the shell or
-`.env.local`. strava sync remains available as an optional secondary source but
+`.env.local` (and can reuse `CRON_SECRET` for server automation). strava sync
+remains available as an optional secondary source but
 is not required for dashboard freshness.
 
 ### spotify now playing (phase 5)
