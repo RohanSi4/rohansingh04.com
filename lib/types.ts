@@ -63,6 +63,9 @@ export type ProjectMeta = {
   slug: string;
   title: string;
   tagline: string;
+  summary: string;
+  outcome: string;
+  visual: "fitness" | "ranking" | "site" | "music" | "health";
   tags: string[];
   startDate: string; // YYYY-MM
   endDate: string | null;
@@ -83,6 +86,7 @@ export type HistoryEntry = {
   endDate: string | null;
   location: string;
   summary: string;
+  bullets?: string[];
 };
 
 // places.json entry shape

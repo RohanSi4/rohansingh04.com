@@ -1,11 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPlaces } from "@/lib/content";
+import TravelNav from "@/components/globe/TravelNav";
 
 export const metadata: Metadata = {
   title: "travel list",
-  description: "places rohan has visited",
+  description: "A chronological list of places Rohan has visited.",
+  alternates: { canonical: "/travel-list" },
 };
+
+function formatVisitedDate(value: string): string {
+  const [year, month] = value.split("-").map(Number);
+  if (!year) return value;
+  if (!month) return String(year);
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(year, month - 1, 1)));
+}
 
 export default async function TravelListPage() {
   const places = (await getPlaces()).sort((a, b) =>
@@ -19,45 +32,45 @@ export default async function TravelListPage() {
   }, {});
 
   const years = Object.keys(byYear).sort((a, b) => Number(b) - Number(a));
+  const countryCount = new Set(places.map((place) => place.country)).size;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="font-serif text-2xl">places</h1>
-        <Link
-          href="/globe"
-          className="text-sm text-muted hover:text-fg transition-colors font-mono"
-        >
-          view as globe →
-        </Link>
-      </div>
+    <div className="site-container page-section">
+      <header className="max-w-3xl">
+        <p className="eyebrow mb-4">travel · chronological</p>
+        <h1 className="page-title">Places, in the order I found them.</h1>
+        <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
+          {places.length} stops across {countryCount} countries, from recent trips back
+          through the earliest entries in the archive.
+        </p>
+        <TravelNav current="list" />
+      </header>
 
-      <div className="space-y-10">
+      <div className="mt-12 max-w-4xl space-y-12">
         {years.map((year) => (
-          <section key={year}>
-            <h2 className="font-mono text-xs uppercase tracking-widest text-muted mb-4 border-b border-border pb-2">
+          <section key={year} aria-labelledby={`travel-year-${year}`}>
+            <h2 id={`travel-year-${year}`} className="eyebrow mb-4 border-b border-border pb-3">
               {year}
             </h2>
-            <ul className="space-y-4">
+            <ul className="divide-y divide-border border-y border-border">
               {byYear[year].map((place) => (
-                <li key={place.id} className="flex justify-between items-start gap-4">
-                  <div>
-                    <p className="font-medium text-fg">{place.name}</p>
-                    <p className="text-sm text-muted">{place.country}</p>
+                <li key={place.id} className="grid gap-3 py-5 sm:grid-cols-[1fr_auto] sm:items-start sm:gap-8">
+                  <div className="min-w-0">
+                    <h3 className="font-serif text-xl font-semibold tracking-tight text-fg">
+                      {place.name}
+                    </h3>
+                    <p className="mt-1 text-sm text-muted">{place.country}</p>
                     {place.notes && (
-                      <p className="text-xs text-muted mt-0.5">{place.notes}</p>
+                      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{place.notes}</p>
                     )}
                   </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-sm text-muted font-mono">
-                      {place.visitedDate}
+                  <div className="shrink-0 sm:text-right">
+                    <time dateTime={place.visitedDate} className="font-mono text-xs text-muted">
+                      {formatVisitedDate(place.visitedDate)}
                       {place._needsDate && (
-                        <span className="text-xs text-muted/60 ml-1">(approx)</span>
+                        <span className="ml-1 text-muted/70">(approx.)</span>
                       )}
-                    </p>
-                    <p className="text-xs text-muted/50">
-                      {place.lat.toFixed(1)}°, {place.lng.toFixed(1)}°
-                    </p>
+                    </time>
                   </div>
                 </li>
               ))}
@@ -65,6 +78,10 @@ export default async function TravelListPage() {
           </section>
         ))}
       </div>
+
+      <p className="mt-12 text-sm text-muted">
+        Prefer the spatial version? <Link href="/globe" className="font-medium text-accent-dim underline decoration-border underline-offset-4 hover:decoration-accent">Open the interactive globe.</Link>
+      </p>
     </div>
   );
 }

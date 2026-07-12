@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { StateEntry } from "@/lib/types";
 import PhotoUpload from "@/components/admin/PhotoUpload";
 
@@ -45,6 +45,30 @@ const H = ROWS * CELL + (ROWS - 1) * GAP;
 function cx(col: number) { return col * (CELL + GAP); }
 function cy(row: number) { return row * (CELL + GAP); }
 
+type ArrowKey = "ArrowLeft" | "ArrowRight" | "ArrowUp" | "ArrowDown";
+
+function nextStateCode(code: string, key: ArrowKey): string | null {
+  const current = GRID[code];
+  if (!current) return null;
+  const [col, row] = current;
+  const candidates = Object.entries(GRID).filter(([, [candidateCol, candidateRow]]) => {
+    if (key === "ArrowLeft") return candidateCol < col;
+    if (key === "ArrowRight") return candidateCol > col;
+    if (key === "ArrowUp") return candidateRow < row;
+    return candidateRow > row;
+  });
+
+  candidates.sort(([, [aCol, aRow]], [, [bCol, bRow]]) => {
+    const aPrimary = key === "ArrowLeft" || key === "ArrowRight" ? Math.abs(aCol - col) : Math.abs(aRow - row);
+    const bPrimary = key === "ArrowLeft" || key === "ArrowRight" ? Math.abs(bCol - col) : Math.abs(bRow - row);
+    const aCross = key === "ArrowLeft" || key === "ArrowRight" ? Math.abs(aRow - row) : Math.abs(aCol - col);
+    const bCross = key === "ArrowLeft" || key === "ArrowRight" ? Math.abs(bRow - row) : Math.abs(bCol - col);
+    return aPrimary - bPrimary || aCross - bCross;
+  });
+
+  return candidates[0]?.[0] ?? null;
+}
+
 interface Props {
   states: StateEntry[];
   isAdmin: boolean;
@@ -56,9 +80,57 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState<StateEntry | null>(null);
   const [saving, setSaving] = useState(false);
+  const [focusedCode, setFocusedCode] = useState("ME");
+  const [visibleFocus, setVisibleFocus] = useState<string | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const byCode = Object.fromEntries(states.map((s) => [s.code, s]));
   const visitedCount = states.filter((s) => s.visited).length;
+
+  function selectState(state: StateEntry) {
+    setSelected(state);
+    setEditing(false);
+  }
+
+  function closeModal() {
+    const code = selected?.code;
+    setSelected(null);
+    setEditing(false);
+    if (code) requestAnimationFrame(() => document.getElementById(`state-tile-${code}`)?.focus());
+  }
+
+  function focusTile(code: string) {
+    setFocusedCode(code);
+    requestAnimationFrame(() => document.getElementById(`state-tile-${code}`)?.focus());
+  }
+
+  function handleTileKeyDown(event: React.KeyboardEvent<SVGGElement>, state: StateEntry) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      selectState(state);
+      return;
+    }
+    if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) return;
+    event.preventDefault();
+    const next = nextStateCode(state.code, event.key as ArrowKey);
+    if (next) focusTile(next);
+  }
+
+  useEffect(() => {
+    if (!selected) return;
+    closeButtonRef.current?.focus();
+  }, [selected?.code]);
+
+  useEffect(() => {
+    if (!selected) return;
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      if (editing) setEditing(false);
+      else closeModal();
+    }
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [editing, selected]);
 
   function openEdit(state: StateEntry) {
     setEditForm({ ...state });
@@ -92,17 +164,28 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
 
   return (
     <div>
-      <p className="text-sm text-muted mb-6 font-mono">
-        {visitedCount} / {states.length} states + dc
-      </p>
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="font-mono text-lg text-fg">{visitedCount} of {states.length}</p>
+          <p id="states-map-description" className="mt-1 max-w-xl text-sm leading-relaxed text-muted">
+            Select a tile for trip details. Keyboard users can move between states with the arrow keys, then press Enter.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-4 text-xs text-muted" aria-label="Map legend">
+          <span className="inline-flex items-center gap-2"><i className="size-3 rounded-sm bg-accent" aria-hidden="true" />visited</span>
+          <span className="inline-flex items-center gap-2"><i className="size-3 rounded-sm border border-border bg-bg" aria-hidden="true" />still to go</span>
+        </div>
+      </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto pb-2" role="region" aria-label="Scrollable states map" tabIndex={0}>
         <svg
           viewBox={`0 0 ${W} ${H}`}
           width={W}
           height={H}
-          className="max-w-full"
-          aria-label="US states map"
+          className="max-w-none"
+          role="group"
+          aria-label="Interactive US states tile map"
+          aria-describedby="states-map-description"
         >
           {Object.entries(GRID).map(([code, [col, row]]) => {
             const state = byCode[code];
@@ -113,10 +196,16 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
             return (
               <g
                 key={code}
-                onClick={() => state && setSelected(state)}
+                id={`state-tile-${code}`}
+                onClick={() => state && selectState(state)}
+                onKeyDown={(event) => state && handleTileKeyDown(event, state)}
+                onFocus={() => { setFocusedCode(code); setVisibleFocus(code); }}
+                onBlur={() => setVisibleFocus(null)}
                 className="cursor-pointer"
                 role="button"
-                aria-label={state?.name ?? code}
+                tabIndex={focusedCode === code ? 0 : -1}
+                aria-haspopup="dialog"
+                aria-label={`${state?.name ?? code}: ${visited ? "visited" : "not yet visited"}`}
               >
                 <rect
                   x={x} y={y} width={CELL} height={CELL} rx={4}
@@ -125,8 +214,8 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
                       ? "fill-accent opacity-80 hover:opacity-100 transition-opacity"
                       : "fill-surface hover:fill-border transition-colors"
                   }
-                  stroke="var(--border)"
-                  strokeWidth={1}
+                  stroke={visibleFocus === code ? "var(--accent)" : "var(--border)"}
+                  strokeWidth={visibleFocus === code ? 3 : 1}
                 />
                 <text
                   x={x + CELL / 2} y={y + CELL / 2 + 1}
@@ -146,22 +235,27 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
       {/* modal */}
       {selected && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={() => { setSelected(null); setEditing(false); }}
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+          onClick={(event) => { if (event.currentTarget === event.target) closeModal(); }}
+          role="presentation"
         >
           <div
-            className="bg-bg border border-border rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+            className="max-h-[90svh] w-full max-w-md overflow-y-auto rounded-t-2xl border border-border bg-bg p-6 shadow-2xl sm:rounded-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="selected-state-title"
           >
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h2 className="font-serif text-xl">{selected.name}</h2>
+                <h2 id="selected-state-title" className="font-serif text-2xl font-semibold">{selected.name}</h2>
                 <p className="text-xs font-mono text-muted mt-1">{selected.code}</p>
               </div>
               <button
-                onClick={() => { setSelected(null); setEditing(false); }}
-                className="text-muted hover:text-fg transition-colors text-lg leading-none ml-4"
-                aria-label="close"
+                ref={closeButtonRef}
+                type="button"
+                onClick={closeModal}
+                className="ml-4 flex size-11 items-center justify-center rounded-full text-lg leading-none text-muted transition-colors hover:bg-surface hover:text-fg"
+                aria-label={`Close details for ${selected.name}`}
               >×</button>
             </div>
 
@@ -170,7 +264,7 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
                 {selected.visited ? (
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-accent inline-block" />
+                      <span className="inline-block size-2 rounded-full bg-accent" aria-hidden="true" />
                       <span className="text-sm text-accent">visited</span>
                     </div>
                     {selected.visitedDate && (
@@ -185,7 +279,7 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
                     {selected.photos && selected.photos.length > 0 && (
                       <div className="grid grid-cols-3 gap-1 mt-2">
                         {selected.photos.map((url) => (
-                          <img key={url} src={url} alt="" className="w-full aspect-square object-cover rounded" />
+                          <img key={url} src={url} alt={`Photo from ${selected.name}`} className="w-full aspect-square object-cover rounded" />
                         ))}
                       </div>
                     )}
@@ -196,7 +290,7 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
                 {isAdmin && (
                   <button
                     onClick={() => openEdit(selected)}
-                    className="mt-4 w-full text-xs font-mono text-muted hover:text-fg border border-border hover:border-fg/30 rounded py-1.5 transition-colors"
+                    className="mt-4 min-h-11 w-full rounded border border-border py-1.5 font-mono text-xs text-muted transition-colors hover:border-fg/30 hover:text-fg"
                   >
                     edit
                   </button>
@@ -207,16 +301,21 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
                 <div className="flex items-center gap-3">
                   <label className="text-xs font-mono text-muted">visited</label>
                   <button
+                    type="button"
+                    role="switch"
+                    aria-checked={editForm.visited}
+                    aria-label={`${editForm.visited ? "Mark" : "Keep"} ${editForm.name} as ${editForm.visited ? "not visited" : "visited"}`}
                     onClick={() => setField("visited", !editForm.visited)}
-                    className={`w-10 h-5 rounded-full transition-colors ${editForm.visited ? "bg-accent" : "bg-surface border border-border"}`}
+                    className={`flex h-7 w-12 items-center rounded-full transition-colors ${editForm.visited ? "bg-accent" : "border border-border bg-surface"}`}
                   >
-                    <span className={`block w-4 h-4 rounded-full bg-white mx-auto transition-transform ${editForm.visited ? "translate-x-2.5" : "-translate-x-2.5"}`} />
+                    <span className={`block size-5 rounded-full bg-white shadow transition-transform ${editForm.visited ? "translate-x-6" : "translate-x-1"}`} />
                   </button>
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-mono text-muted uppercase">visited date</label>
+                  <label htmlFor="state-visited-date" className="text-[10px] font-mono text-muted uppercase">visited date</label>
                   <input
+                    id="state-visited-date"
                     value={editForm.visitedDate ?? ""}
                     onChange={(e) => setField("visitedDate", e.target.value)}
                     placeholder="YYYY-MM"
@@ -225,8 +324,9 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-mono text-muted uppercase">cities (comma separated)</label>
+                  <label htmlFor="state-cities" className="text-[10px] font-mono text-muted uppercase">cities (comma separated)</label>
                   <input
+                    id="state-cities"
                     value={(editForm.cities ?? []).join(", ")}
                     onChange={(e) => setField("cities", e.target.value.split(",").map((s) => s.trim()).filter(Boolean))}
                     className="w-full bg-surface border border-border rounded px-2 py-1 text-xs font-mono focus:outline-none focus:border-accent mt-0.5"
@@ -234,8 +334,9 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-mono text-muted uppercase">notes</label>
+                  <label htmlFor="state-notes" className="text-[10px] font-mono text-muted uppercase">notes</label>
                   <input
+                    id="state-notes"
                     value={editForm.notes ?? ""}
                     onChange={(e) => setField("notes", e.target.value)}
                     className="w-full bg-surface border border-border rounded px-2 py-1 text-xs font-mono focus:outline-none focus:border-accent mt-0.5"
@@ -248,10 +349,12 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
                     <div className="grid grid-cols-3 gap-1 mt-1">
                       {(editForm.photos ?? []).map((url) => (
                         <div key={url} className="relative group">
-                          <img src={url} alt="" className="w-full aspect-square object-cover rounded" />
+                          <img src={url} alt={`Photo from ${editForm.name}`} className="w-full aspect-square object-cover rounded" />
                           <button
+                            type="button"
                             onClick={() => removePhoto(url)}
-                            className="absolute inset-0 bg-black/60 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center"
+                            aria-label={`Remove photo from ${editForm.name}`}
+                            className="absolute inset-0 flex items-center justify-center rounded bg-black/60 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
                           >×</button>
                         </div>
                       ))}
@@ -268,13 +371,13 @@ export default function StatesMap({ states: initialStates, isAdmin }: Props) {
                   <button
                     onClick={saveEdit}
                     disabled={saving}
-                    className="flex-1 bg-accent text-bg text-xs font-mono py-1.5 rounded hover:opacity-90 disabled:opacity-40"
+                    className="min-h-11 flex-1 rounded bg-accent py-1.5 font-mono text-xs text-bg hover:opacity-90 disabled:opacity-40"
                   >
                     {saving ? "saving..." : "save"}
                   </button>
                   <button
                     onClick={() => setEditing(false)}
-                    className="px-3 text-muted border border-border text-xs font-mono py-1.5 rounded hover:border-fg/30"
+                    className="min-h-11 rounded border border-border px-3 py-1.5 font-mono text-xs text-muted hover:border-fg/30"
                   >
                     cancel
                   </button>

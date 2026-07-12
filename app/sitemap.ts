@@ -1,17 +1,28 @@
 import type { MetadataRoute } from "next";
+import { getAllProjects } from "@/lib/content";
 
 const base = "https://rohansingh04.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    { url: base, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
-    { url: `${base}/fitness`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: `${base}/projects`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: `${base}/history`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${base}/resume`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${base}/now`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
-    { url: `${base}/globe`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/travel-list`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/states`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+  const contentUpdated = new Date("2026-07-12");
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url: base, lastModified: contentUpdated, changeFrequency: "weekly", priority: 1 },
+    { url: `${base}/fitness`, lastModified: contentUpdated, changeFrequency: "daily", priority: 0.9 },
+    { url: `${base}/projects`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${base}/history`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/resume`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/now`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/globe`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/travel-list`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/states`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.6 },
   ];
+
+  const projectRoutes: MetadataRoute.Sitemap = getAllProjects().map((project) => ({
+    url: `${base}/projects/${project.slug}`,
+    lastModified: contentUpdated,
+    changeFrequency: "monthly",
+    priority: project.featured ? 0.8 : 0.6,
+  }));
+
+  return [...staticRoutes, ...projectRoutes];
 }

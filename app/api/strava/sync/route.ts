@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getValidAccessToken, fetchRecentActivities, setStravaActivitiesKV, getStravaActivitiesKV } from "@/lib/strava";
+import { getValidAccessToken, fetchRecentActivities, setStravaActivitiesKV } from "@/lib/strava";
 import { computeHealthSummary } from "@/lib/health-compute";
 import { setHealthKV, getBestStreakKV, setBestStreakKV } from "@/lib/kv-data";
 
@@ -21,14 +21,10 @@ async function sync(req: NextRequest) {
   const afterEpoch = Math.floor((Date.now() - 365 * 24 * 60 * 60 * 1000) / 1000);
   const fresh = await fetchRecentActivities(accessToken, afterEpoch);
 
-  // merge with existing (in case of pagination gaps) and dedupe by id
-  const existing = await getStravaActivitiesKV();
-  const byId = new Map(existing.map(a => [a.id, a]));
-  for (const a of fresh) byId.set(a.id, a);
-
-  // trim to 365 days
+  // The fetch is all-or-nothing and covers the full retained window. Replacing
+  // the old set is important: it also removes activities that became private.
   const cutoffStr = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
-  const activities = [...byId.values()].filter(a => a.date >= cutoffStr);
+  const activities = fresh.filter(a => a.date >= cutoffStr);
 
   await setStravaActivitiesKV(activities);
 

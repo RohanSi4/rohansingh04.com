@@ -16,11 +16,10 @@ export default function ProjectCard({ project }: Props) {
   return (
     <Link
       href={`/projects/${project.slug}`}
-      className="group block border border-border rounded-lg p-4 bg-surface
-                 hover:border-accent transition-colors duration-150"
+      className="group surface-card flex min-h-56 flex-col p-6 transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-accent"
     >
       <div className="flex items-start justify-between gap-2 mb-2">
-        <h3 className="text-sm font-medium text-fg group-hover:text-accent transition-colors">
+        <h3 className="font-serif text-xl font-semibold text-fg transition-colors group-hover:text-accent-dim">
           {project.title}
         </h3>
         <span className="text-xs text-muted shrink-0">
@@ -28,9 +27,9 @@ export default function ProjectCard({ project }: Props) {
         </span>
       </div>
 
-      <p className="text-xs text-muted mb-3 leading-relaxed">{project.tagline}</p>
+      <p className="mb-5 text-sm leading-relaxed text-muted">{project.summary}</p>
 
-      <div className="flex items-end justify-between gap-2">
+      <div className="mt-auto flex items-end justify-between gap-2">
         <div className="flex flex-wrap gap-1">
           {project.tags.map((tag) => (
             <span

@@ -3,8 +3,9 @@ import { getHistory } from "@/lib/content";
 import { formatDateRange } from "@/lib/dates";
 
 export const metadata: Metadata = {
-  title: "history",
-  description: "rohan's work, school, and key events",
+  title: "Experience",
+  description: "Rohan Singh's software engineering, machine learning, and education experience.",
+  alternates: { canonical: "/history" },
 };
 
 const typeLabel: Record<string, string> = {
@@ -19,29 +20,35 @@ export default function HistoryPage() {
   );
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <h1 className="font-serif text-2xl mb-12">history</h1>
+    <div className="content-container page-section">
+      <header className="mb-14 max-w-2xl">
+        <p className="eyebrow mb-4">experience</p>
+        <h1 className="page-title">Work that moved a real number.</h1>
+        <p className="mt-6 text-base leading-relaxed text-muted sm:text-lg">
+          Software engineering, data work, and applied machine learning—measured by
+          what got faster, smaller, more reliable, or more useful.
+        </p>
+      </header>
 
       <div className="relative">
-        {/* vertical line */}
-        <div className="absolute left-[7px] top-2 bottom-2 w-px bg-border" />
+        <div className="absolute bottom-2 left-[7px] top-2 w-px bg-border" aria-hidden="true" />
 
-        <ol className="space-y-10">
+        <ol className="space-y-12">
           {entries.map((entry) => (
             <li key={entry.id} className="relative pl-8">
-              {/* dot */}
-              <div className="absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full border-2 border-accent bg-bg" />
+              <div className="absolute left-0 top-1.5 size-[15px] rounded-full border-2 border-accent bg-bg" aria-hidden="true" />
 
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
-                <span className="font-semibold text-fg">{entry.org}</span>
+              <article className="surface-card p-5 sm:p-7">
+              <div className="mb-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h2 className="font-serif text-xl font-semibold text-fg sm:text-2xl">{entry.org}</h2>
                 <span className="text-xs text-muted font-mono uppercase tracking-wide">
                   {typeLabel[entry.type] ?? entry.type}
                 </span>
               </div>
 
-              <div className="text-sm text-fg mb-1">{entry.title}</div>
+              <p className="mb-2 text-sm font-medium text-fg">{entry.title}</p>
 
-              <div className="flex flex-wrap gap-x-3 text-xs text-muted mb-2">
+              <div className="mb-4 flex flex-wrap gap-x-3 text-xs text-muted">
                 <span>{formatDateRange(entry.startDate, entry.endDate ?? null)}</span>
                 {entry.location && <span>{entry.location}</span>}
               </div>
@@ -49,6 +56,17 @@ export default function HistoryPage() {
               {entry.summary && (
                 <p className="text-sm text-muted leading-relaxed">{entry.summary}</p>
               )}
+              {entry.bullets && entry.bullets.length > 0 && (
+                <ul className="mt-4 space-y-2 border-t border-border pt-4">
+                  {entry.bullets.slice(0, 3).map((bullet) => (
+                    <li key={bullet} className="flex gap-3 text-sm leading-relaxed text-fg">
+                      <span className="mt-[0.7em] size-1 shrink-0 rounded-full bg-warm" aria-hidden="true" />
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              </article>
             </li>
           ))}
         </ol>

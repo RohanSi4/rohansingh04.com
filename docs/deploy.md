@@ -24,10 +24,10 @@ add `www` as an alias or redirect.
 
 ## env vars to set in vercel
 
-go to project settings > environment variables. add these before phase 5
-(the site works without them -- stubbed apis return 501 until set).
+Go to project settings > environment variables. The site renders without the
+optional live integrations, but fitness publishing needs an ingest token and KV.
 
-### health dashboard (phase 5)
+### fitness dashboard
 | var | description |
 |-----|-------------|
 | `HEALTH_INGEST_TOKEN` | secret bearer token. generate a random string (e.g. `openssl rand -hex 32`). hardcode the same value in the ios shortcut. |
@@ -47,7 +47,7 @@ in the sibling marathon repo. it can also be pushed on demand with
 remains available as an optional secondary source but
 is not required for dashboard freshness.
 
-### spotify now playing (phase 5)
+### spotify now playing
 | var | description |
 |-----|-------------|
 | `SPOTIFY_CLIENT_ID` | from developer.spotify.com > your app |
@@ -71,7 +71,7 @@ is not required for dashboard freshness.
    ```
 6. copy the `refresh_token` from the response -- that's `SPOTIFY_REFRESH_TOKEN`
 
-### github latest commit (phase 5)
+### github latest commit
 | var | description |
 |-----|-------------|
 | `GITHUB_TOKEN` | github personal access token, read-only scopes: `public_repo` |
@@ -79,22 +79,17 @@ is not required for dashboard freshness.
 create at github.com > settings > developer settings > personal access tokens (fine-grained).
 scope: contents:read on public repos is enough.
 
-### guestbook oauth (phase 5)
-| var | description |
-|-----|-------------|
-| `NEXTAUTH_URL` | `https://rohansingh04.com` |
-| `NEXTAUTH_SECRET` | random string: `openssl rand -hex 32` |
-| `GITHUB_CLIENT_ID` | github oauth app client id |
-| `GITHUB_CLIENT_SECRET` | github oauth app client secret |
+### optional strava sync
 
-create the github oauth app at github.com > settings > developer settings >
-oauth apps. set homepage url to `https://rohansingh04.com` and callback url
-to `https://rohansingh04.com/api/auth/callback/github`.
+The sibling marathon publisher is the primary fitness source. Strava can be
+connected from the authenticated admin page as a secondary sync source; configure
+the `STRAVA_*` values in `.env.example` when needed.
 
 ## local dev
 
 copy `.env.example` to `.env.local` and fill in whatever you want to test.
-most vars are optional -- the app falls back to mock data or returns 501.
+Most vars are optional. Static content and checked-in fitness data keep the site
+useful locally when live integrations are not configured.
 
 ```bash
 cp .env.example .env.local

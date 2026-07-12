@@ -5,8 +5,9 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import { daysSince } from "@/lib/dates";
 
 export const metadata: Metadata = {
-  title: "now",
-  description: "what rohan is up to right now",
+  title: "Now",
+  description: "What Rohan Singh is focused on right now—in work, fitness, and life.",
+  alternates: { canonical: "/now" },
 };
 
 const STALE_DAYS = 90;
@@ -27,22 +28,27 @@ export default async function NowPage() {
   const isStale = age >= STALE_DAYS;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <h1 className="font-serif text-2xl mb-2">now</h1>
-      <p className="text-xs text-muted font-mono mb-6">
+    <div className="content-container page-section">
+      <header className="mb-10">
+      <p className="eyebrow mb-4">right now</p>
+      <h1 className="page-title">What I&apos;m focused on.</h1>
+      <p className="mt-5 text-xs text-muted font-mono">
         last updated {lastUpdated}
         {age > 0 && ` · ${age}d ago`}
       </p>
+      </header>
 
       {isStale && (
-        <div className="mb-6 border border-border rounded px-4 py-3 text-sm text-muted bg-surface">
-          this page hasn't been updated in {age} days. it might be stale.
+        <div className="mb-6 rounded-lg border border-border bg-surface px-4 py-3 text-sm text-muted">
+          This page hasn&apos;t been updated in {age} days, so a few details may have moved on.
         </div>
       )}
 
-      <div className="prose prose-sm max-w-none text-fg [&_p]:mb-4 [&_a]:text-accent [&_a]:underline [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_li]:mb-1">
+      <article className="surface-card p-6 sm:p-8">
+      <div className="prose prose-base max-w-none text-fg [&_p]:mb-5 [&_p]:leading-relaxed [&_a]:text-accent-dim [&_a]:underline [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1">
         {content}
       </div>
+      </article>
     </div>
   );
 }

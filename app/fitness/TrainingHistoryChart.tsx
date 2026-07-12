@@ -31,7 +31,7 @@ function Chart({ points }: { points: Point[] }) {
   const left = 28;
   const right = 12;
   const plotWidth = width - left - right;
-  const band = plotWidth / points.length;
+  const band = plotWidth / Math.max(points.length, 1);
   const barWidth = Math.min(82, band * 0.58);
   const maxValue = Math.max(...points.map((point) => point.miles), 1);
   const tickSize = maxValue > 80 ? 50 : maxValue > 35 ? 20 : 10;
@@ -160,7 +160,8 @@ export default function TrainingHistoryChart({
             <span><i className={styles.barKey} />total miles</span>
             <span><i className={styles.lineKey} />longest run</span>
           </div>
-          <div className={styles.rangeControls} aria-label="Chart range">
+          <fieldset className={styles.rangeControls}>
+            <legend className="sr-only">Chart range</legend>
             {([
               ["recent", "8 weeks"],
               ["year", currentYear],
@@ -176,10 +177,25 @@ export default function TrainingHistoryChart({
                 {label}
               </button>
             ))}
-          </div>
+          </fieldset>
         </div>
       </div>
       <Chart points={points} />
+      <table className="sr-only">
+        <caption>{periodLabel} running history</caption>
+        <thead>
+          <tr><th scope="col">Period</th><th scope="col">Total miles</th><th scope="col">Longest run</th></tr>
+        </thead>
+        <tbody>
+          {points.map((point) => (
+            <tr key={`table-${point.key}`}>
+              <th scope="row">{point.label}</th>
+              <td>{point.miles.toFixed(1)}</td>
+              <td>{point.longest.toFixed(1)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <div className={styles.chartFooter}>
         <span>{points[0]?.label} → {points.at(-1)?.label}</span>
         <span>peak week · {peakWeekMiles.toFixed(1)} mi</span>

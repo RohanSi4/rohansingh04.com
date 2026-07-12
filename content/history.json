@@ -7,7 +7,7 @@
     "startDate": "2024-08",
     "endDate": "2027-05",
     "location": "Charlottesville, VA",
-    "summary": "Transferred from UW-Madison. Currently CS 3130, CS 4750 Databases, CS 4501 Carbon Efficient Computing, DS 2004, STS 4500."
+    "summary": "BSCS with a Data Science minor. Expected May 2027; transferred from UW-Madison after one year."
   },
   {
     "id": "freddie-mac-2025",
@@ -17,7 +17,13 @@
     "startDate": "2025-05",
     "endDate": "2025-08",
     "location": "McLean, VA",
-    "summary": "Spring Boot, GraphQL with 60% payload reduction, Playwright POC 4x faster, Python+Jenkins pipeline cut refresh from 2hr to 10min, AWS S3/MongoDB."
+    "summary": "Built backend APIs, test automation, and data tooling across a Spring Boot and AWS stack.",
+    "bullets": [
+      "Built GraphQL endpoints that reduced API payload size by 60%",
+      "Authored a Playwright proof of concept that ran 4x faster than the existing Selenium suite",
+      "Built a Python and Jenkins pipeline that cut data refresh time from 2 hours to 10 minutes",
+      "Worked with Spring Boot, GraphQL, Python, Jenkins, AWS S3, and MongoDB"
+    ]
   },
   {
     "id": "biocomplexity-2024",
@@ -27,7 +33,12 @@
     "startDate": "2024-11",
     "endDate": "2025-05",
     "location": "Charlottesville, VA",
-    "summary": "Graph-based anomaly detection on 2M+ node graphs, AUC-ROC 0.55 to 0.76. cuGraph and NetworkX on supercomputing infrastructure."
+    "summary": "Developed graph-based anomaly detection on supercomputing infrastructure.",
+    "bullets": [
+      "Developed graph-based anomaly detection for graphs with more than 2 million nodes",
+      "Improved AUC-ROC from 0.55 to 0.76",
+      "Worked with Python, cuGraph, NetworkX, and supercomputing infrastructure"
+    ]
   },
   {
     "id": "cubic-2024",
@@ -37,7 +48,12 @@
     "startDate": "2024-06",
     "endDate": "2024-08",
     "location": "Remote",
-    "summary": "Built React + Docusaurus user guide portal serving 10,000+ users, 85% support ticket reduction. AWS hosted."
+    "summary": "Built and shipped an AWS-hosted documentation portal with React and Docusaurus.",
+    "bullets": [
+      "Built a React and Docusaurus user guide portal serving more than 10,000 users",
+      "Reduced related support tickets by 85%",
+      "Deployed the portal on AWS"
+    ]
   },
   {
     "id": "uw-madison",

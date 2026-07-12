@@ -4,6 +4,7 @@ import {
   formatPace,
   formatRunDate,
   getStaticRunningDashboard,
+  mergeLiveHealth,
   mergeLiveRuns,
 } from "./running";
 
@@ -61,11 +62,51 @@ describe("running dashboard snapshot", () => {
     expect(updated.totals.runMiles).toBe(data.totals.runMiles + 3.1);
     expect(updated.recentRuns[0].id).toBe("live-999");
   });
+
+  it("preserves lifetime health history when live health only covers 365 days", () => {
+    const archive = getStaticRunningDashboard().health;
+    const nextDate = "2099-01-02";
+    const live = {
+      ...archive,
+      updatedAt: "2099-01-02T12:00:00.000Z",
+      lastActivity: archive.lastActivity
+        ? { ...archive.lastActivity, date: nextDate, name: "Private route title" }
+        : null,
+      recentActivities: archive.recentActivities.map((activity, index) => index === 0
+        ? { ...activity, name: "Private route title" }
+        : activity),
+      streak: { currentDays: 1, bestDays: 1 },
+      allTime: { activeDays: 1, sinceDate: "2098-01-03" },
+      heatmap: [
+        ...archive.heatmap,
+        {
+          date: nextDate,
+          intensity: 2,
+          exerciseMinutes: 30,
+          sport: "Run",
+          distanceMi: 3.1,
+        },
+      ],
+    };
+
+    const merged = mergeLiveHealth(archive, live);
+
+    expect(merged.allTime.activeDays).toBe(archive.allTime.activeDays + 1);
+    expect(merged.allTime.sinceDate).toBe(archive.allTime.sinceDate);
+    expect(merged.streak.bestDays).toBe(archive.streak.bestDays);
+    expect(merged.today).toBe(live.today);
+    expect(merged.lastActivity?.name).not.toBe("Private route title");
+    expect(merged.recentActivities[0]?.name).not.toBe("Private route title");
+  });
 });
 
 describe("running formatters", () => {
   it("formats pace as minutes per mile", () => {
     expect(formatPace(583)).toBe("9:43");
+  });
+
+  it("carries rounded seconds into the next minute", () => {
+    expect(formatPace(599.6)).toBe("10:00");
   });
 
   it("formats date-only values without timezone drift", () => {

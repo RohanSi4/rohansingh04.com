@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Stars, useTexture } from "@react-three/drei";
 import * as THREE from "three";
@@ -11,6 +11,31 @@ import PhotoUpload from "@/components/admin/PhotoUpload";
 const GLOBE_R = 1.5;
 const PIN_R = 0.022;
 const PIN_OFFSET = 0.04;
+
+function useReducedMotion() {
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  return reducedMotion;
+}
+
+function formatVisitedDate(value: string) {
+  const [year, month] = value.split("-").map(Number);
+  if (!year) return value;
+  if (!month) return String(year);
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(year, month - 1, 1)));
+}
 
 // --- Earth sphere ---
 function Earth() {
@@ -148,10 +173,10 @@ function AdminEditPanel({
   }
 
   return (
-    <div className="absolute top-4 right-4 bg-black/90 border border-white/20 rounded-lg p-4 w-64 text-white max-h-[90vh] overflow-y-auto">
+    <div className="absolute inset-x-3 bottom-3 z-20 max-h-[85%] overflow-y-auto rounded-xl border border-white/20 bg-black/95 p-4 text-white shadow-2xl sm:inset-x-auto sm:bottom-auto sm:right-4 sm:top-4 sm:w-72">
       <div className="flex justify-between items-center mb-3">
         <p className="text-xs font-mono text-white/50 uppercase tracking-widest">edit pin</p>
-        <button onClick={onClose} className="text-white/40 hover:text-white text-lg leading-none">×</button>
+        <button type="button" onClick={onClose} className="flex size-11 items-center justify-center rounded-full text-lg leading-none text-white/60 hover:bg-white/10 hover:text-white" aria-label={`Close editor for ${place.name}`}>×</button>
       </div>
 
       <div className="space-y-2">
@@ -188,10 +213,12 @@ function AdminEditPanel({
             <div className="grid grid-cols-3 gap-1 mt-1">
               {form.photos.map((url) => (
                 <div key={url} className="relative group">
-                  <img src={url} alt="" className="w-full aspect-square object-cover rounded" />
+                  <img src={url} alt={`Photo from ${place.name}`} className="w-full aspect-square object-cover rounded" />
                   <button
+                    type="button"
                     onClick={() => removePhoto(url)}
-                    className="absolute inset-0 bg-black/60 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center"
+                    aria-label={`Remove photo from ${place.name}`}
+                    className="absolute inset-0 flex items-center justify-center rounded bg-black/60 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
                   >
                     ×
                   </button>
@@ -212,14 +239,14 @@ function AdminEditPanel({
           <button
             onClick={save}
             disabled={saving}
-            className="flex-1 bg-accent text-bg text-xs font-mono py-1.5 rounded hover:opacity-90 disabled:opacity-40"
+            className="min-h-11 flex-1 rounded bg-accent px-3 py-1.5 font-mono text-xs text-bg hover:opacity-90 disabled:opacity-40"
           >
             {saving ? "saving..." : "save"}
           </button>
           <button
             onClick={del}
             disabled={deleting}
-            className="px-3 text-red-400 border border-red-400/30 text-xs font-mono py-1.5 rounded hover:bg-red-400/10 disabled:opacity-40"
+            className="min-h-11 rounded border border-red-400/30 px-3 py-1.5 font-mono text-xs text-red-400 hover:bg-red-400/10 disabled:opacity-40"
           >
             {deleting ? "..." : "del"}
           </button>
@@ -263,10 +290,10 @@ function AdminAddPanel({
   }
 
   return (
-    <div className="absolute top-4 right-4 bg-black/90 border border-white/20 rounded-lg p-4 w-64 text-white">
+    <div className="absolute inset-x-3 bottom-3 z-20 max-h-[85%] overflow-y-auto rounded-xl border border-white/20 bg-black/95 p-4 text-white shadow-2xl sm:inset-x-auto sm:bottom-auto sm:right-4 sm:top-4 sm:w-72">
       <div className="flex justify-between items-center mb-3">
         <p className="text-xs font-mono text-white/50 uppercase tracking-widest">add pin</p>
-        <button onClick={onClose} className="text-white/40 hover:text-white text-lg leading-none">×</button>
+        <button type="button" onClick={onClose} className="flex size-11 items-center justify-center rounded-full text-lg leading-none text-white/60 hover:bg-white/10 hover:text-white" aria-label="Close add-place form">×</button>
       </div>
 
       <div className="space-y-2">
@@ -302,7 +329,7 @@ function AdminAddPanel({
         <button
           onClick={save}
           disabled={saving || !form.name || !form.country}
-          className="w-full bg-accent text-bg text-xs font-mono py-1.5 rounded hover:opacity-90 disabled:opacity-40 mt-1"
+          className="mt-1 min-h-11 w-full rounded bg-accent py-1.5 font-mono text-xs text-bg hover:opacity-90 disabled:opacity-40"
         >
           {saving ? "adding..." : "add pin"}
         </button>
@@ -325,6 +352,7 @@ export default function GlobeScene({ places: initialPlaces, isAdmin }: Props) {
   const [adding, setAdding] = useState(false);
   const [interacting, setInteracting] = useState(false);
   const rotateTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reducedMotion = useReducedMotion();
 
   const handleHover = useCallback((p: Place | null) => setHovered(p), []);
   const handleClick = useCallback((p: Place) => {
@@ -353,9 +381,30 @@ export default function GlobeScene({ places: initialPlaces, isAdmin }: Props) {
 
   const panelOpen = editing || adding;
 
+  useEffect(() => {
+    return () => {
+      if (rotateTimer.current) clearTimeout(rotateTimer.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!selected && !adding) return;
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      if (editing) setEditing(false);
+      else if (adding) setAdding(false);
+      else setSelected(null);
+    }
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [adding, editing, selected]);
+
   return (
-    <div className="relative w-full h-full">
+    <div className="relative h-full w-full">
       <Canvas
+        aria-label="Interactive globe showing places Rohan has visited"
         camera={{ position: [0, 0, 4], fov: 45 }}
         gl={{ antialias: true }}
         onPointerDown={() => {
@@ -370,9 +419,9 @@ export default function GlobeScene({ places: initialPlaces, isAdmin }: Props) {
         <ambientLight intensity={1.2} />
         <directionalLight position={[5, 3, 5]} intensity={1.8} />
         <directionalLight position={[-5, -2, -3]} intensity={0.4} />
-        <Stars radius={100} depth={50} count={3000} factor={4} fade />
+        <Stars radius={100} depth={50} count={reducedMotion ? 1200 : 3000} factor={4} fade />
 
-        <AutoRotate paused={interacting || selected !== null}>
+        <AutoRotate paused={reducedMotion || interacting || selected !== null}>
           <Earth />
           <Atmosphere />
           {places.map((p) => (
@@ -390,9 +439,31 @@ export default function GlobeScene({ places: initialPlaces, isAdmin }: Props) {
         <CursorStyle hovered={hovered !== null} />
       </Canvas>
 
+      <div className="absolute left-3 top-3 z-10 rounded-lg border border-white/15 bg-black/80 p-2 text-white shadow-lg backdrop-blur-sm sm:left-4 sm:top-4">
+        <label htmlFor="travel-place-select" className="sr-only">Jump to a visited place</label>
+        <select
+          id="travel-place-select"
+          value={selected?.id ?? ""}
+          onChange={(event) => {
+            const place = places.find((candidate) => candidate.id === event.target.value) ?? null;
+            setAdding(false);
+            setEditing(false);
+            setSelected(place);
+          }}
+          className="min-h-11 max-w-[13rem] rounded-md border border-white/15 bg-black px-3 text-sm text-white outline-none focus:border-white/50 sm:max-w-xs"
+        >
+          <option value="">Jump to a place…</option>
+          {[...places]
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((place) => (
+              <option key={place.id} value={place.id}>{place.name}, {place.country}</option>
+            ))}
+        </select>
+      </div>
+
       {/* hover label */}
       {hovered && !selected && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs font-mono px-3 py-1.5 rounded pointer-events-none">
+        <div className="pointer-events-none absolute left-1/2 top-20 -translate-x-1/2 rounded bg-black/80 px-3 py-1.5 font-mono text-xs text-white">
           {hovered.name}, {hovered.country}
         </div>
       )}
@@ -401,7 +472,8 @@ export default function GlobeScene({ places: initialPlaces, isAdmin }: Props) {
       {isAdmin && !panelOpen && (
         <button
           onClick={() => { setSelected(null); setAdding(true); }}
-          className="absolute top-4 left-4 bg-accent text-bg text-xs font-mono px-3 py-1.5 rounded hover:opacity-90 transition-opacity"
+          type="button"
+          className="absolute left-4 top-20 z-10 min-h-11 rounded bg-accent px-3 py-1.5 font-mono text-xs text-bg transition-opacity hover:opacity-90"
         >
           + add pin
         </button>
@@ -409,23 +481,28 @@ export default function GlobeScene({ places: initialPlaces, isAdmin }: Props) {
 
       {/* selected info panel (non-edit) */}
       {selected && !editing && !adding && (
-        <div className="absolute top-4 right-4 bg-black/80 border border-white/10 rounded-lg p-4 w-52 text-white">
+        <section
+          className="absolute inset-x-3 bottom-3 z-20 rounded-xl border border-white/15 bg-black/90 p-4 text-white shadow-2xl backdrop-blur-sm sm:inset-x-auto sm:bottom-auto sm:right-4 sm:top-4 sm:w-64"
+          aria-label={`Selected place: ${selected.name}, ${selected.country}`}
+          aria-live="polite"
+        >
           <div className="flex justify-between items-start mb-2">
             <div>
               <p className="font-semibold text-sm">{selected.name}</p>
               <p className="text-xs text-white/50">{selected.country}</p>
             </div>
             <button
+              type="button"
               onClick={() => setSelected(null)}
-              className="text-white/40 hover:text-white transition-colors text-lg leading-none ml-2"
-              aria-label="close"
+              className="ml-2 flex size-11 items-center justify-center rounded-full text-lg leading-none text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+              aria-label={`Close details for ${selected.name}`}
             >
               ×
             </button>
           </div>
           {selected.visitedDate && (
-            <p className="text-xs text-white/60 font-mono mb-1">
-              {selected.visitedDate}
+            <p className="mb-1 font-mono text-xs text-white/70">
+              {formatVisitedDate(selected.visitedDate)}
               {selected._needsDate && " (approx)"}
             </p>
           )}
@@ -435,19 +512,19 @@ export default function GlobeScene({ places: initialPlaces, isAdmin }: Props) {
           {selected.photos && selected.photos.length > 0 && (
             <div className="grid grid-cols-3 gap-1 mb-2">
               {selected.photos.map((url) => (
-                <img key={url} src={url} alt="" className="w-full aspect-square object-cover rounded" />
+                <img key={url} src={url} alt={`Photo from ${selected.name}`} className="w-full aspect-square object-cover rounded" />
               ))}
             </div>
           )}
           {isAdmin && (
             <button
               onClick={() => setEditing(true)}
-              className="w-full text-xs font-mono text-white/40 hover:text-white border border-white/10 hover:border-white/30 rounded py-1 transition-colors"
+              className="min-h-11 w-full rounded border border-white/10 py-1 font-mono text-xs text-white/60 hover:border-white/30 hover:text-white"
             >
               edit
             </button>
           )}
-        </div>
+        </section>
       )}
 
       {/* admin edit panel */}

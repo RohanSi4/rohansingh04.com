@@ -1,6 +1,10 @@
 import snapshot from "@/content/running-dashboard.json";
 import { getHealthKV, getRunningDashboardKV } from "./kv-data";
-import { getStravaActivitiesKV, type StravaActivity } from "./strava";
+import {
+  genericActivityName,
+  getStravaActivitiesKV,
+  type StravaActivity,
+} from "./strava";
 import type { HealthSummary } from "./types";
 
 export type RunningWeek = {
@@ -79,6 +83,56 @@ export type RunningDashboard = {
 
 export function getStaticRunningDashboard(): RunningDashboard {
   return snapshot as unknown as RunningDashboard;
+}
+
+function sanitizeHealthActivityNames(summary: HealthSummary): HealthSummary {
+  return {
+    ...summary,
+    lastActivity: summary.lastActivity
+      ? {
+          ...summary.lastActivity,
+          name: genericActivityName(summary.lastActivity.sport),
+        }
+      : null,
+    recentActivities: summary.recentActivities.map((activity) => ({
+      ...activity,
+      name: genericActivityName(activity.sport),
+    })),
+  };
+}
+
+/**
+ * Prefer fresh rolling health fields without replacing lifetime history with
+ * Strava's deliberately bounded 365-day cache.
+ */
+export function mergeLiveHealth(
+  archive: HealthSummary,
+  live: HealthSummary,
+): HealthSummary {
+  const safeLive = sanitizeHealthActivityNames(live);
+  const archiveCutoff = archive.lastActivity?.date ?? archive.allTime.sinceDate;
+  const newActiveDates = new Set(
+    safeLive.heatmap
+      .filter((entry) => entry.date > archiveCutoff && entry.exerciseMinutes > 0)
+      .map((entry) => entry.date),
+  );
+
+  return {
+    ...safeLive,
+    streak: {
+      currentDays: safeLive.streak.currentDays,
+      bestDays: Math.max(archive.streak.bestDays, safeLive.streak.bestDays),
+    },
+    allTime: {
+      activeDays: Math.max(
+        safeLive.allTime.activeDays,
+        archive.allTime.activeDays + newActiveDates.size,
+      ),
+      sinceDate: archive.allTime.sinceDate < safeLive.allTime.sinceDate
+        ? archive.allTime.sinceDate
+        : safeLive.allTime.sinceDate,
+    },
+  };
 }
 
 function dateKey(activity: StravaActivity): string {
@@ -241,10 +295,11 @@ export async function getRunningDashboard(): Promise<RunningDashboard> {
     getStravaActivitiesKV(),
   ]);
   const stored = storedResult.status === "fulfilled" ? storedResult.value : null;
-  const base = stored?.schemaVersion === 2 ? stored : fallback;
+  const source = stored?.schemaVersion === 2 ? stored : fallback;
+  const base = { ...source, health: sanitizeHealthActivityNames(source.health) };
   const health = healthResult.status === "fulfilled" ? healthResult.value : null;
   const withHealth = health && health.updatedAt > base.health.updatedAt
-    ? { ...base, health }
+    ? { ...base, health: mergeLiveHealth(base.health, health) }
     : base;
   return mergeLiveRuns(
     withHealth,
@@ -253,8 +308,9 @@ export async function getRunningDashboard(): Promise<RunningDashboard> {
 }
 
 export function formatPace(totalSeconds: number): string {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = Math.round(totalSeconds % 60);
+  const roundedSeconds = Math.max(0, Math.round(totalSeconds));
+  const minutes = Math.floor(roundedSeconds / 60);
+  const seconds = roundedSeconds % 60;
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 

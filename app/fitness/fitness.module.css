@@ -371,6 +371,7 @@
 }
 
 .rangeButton {
+  min-height: 2.75rem;
   padding: 0.38rem 0.65rem;
   border-radius: 0.35rem;
   color: var(--muted);
@@ -517,10 +518,15 @@
 }
 
 .runTable {
+  display: block;
+  width: 100%;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 1rem;
 }
+
+.runTable thead,
+.runTable tbody { display: block; }
 
 .runRow {
   display: grid;
@@ -534,6 +540,8 @@
   font-size: 0.82rem;
   transition: background 150ms ease;
 }
+
+.runRow > * { text-align: left; }
 
 .runRow:last-child { border: 0; }
 .runRow:not(.runTableHead):hover { background: var(--surface); }
@@ -627,7 +635,7 @@
   .runTable { border-radius: 0.8rem; }
   .runTableHead { display: none; }
   .runRow { grid-template-columns: 0.75fr 1.1fr 1fr; gap: 0.6rem; min-height: 4.5rem; padding: 0.75rem 1rem; }
-  .runRow > span:nth-child(4), .runRow > span:nth-child(5) { display: none; }
+  .runRow > :nth-child(4), .runRow > :nth-child(5) { display: none; }
   .runPrimary { align-items: flex-start; flex-direction: column; gap: 0.1rem; }
   .pipeline { grid-template-columns: 1fr; padding: 1.5rem; }
   .dataFooter { align-items: flex-start; flex-direction: column; padding-left: 0.5rem; }

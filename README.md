@@ -1,6 +1,7 @@
 # rohansingh04.com
 
-personal site. next.js 16, tailwind 4, react-three-fiber. hosted on vercel.
+Personal portfolio and live-data playground. Built with Next.js 16, Tailwind 4,
+and React Three Fiber; hosted on Vercel.
 
 ## dev
 
@@ -26,7 +27,8 @@ open [http://localhost:3000](http://localhost:3000).
 app/           next.js app router pages + api routes
 components/    react components
   layout/      header, footer, theme toggle
-  widgets/     live data widgets (health, spotify, github)
+  fitness/     fitness previews and dashboard components
+  widgets/     small live data widgets (spotify and github)
   globe/        r3f globe components
   states/      us states svg map
   projects/    project grid + cards
@@ -47,7 +49,7 @@ all structured data lives in `/content`. edit json files directly.
 - `states.json` -- all 50 states + DC with visited status
 - `history.json` -- work, school, milestones for /history and /resume
 - `projects/*/meta.json` -- project metadata, `featured: true` surfaces on landing
-- `running-dashboard.json` -- privacy-safe snapshot rendered by `/fitness`
+- `running-dashboard.json` -- deploy-safe fallback for `/fitness`
 
 ## fitness page
 
@@ -88,20 +90,13 @@ css variables for all colors defined in `app/globals.css`. accent is sage green
 see `docs/deploy.md` for the full list. for local dev, copy `.env.example` to
 `.env.local` and fill in the values you need (most are optional in dev).
 
-## phases
-
-- **phase 0** (done) -- scaffold, empty pages, header, footer, theme
-- **phase 1** -- content json seed, widget card, types, geo helpers
-- **phase 2** -- health dashboard on landing (mock data)
-- **phase 3** -- projects, history, resume, now, states
-- **phase 4** -- 3d globe, travel list
-- **phase 5** -- live apis (spotify, github, health ingest), guestbook
-
 ## notes
 
-- no db, no cms, no auth except github oauth on /guestbook (phase 5)
-- the health dashboard on the landing page is fed by an ios shortcut
-  that posts to /api/health/ingest daily -- see docs/ios-shortcut.md
+- Project, experience, and current-focus content lives in versioned JSON/MDX.
+- Fitness data is ingested privately and exposed only through a strict,
+  privacy-safe dashboard schema.
+- The older Apple Health ingest remains available as a secondary source; see
+  `docs/ios-shortcut.md`.
 - `@vercel/kv` is deprecated upstream (moved to upstash redis). the api
   is identical; just add the upstash integration in the vercel dashboard
   and it will work with the same env vars

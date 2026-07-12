@@ -1,0 +1,41 @@
+I wanted a personal site that showed more than a list of links. The goal became
+a living portfolio: the work still has to be easy to understand, but the site
+should also reflect the fitness, travel, music, and side projects that fill the
+rest of my time.
+
+## what lives here
+
+The site is built with Next.js and TypeScript. Project case studies and personal
+history live in simple, reviewable content files, while the parts that need to
+change on their own use live data. The fitness page updates from my training
+pipeline, the globe and states views turn travel history into something visual,
+and the music and development widgets add a small snapshot of the present.
+
+That mix makes the site useful as a portfolio without flattening it into a
+resume. Someone can move quickly through the projects and experience, or follow
+the more personal paths when they want to know the person behind the work.
+
+## publishing fitness data safely
+
+My workout archive includes information that should stay private. The public
+fitness flow therefore publishes an explicit set of summary fields instead of
+copying raw activity files into the site. Mileage, duration, activity type, and
+aggregate progress can appear publicly; GPS coordinates, source filenames,
+health notes, and workout descriptions remain local.
+
+This is a small design decision with a large effect: the dashboard can update
+from real training while the boundary between a useful public story and a
+private health archive remains clear.
+
+## design tradeoffs
+
+I kept the content model deliberately lightweight. JSON and MDX are easier to
+review and version than a CMS for a site maintained by one person, while live
+APIs and data stores are reserved for features that actually benefit from them.
+The globe and maps are richer interactive surfaces, but most pages stay fast,
+readable, and server-rendered.
+
+The visual direction follows the same rule. Data and interaction are used when
+they reveal something; they should not make a visitor work to understand who I
+am or what I built. The site is still evolving, but that balance between clear
+portfolio storytelling and playful personal systems is the project.

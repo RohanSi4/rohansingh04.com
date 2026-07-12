@@ -1,0 +1,16 @@
+{
+  "slug": "personal-site",
+  "title": "Personal Site",
+  "tagline": "A living portfolio for my work, fitness, travel, and interests",
+  "summary": "I designed and built this Next.js site as both a portfolio and a home for projects that do not fit in a static resume. It combines written case studies with live fitness data, travel maps, music, and small signals from the things I am doing now.",
+  "outcome": "Shipped one evolving site that connects professional work with live, privacy-conscious personal data.",
+  "visual": "site",
+  "tags": ["next.js", "typescript", "data"],
+  "startDate": "2026-04",
+  "endDate": null,
+  "status": "in-progress",
+  "featured": true,
+  "githubUrl": "https://github.com/RohanSi4/rohansingh04.com",
+  "liveUrl": "https://rohansingh04.com",
+  "subProjects": []
+}

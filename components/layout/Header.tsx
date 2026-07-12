@@ -2,60 +2,95 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
-  { href: "/fitness", label: "fitness" },
-  { href: "/globe", label: "globe" },
-  { href: "/states", label: "states" },
-  { href: "/projects", label: "projects" },
-  { href: "/history", label: "history" },
-  { href: "/resume", label: "resume" },
-  { href: "/now", label: "now" },
+  { href: "/projects", label: "work", paths: ["/projects"] },
+  { href: "/history", label: "experience", paths: ["/history"] },
+  { href: "/fitness", label: "fitness", paths: ["/fitness"] },
+  { href: "/globe", label: "travel", paths: ["/globe", "/states", "/travel-list"] },
+  { href: "/now", label: "now", paths: ["/now"] },
 ] as const;
+
+function pathIsActive(pathname: string, paths: readonly string[]) {
+  return paths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+}
 
 export default function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      menuButtonRef.current?.focus();
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [menuOpen]);
 
   return (
-    <header className="sticky top-0 z-40 bg-bg/90 backdrop-blur-sm border-b border-border">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+    <header className="sticky top-0 z-40 border-b border-border bg-bg/90 backdrop-blur-md supports-[backdrop-filter]:bg-bg/80">
+      <div className="site-container flex h-14 items-center justify-between">
         {/* name / home link */}
         <Link
           href="/"
-          className="font-serif text-lg font-semibold tracking-tight text-fg hover:text-accent transition-colors"
+          className="flex min-h-11 items-center font-serif text-lg font-semibold tracking-tight text-fg transition-colors hover:text-accent"
         >
           rohan singh
         </Link>
 
         {/* desktop nav */}
-        <nav aria-label="site navigation" className="hidden md:flex items-center gap-6">
-          {navLinks.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className={`text-sm transition-colors ${
-                pathname === href || pathname.startsWith(href + "/")
-                  ? "text-fg font-medium"
-                  : "text-muted hover:text-fg"
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
+        <nav aria-label="Primary navigation" className="hidden items-center gap-1 md:flex [&_button]:size-11">
+          {navLinks.map(({ href, label, paths }) => {
+            const active = pathIsActive(pathname, paths);
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={active ? "page" : undefined}
+                className={`flex min-h-11 items-center rounded-full px-3 text-sm transition-colors ${
+                  active
+                    ? "bg-surface text-fg"
+                    : "text-muted hover:bg-surface/70 hover:text-fg"
+                }`}
+              >
+                {label}
+              </Link>
+            );
+          })}
+          <Link
+            href="/resume"
+            aria-current={pathname === "/resume" ? "page" : undefined}
+            className="ml-1 flex min-h-11 items-center rounded-full border border-border px-3.5 text-sm font-medium text-fg transition-colors hover:border-accent hover:text-accent-dim"
+          >
+            resume <span aria-hidden="true">↗</span>
+          </Link>
           <ThemeToggle />
         </nav>
 
         {/* mobile: theme toggle + hamburger */}
-        <div className="flex md:hidden items-center gap-2">
+        <div className="flex items-center gap-1 md:hidden [&_button]:size-11">
           <ThemeToggle />
           <button
+            ref={menuButtonRef}
+            type="button"
             aria-label={menuOpen ? "close menu" : "open menu"}
             aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            aria-haspopup="true"
             onClick={() => setMenuOpen((o) => !o)}
-            className="w-8 h-8 flex items-center justify-center rounded text-muted hover:text-fg transition-colors"
+            className="flex size-11 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface hover:text-fg"
           >
             {menuOpen ? (
               // X
@@ -79,24 +114,40 @@ export default function Header() {
       {menuOpen && (
         <nav
           aria-label="site navigation"
-          className="md:hidden border-t border-border bg-bg"
+          id="mobile-navigation"
+          className="border-t border-border bg-bg shadow-lg md:hidden"
         >
-          <ul className="max-w-5xl mx-auto px-4 py-3 flex flex-col gap-1">
-            {navLinks.map(({ href, label }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  onClick={() => setMenuOpen(false)}
-                  className={`block py-2 text-sm transition-colors ${
-                    pathname === href || pathname.startsWith(href + "/")
-                      ? "text-fg font-medium"
-                      : "text-muted hover:text-fg"
-                  }`}
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
+          <ul className="site-container flex flex-col gap-1 py-3">
+            {navLinks.map(({ href, label, paths }) => {
+              const active = pathIsActive(pathname, paths);
+              return (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    aria-current={active ? "page" : undefined}
+                    onClick={() => setMenuOpen(false)}
+                    className={`flex min-h-11 items-center justify-between rounded-lg px-3 text-sm transition-colors ${
+                      active
+                        ? "bg-surface font-medium text-fg"
+                        : "text-muted hover:bg-surface/70 hover:text-fg"
+                    }`}
+                  >
+                    {label}
+                    {active && <span className="size-1.5 rounded-full bg-accent" aria-hidden="true" />}
+                  </Link>
+                </li>
+              );
+            })}
+            <li className="pt-1">
+              <Link
+                href="/resume"
+                aria-current={pathname === "/resume" ? "page" : undefined}
+                onClick={() => setMenuOpen(false)}
+                className="flex min-h-11 items-center justify-between rounded-lg border border-border px-3 text-sm font-medium text-fg transition-colors hover:border-accent"
+              >
+                resume <span aria-hidden="true">↗</span>
+              </Link>
+            </li>
           </ul>
         </nav>
       )}

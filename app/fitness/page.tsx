@@ -242,22 +242,27 @@ export default async function FitnessPage() {
             walks, rides, and sports all count.
           </p>
         </div>
-        <div className={styles.runTable}>
-          <div className={`${styles.runRow} ${styles.runTableHead}`} aria-hidden="true">
-            <span>date</span><span>activity</span><span>duration</span><span>distance</span><span>type</span>
-          </div>
+        <table className={styles.runTable}>
+          <caption className="sr-only">Ten most recent fitness activities</caption>
+          <thead>
+          <tr className={`${styles.runRow} ${styles.runTableHead}`}>
+            <th scope="col">date</th><th scope="col">activity</th><th scope="col">duration</th><th scope="col">distance</th><th scope="col">type</th>
+          </tr>
+          </thead>
+          <tbody>
           {data.health.recentActivities.slice(0, 10).map((activity, index) => (
-            <div className={styles.runRow} key={`${activity.date}-${activity.sport}-${index}`}>
-              <span className={styles.runDate}>{formatRunDate(activity.date)}</span>
-              <span className={styles.runPrimary}>
+            <tr className={styles.runRow} key={`${activity.date}-${activity.sport}-${index}`}>
+              <td className={styles.runDate}>{formatRunDate(activity.date)}</td>
+              <td className={styles.runPrimary}>
                 <strong>{activity.name.toLowerCase()}</strong>
-              </span>
-              <span>{activity.movingMins} <small>min</small></span>
-              <span>{activity.distanceMi > 0 ? activity.distanceMi.toFixed(1) : "—"} <small>{activity.distanceMi > 0 ? "mi" : ""}</small></span>
-              <span><small>{activityLabel(activity.sport)}</small></span>
-            </div>
+              </td>
+              <td>{activity.movingMins} <small>min</small></td>
+              <td>{activity.distanceMi > 0 ? activity.distanceMi.toFixed(1) : "—"} <small>{activity.distanceMi > 0 ? "mi" : ""}</small></td>
+              <td><small>{activityLabel(activity.sport)}</small></td>
+            </tr>
           ))}
-        </div>
+          </tbody>
+        </table>
       </section>
 
       <section className={styles.pipeline} aria-labelledby="bigger-goal-title">

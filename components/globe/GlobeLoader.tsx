@@ -6,8 +6,8 @@ import type { Place } from "@/lib/types";
 const GlobeScene = dynamic(() => import("./GlobeScene"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <p className="text-white/30 text-sm font-mono">loading...</p>
+    <div className="flex h-full w-full items-center justify-center" role="status" aria-live="polite">
+      <p className="font-mono text-sm text-white/70">loading the globe…</p>
     </div>
   ),
 });

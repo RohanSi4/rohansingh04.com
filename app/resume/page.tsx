@@ -1,68 +1,50 @@
 import type { Metadata } from "next";
-import { getHistory } from "@/lib/content";
+import { getHistory, getSiteConfig } from "@/lib/content";
 import { formatDateRange } from "@/lib/dates";
-import experience from "@/content/experience.json";
 
 export const metadata: Metadata = {
-  title: "resume",
-  description: "rohan singh's resume",
-};
-
-type ExperienceEntry = {
-  id: string;
-  title: string;
-  org: string;
-  startDate: string;
-  endDate: string;
-  location: string;
-  bullets: string[];
+  title: "Résumé",
+  description: "Rohan Singh's education, software engineering experience, and technical skills.",
+  alternates: { canonical: "/resume" },
 };
 
 export default function ResumePage() {
   const history = getHistory();
+  const site = getSiteConfig();
   const education = history
     .filter((e) => e.type === "school")
     .sort((a, b) => b.startDate.localeCompare(a.startDate));
 
-  const exp = (experience as ExperienceEntry[]).sort((a, b) =>
-    b.startDate.localeCompare(a.startDate)
-  );
+  const experience = history
+    .filter((e) => e.type === "work")
+    .sort((a, b) => b.startDate.localeCompare(a.startDate));
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <div className="flex items-center justify-between mb-10">
-        <h1 className="font-serif text-2xl">resume</h1>
-        <a
-          href="/resume.pdf"
-          download
-          className="text-sm text-accent hover:underline transition-colors"
-        >
-          download pdf
-        </a>
-      </div>
+    <div className="content-container page-section">
+      <header className="mb-12 border-b border-border pb-8">
+        <p className="eyebrow mb-4">résumé</p>
+        <h1 className="page-title">Rohan Singh</h1>
 
-      {/* header */}
-      <div className="mb-10">
-        <p className="font-semibold text-lg">rohan singh</p>
-        <p className="text-sm text-muted">
-          charlottesville, va ·{" "}
-          <a href="mailto:rohan@rohansingh04.com" className="text-accent hover:underline">
-            rohan@rohansingh04.com
-          </a>{" "}
-          ·{" "}
+        <p className="mt-5 text-base text-muted">
+          Computer science at UVA, graduating May 2027 · software, data, and ML systems
+        </p>
+        <p className="mt-3 flex flex-wrap gap-x-2 text-sm text-muted">
+          <span>{site.currentLocation}</span><span aria-hidden="true">·</span>
+          <a href="mailto:rohan.singh04@outlook.com" className="text-accent hover:underline">
+            rohan.singh04@outlook.com
+          </a><span aria-hidden="true">·</span>
           <a href="https://github.com/RohanSi4" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
             github
-          </a>{" "}
-          ·{" "}
+          </a><span aria-hidden="true">·</span>
           <a href="https://rohansingh04.com" className="text-accent hover:underline">
             rohansingh04.com
           </a>
         </p>
-      </div>
+      </header>
 
       {/* education */}
-      <section className="mb-10">
-        <h2 className="font-mono text-xs uppercase tracking-widest text-muted mb-4 border-b border-border pb-2">
+      <section className="mb-12">
+        <h2 className="eyebrow mb-5 border-b border-border pb-3">
           education
         </h2>
         <div className="space-y-5">
@@ -84,30 +66,34 @@ export default function ResumePage() {
       </section>
 
       {/* experience */}
-      <section className="mb-10">
-        <h2 className="font-mono text-xs uppercase tracking-widest text-muted mb-4 border-b border-border pb-2">
+      <section className="mb-12">
+        <h2 className="eyebrow mb-5 border-b border-border pb-3">
           experience
         </h2>
-        <div className="space-y-6">
-          {exp.map((e) => (
+        <div className="space-y-8">
+          {experience.map((e) => (
             <div key={e.id}>
               <div className="flex flex-wrap justify-between gap-2">
                 <span className="font-semibold">{e.org}</span>
                 <span className="text-sm text-muted font-mono">
-                  {formatDateRange(e.startDate, e.endDate)}
+                  {formatDateRange(e.startDate, e.endDate ?? null)}
                 </span>
               </div>
               <div className="flex flex-wrap justify-between gap-2 text-sm text-muted mb-2">
                 <span>{e.title}</span>
                 <span>{e.location}</span>
               </div>
-              <ul className="list-disc pl-5 space-y-1">
-                {e.bullets.map((b, i) => (
-                  <li key={i} className="text-sm text-muted">
-                    {b}
-                  </li>
-                ))}
-              </ul>
+              {e.bullets && e.bullets.length > 0 ? (
+                <ul className="mt-3 list-disc space-y-1.5 pl-5">
+                  {e.bullets.map((bullet) => (
+                    <li key={bullet} className="text-sm text-muted">
+                      {bullet}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-muted">{e.summary}</p>
+              )}
             </div>
           ))}
         </div>
@@ -115,12 +101,12 @@ export default function ResumePage() {
 
       {/* skills note */}
       <section>
-        <h2 className="font-mono text-xs uppercase tracking-widest text-muted mb-4 border-b border-border pb-2">
+        <h2 className="eyebrow mb-5 border-b border-border pb-3">
           skills
         </h2>
-        <p className="text-sm text-muted">
-          python · java · go · typescript · react · next.js · spring boot ·
-          graphql · aws · mongodb · postgres
+        <p className="text-sm leading-relaxed text-muted">
+          Python · Java · Go · TypeScript · React · Next.js · Spring Boot ·
+          GraphQL · AWS · MongoDB · Postgres
         </p>
       </section>
     </div>

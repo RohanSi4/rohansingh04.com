@@ -15,23 +15,39 @@ export default function SpotifyNowPlaying() {
   const [state, setState] = useState<WidgetState>("loading");
   const [data, setData] = useState<SpotifyData | null>(null);
 
-  async function fetchNowPlaying() {
-    try {
-      const res = await fetch("/api/spotify");
-      if (!res.ok) { setState("error"); return; }
-      const json = await res.json() as SpotifyData;
-      setData(json);
-      setState(json ? "ready" : "empty");
-    } catch {
-      setState("error");
-    }
-  }
-
   useEffect(() => {
-    fetchNowPlaying();
-    // poll every 30s -- track changes without a full page reload
-    const id = setInterval(fetchNowPlaying, 30_000);
-    return () => clearInterval(id);
+    let active = true;
+
+    async function refresh() {
+      if (document.visibilityState !== "visible") return;
+      try {
+        const res = await fetch("/api/spotify");
+        if (!active) return;
+        if (!res.ok) {
+          setState("error");
+          return;
+        }
+        const json = await res.json() as SpotifyData;
+        if (!active) return;
+        setData(json);
+        setState(json.isPlaying || json.title ? "ready" : "empty");
+      } catch {
+        if (active) setState("error");
+      }
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState === "visible") void refresh();
+    }
+
+    void refresh();
+    const id = window.setInterval(() => void refresh(), 30_000);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      active = false;
+      window.clearInterval(id);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   return (

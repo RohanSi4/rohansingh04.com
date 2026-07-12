@@ -24,25 +24,36 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "rohan singh",
-    template: "%s | rohan singh",
+    default: "Rohan Singh — software, data, and real-world systems",
+    template: "%s | Rohan Singh",
   },
-  description: "cs student at uva. building things.",
+  description:
+    "Rohan Singh is a computer science student at UVA building useful software from messy, real-world data.",
   metadataBase: new URL("https://rohansingh04.com"),
+  alternates: { canonical: "/" },
+  authors: [{ name: "Rohan Singh", url: "https://rohansingh04.com" }],
+  creator: "Rohan Singh",
+  keywords: [
+    "Rohan Singh",
+    "software engineer",
+    "data engineering",
+    "machine learning",
+    "University of Virginia",
+  ],
   openGraph: {
-    title: "rohan singh",
-    description: "cs student at uva. building things.",
+    title: "Rohan Singh — software, data, and real-world systems",
+    description:
+      "A portfolio of useful software, data systems, and projects grounded in real life.",
     url: "https://rohansingh04.com",
-    siteName: "rohan singh",
+    siteName: "Rohan Singh",
     locale: "en_US",
     type: "website",
-    images: [{ url: "/og.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "rohan singh",
-    description: "cs student at uva. building things.",
-    images: ["/og.png"],
+    title: "Rohan Singh — software, data, and real-world systems",
+    description:
+      "A portfolio of useful software, data systems, and projects grounded in real life.",
   },
   robots: {
     index: true,
@@ -54,9 +65,11 @@ export const metadata: Metadata = {
 // to prevent flash of wrong theme on first load
 const themeScript = `
 (function() {
-  var t = localStorage.getItem('theme');
-  if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  if (t === 'dark') document.documentElement.classList.add('dark');
+  try {
+    var t = localStorage.getItem('theme');
+    if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    if (t === 'dark') document.documentElement.classList.add('dark');
+  } catch (_) {}
 })()
 `.trim();
 
