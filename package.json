@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "sync:running": "node scripts/sync-running-data.mjs",
+    "publish:running": "node scripts/sync-running-data.mjs --publish",
     "test": "vitest run",
     "test:watch": "vitest"
   },

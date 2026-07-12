@@ -4,8 +4,8 @@ import {
   formatPace,
   formatRunDate,
   getRunningDashboard,
-  type RunningWeek,
 } from "@/lib/running";
+import TrainingHistoryChart from "./TrainingHistoryChart";
 import styles from "./running.module.css";
 
 export const metadata: Metadata = {
@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+
 const DAY_MS = 86_400_000;
 
 function daysBetween(start: string, end: string): number {
@@ -33,93 +35,6 @@ function daysBetween(start: string, end: string): number {
   );
 }
 
-function VolumeChart({ weeks }: { weeks: RunningWeek[] }) {
-  const width = 900;
-  const height = 250;
-  const baseline = 196;
-  const chartHeight = 160;
-  const left = 28;
-  const right = 12;
-  const plotWidth = width - left - right;
-  const band = plotWidth / weeks.length;
-  const barWidth = Math.min(30, band * 0.58);
-  const maxMiles = Math.max(30, Math.ceil(Math.max(...weeks.map((week) => week.runMiles)) / 10) * 10);
-  const y = (miles: number) => baseline - (miles / maxMiles) * chartHeight;
-  const longRunPoints = weeks
-    .map((week, index) => `${left + index * band + band / 2},${y(week.longRunMiles)}`)
-    .join(" ");
-
-  return (
-    <div className={styles.chartScroller}>
-      <svg
-        className={styles.volumeChart}
-        viewBox={`0 0 ${width} ${height}`}
-        role="img"
-        aria-label="Weekly mileage bars with a line showing the longest run each week"
-      >
-        {[0, 10, 20, 30].filter((tick) => tick <= maxMiles).map((tick) => (
-          <g key={tick}>
-            <line
-              className={styles.gridLine}
-              x1={left}
-              x2={width - right}
-              y1={y(tick)}
-              y2={y(tick)}
-            />
-            <text className={styles.axisLabel} x={0} y={y(tick) + 4}>
-              {tick}
-            </text>
-          </g>
-        ))}
-
-        {weeks.map((week, index) => {
-          const x = left + index * band + (band - barWidth) / 2;
-          const barHeight = Math.max(week.runMiles > 0 ? 2 : 0, baseline - y(week.runMiles));
-          return (
-            <g key={week.weekStart}>
-              <rect
-                className={styles.volumeBar}
-                x={x}
-                y={baseline - barHeight}
-                width={barWidth}
-                height={barHeight}
-                rx={4}
-              >
-                <title>
-                  Week of {formatRunDate(week.weekStart)}: {week.runMiles.toFixed(1)} miles, {week.longRunMiles.toFixed(1)} mile long run
-                </title>
-              </rect>
-              {(index % 3 === 1 || index === weeks.length - 1) && (
-                <text
-                  className={styles.weekLabel}
-                  x={left + index * band + band / 2}
-                  y={225}
-                  textAnchor="middle"
-                >
-                  {formatRunDate(week.weekStart)}
-                </text>
-              )}
-            </g>
-          );
-        })}
-
-        <polyline className={styles.longRunLine} points={longRunPoints} />
-        {weeks.map((week, index) => (
-          <circle
-            key={`long-${week.weekStart}`}
-            className={styles.longRunDot}
-            cx={left + index * band + band / 2}
-            cy={y(week.longRunMiles)}
-            r={week.longRunMiles > 0 ? 3.5 : 2}
-          >
-            <title>{week.longRunMiles.toFixed(1)} mile long run</title>
-          </circle>
-        ))}
-      </svg>
-    </div>
-  );
-}
-
 function Metric({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
     <div className={styles.metric}>
@@ -130,17 +45,25 @@ function Metric({ label, value, detail }: { label: string; value: string; detail
   );
 }
 
-export default function RunningPage() {
-  const data = getRunningDashboard();
+export default async function RunningPage() {
+  const data = await getRunningDashboard();
   const latestRun = data.recentRuns[0];
-  const daysToRace = daysBetween(data.dataThrough, data.race.date);
+  const featuredRun = data.recentRuns.find(
+    (run) => run.distanceMi >= Math.max(8, data.currentWeek.longRunMiles - 0.25),
+  ) ?? latestRun;
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Los_Angeles",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  const daysToRace = daysBetween(today, data.race.date);
   const blockStart = data.weeks.find((week) => week.runMiles > 0)?.weekStart ?? data.dataThrough;
   const blockLength = Math.max(1, daysBetween(blockStart, data.race.date));
   const elapsed = blockLength - daysToRace;
   const progress = Math.max(0, Math.min(100, Math.round((elapsed / blockLength) * 100)));
   const circumference = 2 * Math.PI * 46;
   const ringOffset = circumference * (1 - progress / 100);
-  const latestFourWeeks = data.weeks.slice(-4);
   const previousFourWeeks = data.weeks.slice(-8, -4);
   const previousFourMiles = previousFourWeeks.reduce((sum, week) => sum + week.runMiles, 0);
   const volumeChange = previousFourMiles > 0
@@ -228,7 +151,7 @@ export default function RunningPage() {
         <Metric
           label="long run"
           value={`${data.currentWeek.longRunMiles.toFixed(1)} mi`}
-          detail={`${formatPace(latestRun.paceSecondsPerMile)} /mi · ${latestRun.averageHeartRate} bpm`}
+          detail={`${formatPace(featuredRun.paceSecondsPerMile)} /mi · ${featuredRun.averageHeartRate ?? "—"} bpm`}
         />
         <Metric
           label="training load"
@@ -244,28 +167,18 @@ export default function RunningPage() {
             <h2 id="volume-title">Volume is the feature.</h2>
           </div>
           <p className={styles.sectionNote}>
-            Weekly mileage is climbing while the long run extends underneath it.
-            Consistency first; hero workouts later.
+            Eight focused weeks by default, with the complete {data.totals.totalRuns}-run,
+            {" "}{data.yearlyHistory.length}-year archive one click away. No history discarded.
           </p>
         </div>
         <div className={styles.chartCard}>
-          <div className={styles.chartHeader}>
-            <div>
-              <span>weekly mileage</span>
-              <strong>{data.currentWeek.runMiles.toFixed(1)}</strong>
-              <small> miles this week</small>
-            </div>
-            <div className={styles.legend} aria-hidden="true">
-              <span><i className={styles.barKey} />total miles</span>
-              <span><i className={styles.lineKey} />long run</span>
-            </div>
-          </div>
-          <VolumeChart weeks={data.weeks} />
-          <div className={styles.chartFooter}>
-            <span>week of {formatRunDate(latestFourWeeks[0].weekStart)}</span>
-            <span>peak week · {data.totals.peakWeekMiles.toFixed(1)} mi</span>
-            <span>through {formatRunDate(data.dataThrough, true)}</span>
-          </div>
+          <TrainingHistoryChart
+            weeks={data.weeks}
+            months={data.monthlyHistory}
+            years={data.yearlyHistory}
+            dataThrough={data.dataThrough}
+            peakWeekMiles={data.totals.peakWeekMiles}
+          />
         </div>
       </section>
 
@@ -280,30 +193,30 @@ export default function RunningPage() {
           </p>
           <div className={styles.aerobicRules}>
             <div><span>easy ceiling</span><strong>150 bpm</strong></div>
-            <div><span>latest average</span><strong>{latestRun.averageHeartRate} bpm</strong></div>
-            <div><span>aerobic drift</span><strong>{latestRun.aerobicDecouplingPct?.toFixed(1)}%</strong></div>
+            <div><span>latest average</span><strong>{featuredRun.averageHeartRate ?? "—"} bpm</strong></div>
+            <div><span>aerobic drift</span><strong>{featuredRun.aerobicDecouplingPct == null ? "—" : `${featuredRun.aerobicDecouplingPct.toFixed(1)}%`}</strong></div>
           </div>
         </div>
         <div className={styles.latestRunCard}>
           <div className={styles.latestRunHeader}>
             <span>latest long run</span>
-            <span>{formatRunDate(latestRun.date, true)}</span>
+            <span>{formatRunDate(featuredRun.date, true)}</span>
           </div>
           <div className={styles.latestRunDistance}>
-            <strong>{latestRun.distanceMi.toFixed(1)}</strong>
+            <strong>{featuredRun.distanceMi.toFixed(1)}</strong>
             <span>miles</span>
           </div>
-          <div className={styles.zoneBar} aria-label={`${latestRun.easyZonePct}% in easy heart-rate zones`}>
-            <span style={{ width: `${latestRun.easyZonePct ?? 0}%` }} />
+          <div className={styles.zoneBar} aria-label={`${featuredRun.easyZonePct ?? 0}% in easy heart-rate zones`}>
+            <span style={{ width: `${featuredRun.easyZonePct ?? 0}%` }} />
           </div>
           <div className={styles.latestRunStats}>
-            <div><span>pace</span><strong>{formatPace(latestRun.paceSecondsPerMile)} /mi</strong></div>
-            <div><span>easy zones</span><strong>{latestRun.easyZonePct}%</strong></div>
-            <div><span>elevation</span><strong>{latestRun.elevationFeet} ft</strong></div>
-            <div><span>load</span><strong>{latestRun.trainingLoad}</strong></div>
+            <div><span>pace</span><strong>{formatPace(featuredRun.paceSecondsPerMile)} /mi</strong></div>
+            <div><span>easy zones</span><strong>{featuredRun.easyZonePct == null ? "—" : `${featuredRun.easyZonePct}%`}</strong></div>
+            <div><span>elevation</span><strong>{featuredRun.elevationFeet ?? "—"} ft</strong></div>
+            <div><span>load</span><strong>{featuredRun.trainingLoad ?? "—"}</strong></div>
           </div>
           <p className={styles.runReadout}>
-            {latestRun.easyZonePct}% controlled · {latestRun.aerobicDecouplingPct}% drift · {latestRun.temperatureF}°F
+            {featuredRun.easyZonePct ?? "—"}% controlled · {featuredRun.aerobicDecouplingPct ?? "—"}% drift · {featuredRun.temperatureF ?? "—"}°F
           </p>
         </div>
       </section>
@@ -358,10 +271,8 @@ export default function RunningPage() {
 
       <footer className={styles.dataFooter}>
         <span><i className={styles.liveDot} />data through {formatRunDate(data.dataThrough, true)}</span>
-        <span>{data.totals.runMiles.toFixed(1)} training miles in the archive</span>
-        <a href="https://github.com/RohanSi4/marathon-prep-bot" target="_blank" rel="noreferrer">
-          source on github ↗
-        </a>
+        <span>{data.totals.runMiles.toFixed(1)} miles · {data.totals.totalActivities.toLocaleString()} total activities</span>
+        <Link href="/projects/marathon-prep-bot">project notes →</Link>
       </footer>
     </div>
   );

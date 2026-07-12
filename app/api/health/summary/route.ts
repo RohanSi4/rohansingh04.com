@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { getHealthKV } from "@/lib/kv-data";
-import { healthMock } from "@/lib/health-mock";
+import { getRunningDashboard } from "@/lib/running";
 
 export async function GET() {
-  const data = await getHealthKV();
-  return NextResponse.json(data ?? healthMock);
+  const data = await getRunningDashboard();
+  return NextResponse.json(data.health);
 }

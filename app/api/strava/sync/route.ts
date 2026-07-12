@@ -5,13 +5,12 @@ import { setHealthKV, getBestStreakKV, setBestStreakKV } from "@/lib/kv-data";
 
 function authorized(req: NextRequest): boolean {
   const auth = req.headers.get("authorization") ?? "";
-  return (
-    auth === `Bearer ${process.env.HEALTH_INGEST_TOKEN}` ||
-    auth === `Bearer ${process.env.CRON_SECRET}`
-  );
+  return [process.env.HEALTH_INGEST_TOKEN, process.env.CRON_SECRET]
+    .filter((token): token is string => Boolean(token))
+    .some((token) => auth === `Bearer ${token}`);
 }
 
-export async function POST(req: NextRequest) {
+async function sync(req: NextRequest) {
   if (!authorized(req)) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
@@ -39,3 +38,7 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ ok: true, activities: activities.length, updatedAt: summary.updatedAt });
 }
+
+// Vercel Cron invokes routes with GET. Keep POST for manual/automation callers.
+export const GET = sync;
+export const POST = sync;

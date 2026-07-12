@@ -1,5 +1,6 @@
 import { kv } from "@vercel/kv";
 import type { Place, StateEntry, HealthSummary } from "./types";
+import type { RunningDashboard } from "./running";
 import placesJson from "../content/places.json";
 import statesJson from "../content/states.json";
 
@@ -36,6 +37,14 @@ export async function getHealthKV(): Promise<HealthSummary | null> {
 
 export async function setHealthKV(data: HealthSummary): Promise<void> {
   await kv.set("health", data);
+}
+
+export async function getRunningDashboardKV(): Promise<RunningDashboard | null> {
+  return kv.get<RunningDashboard>("running:dashboard");
+}
+
+export async function setRunningDashboardKV(data: RunningDashboard): Promise<void> {
+  await kv.set("running:dashboard", data);
 }
 
 export async function getBestStreakKV(): Promise<number> {

@@ -5,6 +5,9 @@ export default function RunningPreview({ data }: { data: RunningDashboard }) {
   const recentWeeks = data.weeks.slice(-8);
   const maxMiles = Math.max(...recentWeeks.map((week) => week.runMiles), 1);
   const latestRun = data.recentRuns[0];
+  const latestLongRun = data.recentRuns.find(
+    (run) => run.distanceMi >= Math.max(8, data.currentWeek.longRunMiles - 0.25),
+  ) ?? latestRun;
 
   return (
     <Link
@@ -40,7 +43,7 @@ export default function RunningPreview({ data }: { data: RunningDashboard }) {
         </div>
         <div>
           <p className="text-[10px] uppercase tracking-widest text-muted">latest long run</p>
-          <p className="mt-1 font-mono text-xl text-fg">{latestRun.distanceMi.toFixed(1)} mi</p>
+          <p className="mt-1 font-mono text-xl text-fg">{latestLongRun.distanceMi.toFixed(1)} mi</p>
         </div>
         <div>
           <p className="text-[10px] uppercase tracking-widest text-muted">target</p>

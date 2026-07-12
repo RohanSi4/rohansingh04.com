@@ -51,18 +51,28 @@ all structured data lives in `/content`. edit json files directly.
 
 ## running dashboard
 
-the `/running` dashboard is fed by the sibling `marathonPrepBot` repo. after
-importing new workouts there, refresh the public snapshot here with:
+the `/running` dashboard is fed by the sibling `marathonPrepBot` repo. preview a
+fresh privacy-safe snapshot locally with:
 
 ```bash
 pnpm sync:running
 ```
 
+publish it to the live site immediately with:
+
+```bash
+pnpm publish:running
+```
+
 by default the script reads `../marathonPrepBot`. set `MARATHON_REPO` to an
 absolute repo path if the folders live somewhere else. the generated snapshot
 uses an explicit field whitelist and excludes gps coordinates, source filenames,
-private notes, and workout descriptions. commit `content/running-dashboard.json`
-so vercel can render the dashboard without access to the private local archive.
+private notes, and workout descriptions. `publish:running` sends the same checked
+snapshot to an authenticated ingest endpoint backed by vercel kv. the committed
+snapshot remains a deploy-safe fallback. the marathon repo runs this publisher
+automatically after each successful `npm run import`, and both the homepage and
+`/running` render at request time so a fresh ingest does not require another site
+deployment. strava is an optional secondary source, not a freshness dependency.
 
 ## theme
 

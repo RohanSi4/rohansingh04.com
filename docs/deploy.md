@@ -31,6 +31,7 @@ go to project settings > environment variables. add these before phase 5
 | var | description |
 |-----|-------------|
 | `HEALTH_INGEST_TOKEN` | secret bearer token. generate a random string (e.g. `openssl rand -hex 32`). hardcode the same value in the ios shortcut. |
+| `RUNNING_DASHBOARD_TOKEN` | optional separate bearer token for the running snapshot publisher. if omitted, `HEALTH_INGEST_TOKEN` is accepted. |
 | `KV_REST_API_URL` | auto-set when you add the upstash redis integration |
 | `KV_REST_API_TOKEN` | auto-set when you add the upstash redis integration |
 
@@ -38,6 +39,12 @@ to set up kv: in vercel dashboard > storage, add an upstash redis database and
 connect it to your project. the two `KV_*` vars above will be injected automatically.
 `@vercel/kv` is deprecated but the upstash integration uses the same api -- it
 just works.
+
+the richer local FIT archive is published automatically after `npm run import`
+in the sibling marathon repo. it can also be pushed on demand with
+`pnpm publish:running`, which reads either running token above from the shell or
+`.env.local`. strava sync remains available as an optional secondary source but
+is not required for dashboard freshness.
 
 ### spotify now playing (phase 5)
 | var | description |

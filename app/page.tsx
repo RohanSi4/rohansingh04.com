@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { healthMock } from "@/lib/health-mock";
-import { getHealthKV } from "@/lib/kv-data";
 import { getFeaturedProjects } from "@/lib/content";
 import HealthStatusLine from "@/components/widgets/HealthStatusLine";
 import HealthHeroCards from "@/components/widgets/HealthHeroCards";
@@ -17,13 +16,14 @@ export const metadata: Metadata = {
   description: "cs student at uva. building things.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
-  const [healthKV, featured] = await Promise.all([
-    getHealthKV(),
+  const [running, featured] = await Promise.all([
+    getRunningDashboard(),
     Promise.resolve(getFeaturedProjects().slice(0, 3)),
   ]);
-  const health = healthKV ?? healthMock;
-  const running = getRunningDashboard();
+  const health = running.health ?? healthMock;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
