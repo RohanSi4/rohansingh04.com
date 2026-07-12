@@ -7,7 +7,7 @@ import {
   type RunningWeek,
   type RunningYear,
 } from "@/lib/running";
-import styles from "./running.module.css";
+import styles from "./fitness.module.css";
 
 type Range = "recent" | "year" | "all";
 type Point = {

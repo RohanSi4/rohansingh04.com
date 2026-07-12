@@ -4,6 +4,6 @@ I wanted a coach that knew the difference between a hard run and a hot run, reme
 
 HealthFit exports workout files from my Apple Watch and Polar H10. A TypeScript pipeline deduplicates and normalizes them, then derives heart-rate zones, TRIMP training load, aerobic decoupling, weekly volume, and long-run progression. That context feeds a CLI coach instead of disappearing inside a fitness app.
 
-The public [running dashboard](/running) is another output of the same system. Its sync step uses a strict field whitelist: aggregate performance signals are published, while GPS coordinates, source filenames, health notes, and workout descriptions stay local.
+The public [fitness page](/fitness) is another output of the same system. It shows the progress without turning the page into a technical report. Its sync step uses a strict field whitelist: useful activity summaries are published, while GPS coordinates, source filenames, health notes, and workout descriptions stay local.
 
 The fun part is that the software and the athlete share the same feedback loop. Every run improves the dataset; every pipeline improvement changes how I understand the next run.

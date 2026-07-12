@@ -8,7 +8,7 @@ import HealthActivityFeed from "@/components/widgets/HealthActivityFeed";
 import SpotifyNowPlaying from "@/components/widgets/SpotifyNowPlaying";
 import GithubLatestCommit from "@/components/widgets/GithubLatestCommit";
 import ProjectCard from "@/components/projects/ProjectCard";
-import RunningPreview from "@/components/running/RunningPreview";
+import FitnessPreview from "@/components/fitness/FitnessPreview";
 import { getRunningDashboard } from "@/lib/running";
 
 export const metadata: Metadata = {
@@ -36,7 +36,7 @@ export default async function HomePage() {
         <HealthActivityFeed activities={health.recentActivities} />
       </section>
 
-      <RunningPreview data={running} />
+      <FitnessPreview data={running} />
 
       {/* ── live widgets ───────────────────────────────────────── */}
       <section

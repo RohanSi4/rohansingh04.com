@@ -47,11 +47,11 @@ all structured data lives in `/content`. edit json files directly.
 - `states.json` -- all 50 states + DC with visited status
 - `history.json` -- work, school, milestones for /history and /resume
 - `projects/*/meta.json` -- project metadata, `featured: true` surfaces on landing
-- `running-dashboard.json` -- privacy-safe snapshot rendered by `/running`
+- `running-dashboard.json` -- privacy-safe snapshot rendered by `/fitness`
 
-## running dashboard
+## fitness page
 
-the `/running` dashboard is fed by the sibling `marathonPrepBot` repo. preview a
+the `/fitness` page is fed by the sibling `marathonPrepBot` repo. preview a
 fresh privacy-safe snapshot locally with:
 
 ```bash
@@ -71,7 +71,7 @@ private notes, and workout descriptions. `publish:running` sends the same checke
 snapshot to an authenticated ingest endpoint backed by vercel kv. the committed
 snapshot remains a deploy-safe fallback. the marathon repo runs this publisher
 automatically after each successful `npm run import`, and both the homepage and
-`/running` render at request time so a fresh ingest does not require another site
+`/fitness` render at request time so a fresh ingest does not require another site
 deployment. strava is an optional secondary source, not a freshness dependency.
 
 ## theme

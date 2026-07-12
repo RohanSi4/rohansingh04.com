@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { formatPace, formatRunDate, type RunningDashboard } from "@/lib/running";
 
-export default function RunningPreview({ data }: { data: RunningDashboard }) {
+export default function FitnessPreview({ data }: { data: RunningDashboard }) {
   const recentWeeks = data.weeks.slice(-8);
   const maxMiles = Math.max(...recentWeeks.map((week) => week.runMiles), 1);
   const latestRun = data.recentRuns[0];
@@ -11,7 +11,7 @@ export default function RunningPreview({ data }: { data: RunningDashboard }) {
 
   return (
     <Link
-      href="/running"
+      href="/fitness"
       className="group relative block my-8 overflow-hidden rounded-xl border border-border bg-surface p-5 sm:p-6 transition-colors hover:border-accent"
     >
       <div
@@ -22,32 +22,32 @@ export default function RunningPreview({ data }: { data: RunningDashboard }) {
         <div>
           <p className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#ee5f3b]" />
-            marathon build · live
+            fitness · current goal: richmond
           </p>
           <h2 className="font-serif text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
-            The road to 26.2
+            Training for Richmond
           </h2>
           <p className="mt-1.5 max-w-lg text-sm leading-relaxed text-muted">
-            Training volume, aerobic efficiency, and the code turning raw workouts into a smarter build.
+            Running, lifting, and staying active. The marathon is the current goal; staying fit is the long game.
           </p>
         </div>
         <span className="relative mt-1 text-sm text-muted transition-transform group-hover:translate-x-1 group-hover:text-fg">
-          view dashboard →
+          view progress →
         </span>
       </div>
 
       <div className="relative mt-6 grid grid-cols-3 gap-4 border-t border-border pt-5">
         <div>
-          <p className="text-[10px] uppercase tracking-widest text-muted">this week</p>
-          <p className="mt-1 font-mono text-xl text-fg">{data.currentWeek.runMiles.toFixed(1)} mi</p>
+          <p className="text-[10px] uppercase tracking-widest text-muted">active this month</p>
+          <p className="mt-1 font-mono text-xl text-fg">{data.health.thisMonth.activeDays} days</p>
         </div>
         <div>
           <p className="text-[10px] uppercase tracking-widest text-muted">latest long run</p>
           <p className="mt-1 font-mono text-xl text-fg">{latestLongRun.distanceMi.toFixed(1)} mi</p>
         </div>
         <div>
-          <p className="text-[10px] uppercase tracking-widest text-muted">target</p>
-          <p className="mt-1 font-mono text-xl text-[#ee5f3b]">{data.race.goalTime}</p>
+          <p className="text-[10px] uppercase tracking-widest text-muted">running this week</p>
+          <p className="mt-1 font-mono text-xl text-[#ee5f3b]">{data.currentWeek.runMiles.toFixed(1)} mi</p>
         </div>
       </div>
 
