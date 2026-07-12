@@ -1,0 +1,13 @@
+{
+  "slug": "marathon-prep-bot",
+  "title": "Marathon Prep Bot",
+  "tagline": "A local-first training intelligence system built from my own workout data",
+  "tags": ["typescript", "data", "fitness"],
+  "startDate": "2026-06",
+  "endDate": null,
+  "status": "in-progress",
+  "featured": true,
+  "githubUrl": "https://github.com/RohanSi4/marathon-prep-bot",
+  "liveUrl": "/running",
+  "subProjects": []
+}

@@ -9,6 +9,8 @@ import HealthActivityFeed from "@/components/widgets/HealthActivityFeed";
 import SpotifyNowPlaying from "@/components/widgets/SpotifyNowPlaying";
 import GithubLatestCommit from "@/components/widgets/GithubLatestCommit";
 import ProjectCard from "@/components/projects/ProjectCard";
+import RunningPreview from "@/components/running/RunningPreview";
+import { getRunningDashboard } from "@/lib/running";
 
 export const metadata: Metadata = {
   title: "rohan singh",
@@ -21,6 +23,7 @@ export default async function HomePage() {
     Promise.resolve(getFeaturedProjects().slice(0, 3)),
   ]);
   const health = healthKV ?? healthMock;
+  const running = getRunningDashboard();
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
@@ -32,6 +35,8 @@ export default async function HomePage() {
         <HealthHeatmap heatmap={health.heatmap} />
         <HealthActivityFeed activities={health.recentActivities} />
       </section>
+
+      <RunningPreview data={running} />
 
       {/* ── live widgets ───────────────────────────────────────── */}
       <section

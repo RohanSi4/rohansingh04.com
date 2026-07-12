@@ -35,6 +35,7 @@ content/       all structured data (json + mdx)
 lib/           shared utilities
 public/        static assets + textures
 docs/          deployment + setup guides
+scripts/       local data publishing utilities
 ```
 
 ## content
@@ -46,6 +47,22 @@ all structured data lives in `/content`. edit json files directly.
 - `states.json` -- all 50 states + DC with visited status
 - `history.json` -- work, school, milestones for /history and /resume
 - `projects/*/meta.json` -- project metadata, `featured: true` surfaces on landing
+- `running-dashboard.json` -- privacy-safe snapshot rendered by `/running`
+
+## running dashboard
+
+the `/running` dashboard is fed by the sibling `marathonPrepBot` repo. after
+importing new workouts there, refresh the public snapshot here with:
+
+```bash
+pnpm sync:running
+```
+
+by default the script reads `../marathonPrepBot`. set `MARATHON_REPO` to an
+absolute repo path if the folders live somewhere else. the generated snapshot
+uses an explicit field whitelist and excludes gps coordinates, source filenames,
+private notes, and workout descriptions. commit `content/running-dashboard.json`
+so vercel can render the dashboard without access to the private local archive.
 
 ## theme
 

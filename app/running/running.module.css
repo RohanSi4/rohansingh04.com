@@ -1,0 +1,603 @@
+.page {
+  --run-orange: #ee5f3b;
+  --run-cream: #f3eddf;
+  --run-ink: #10251b;
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 3.5rem 0 5rem;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 1rem;
+  min-height: 540px;
+}
+
+.heroCopy {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(2rem, 5vw, 4.5rem);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(circle at 90% 8%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 30%),
+    linear-gradient(135deg, var(--surface), var(--bg));
+}
+
+.heroCopy::after {
+  content: "";
+  position: absolute;
+  right: -7rem;
+  bottom: -11rem;
+  width: 28rem;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 3rem color-mix(in srgb, var(--accent) 5%, transparent),
+    0 0 0 7rem color-mix(in srgb, var(--accent) 4%, transparent);
+  pointer-events: none;
+}
+
+.eyebrow,
+.raceCardTop,
+.raceCardBottom,
+.sectionHeading > div > p,
+.aerobicCopy > p:first-child,
+.pipelineIntro > p:first-child,
+.latestRunHeader,
+.chartFooter,
+.runTableHead,
+.dataFooter {
+  font-family: var(--font-jetbrains-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.liveDot {
+  display: inline-block;
+  width: 0.48rem;
+  height: 0.48rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--run-orange);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--run-orange) 15%, transparent);
+}
+
+.eyebrowRule {
+  width: 2.5rem;
+  height: 1px;
+  background: var(--border);
+}
+
+.kicker {
+  margin-top: clamp(3rem, 8vw, 6rem);
+  color: var(--accent);
+  font-family: var(--font-fraunces), serif;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-style: italic;
+}
+
+.hero h1 {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.65rem;
+  max-width: 820px;
+  font-family: var(--font-fraunces), serif;
+  font-size: clamp(3.4rem, 8vw, 6.8rem);
+  font-weight: 580;
+  letter-spacing: -0.065em;
+  line-height: 0.88;
+}
+
+.hero h1 em {
+  color: var(--run-orange);
+  font-weight: 500;
+}
+
+.heroIntro {
+  position: relative;
+  z-index: 1;
+  max-width: 38rem;
+  margin-top: 2rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.goalStrip {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 42rem;
+  margin-top: 2.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.goalStrip div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.goalStrip span,
+.metric p,
+.latestRunStats span,
+.aerobicRules span {
+  color: var(--muted);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+}
+
+.goalStrip strong {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.raceCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  background: var(--run-ink);
+  color: var(--run-cream);
+}
+
+.raceCardTop,
+.raceCardBottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.61rem;
+  color: color-mix(in srgb, var(--run-cream) 65%, transparent);
+}
+
+.raceDistance {
+  margin-top: 2.5rem;
+  color: var(--run-orange);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 5.5rem;
+  font-weight: 500;
+  letter-spacing: -0.08em;
+  line-height: 1;
+}
+
+.raceName {
+  width: min-content;
+  margin-top: 0.35rem;
+  font-family: var(--font-fraunces), serif;
+  font-size: 1.55rem;
+  line-height: 1.05;
+}
+
+.countdown {
+  position: relative;
+  width: 9rem;
+  margin: auto;
+  aspect-ratio: 1;
+}
+
+.countdown svg {
+  width: 100%;
+  transform: rotate(-90deg);
+}
+
+.ringTrack,
+.ringProgress {
+  fill: none;
+  stroke-width: 3;
+}
+
+.ringTrack { stroke: color-mix(in srgb, var(--run-cream) 14%, transparent); }
+.ringProgress { stroke: var(--run-orange); stroke-linecap: round; }
+
+.countdown > div {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
+.countdown strong {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.countdown span {
+  margin-top: 0.35rem;
+  color: color-mix(in srgb, var(--run-cream) 60%, transparent);
+  font-size: 0.67rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.raceCardBottom {
+  align-items: end;
+  padding-top: 1.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--run-cream) 14%, transparent);
+}
+
+.raceCardBottom strong {
+  color: var(--run-cream);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  margin-top: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--border);
+}
+
+.metric {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: var(--bg);
+}
+
+.metric strong {
+  margin-top: 0.65rem;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: clamp(1.45rem, 3vw, 2.1rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+}
+
+.metric > span {
+  margin-top: 0.45rem;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.73rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.section {
+  padding-top: clamp(5rem, 10vw, 8rem);
+}
+
+.sectionHeading {
+  display: grid;
+  grid-template-columns: 1fr minmax(260px, 0.6fr);
+  gap: 2rem;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+
+.sectionHeading > div > p,
+.aerobicCopy > p:first-child,
+.pipelineIntro > p:first-child {
+  margin-bottom: 0.8rem;
+  color: var(--run-orange);
+  font-size: 0.65rem;
+}
+
+.sectionHeading h2,
+.aerobicCopy h2,
+.pipelineIntro h2 {
+  font-family: var(--font-fraunces), serif;
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: 540;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+
+.sectionNote {
+  max-width: 30rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.chartCard {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.5rem 1.75rem 0.5rem;
+}
+
+.chartHeader > div:first-child > span {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--muted);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+}
+
+.chartHeader strong {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.chartHeader small { color: var(--muted); }
+
+.legend {
+  display: flex;
+  gap: 1rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.legend span { display: flex; align-items: center; gap: 0.4rem; }
+.legend i { display: inline-block; width: 1.2rem; height: 3px; }
+.barKey { background: var(--accent); }
+.lineKey { background: var(--run-orange); }
+
+.chartScroller { overflow-x: auto; padding: 0 1.25rem; }
+.volumeChart { display: block; min-width: 760px; width: 100%; }
+.gridLine { stroke: var(--border); stroke-width: 1; stroke-dasharray: 3 5; }
+.axisLabel, .weekLabel { fill: var(--muted); font-family: var(--font-jetbrains-mono), monospace; font-size: 9px; }
+.volumeBar { fill: var(--accent); opacity: 0.82; transition: opacity 150ms ease; }
+.volumeBar:hover { opacity: 1; }
+.longRunLine { fill: none; stroke: var(--run-orange); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.longRunDot { fill: var(--surface); stroke: var(--run-orange); stroke-width: 2; }
+
+.chartFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.75rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.58rem;
+}
+
+.aerobicSection {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(380px, 1.1fr);
+  gap: clamp(2rem, 7vw, 7rem);
+  align-items: center;
+  padding: clamp(5rem, 11vw, 9rem) clamp(0rem, 3vw, 2rem);
+}
+
+.aerobicCopy > p:not(:first-child),
+.pipelineIntro > p:not(:first-child) {
+  max-width: 34rem;
+  margin-top: 1.5rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.aerobicRules {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.aerobicRules div,
+.latestRunStats div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.aerobicRules strong,
+.latestRunStats strong {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.latestRunCard {
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 1.2rem;
+  background: var(--run-ink);
+  color: var(--run-cream);
+  box-shadow: 1.5rem 1.5rem 0 color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+.latestRunHeader {
+  display: flex;
+  justify-content: space-between;
+  color: color-mix(in srgb, var(--run-cream) 60%, transparent);
+  font-size: 0.61rem;
+}
+
+.latestRunDistance {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+}
+
+.latestRunDistance strong {
+  color: var(--run-orange);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: clamp(4rem, 9vw, 7rem);
+  font-weight: 500;
+  letter-spacing: -0.09em;
+  line-height: 0.85;
+}
+
+.latestRunDistance span {
+  font-family: var(--font-fraunces), serif;
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+.zoneBar {
+  height: 0.55rem;
+  margin-top: 2rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--run-cream) 13%, transparent);
+}
+
+.zoneBar span { display: block; height: 100%; border-radius: inherit; background: var(--run-orange); }
+
+.latestRunStats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.latestRunStats span { color: color-mix(in srgb, var(--run-cream) 55%, transparent); }
+
+.runReadout {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--run-cream) 14%, transparent);
+  color: color-mix(in srgb, var(--run-cream) 60%, transparent);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.65rem;
+}
+
+.runTable {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+}
+
+.runRow {
+  display: grid;
+  grid-template-columns: 0.75fr 1.4fr 1fr 1fr 0.5fr;
+  gap: 1rem;
+  align-items: center;
+  min-height: 4.2rem;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.82rem;
+  transition: background 150ms ease;
+}
+
+.runRow:last-child { border: 0; }
+.runRow:not(.runTableHead):hover { background: var(--surface); }
+
+.runTableHead {
+  min-height: 2.65rem;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.58rem;
+}
+
+.runDate { color: var(--muted); }
+.runPrimary { display: flex; align-items: baseline; gap: 0.6rem; }
+.runPrimary strong { color: var(--accent); font-size: 1rem; font-weight: 500; }
+.runRow small { color: var(--muted); font-family: var(--font-geist-sans), sans-serif; font-size: 0.67rem; }
+
+.pipeline {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(400px, 1.1fr);
+  gap: clamp(2rem, 8vw, 8rem);
+  margin-top: clamp(5rem, 11vw, 9rem);
+  padding: clamp(2rem, 6vw, 5rem);
+  border-radius: 1.2rem;
+  background: var(--surface);
+}
+
+.pipelineIntro a {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pipelineSteps { counter-reset: pipeline; }
+
+.pipelineSteps li {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: 1rem;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.pipelineSteps li:last-child { border: 0; }
+.pipelineSteps li > span { color: var(--run-orange); font-family: var(--font-jetbrains-mono), monospace; font-size: 0.68rem; }
+.pipelineSteps strong { display: block; margin-bottom: 0.3rem; font-family: var(--font-jetbrains-mono), monospace; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.pipelineSteps p { color: var(--muted); font-size: 0.82rem; line-height: 1.5; }
+
+.dataFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1.25rem 0.5rem;
+  color: var(--muted);
+  font-size: 0.58rem;
+}
+
+.dataFooter span:first-child { display: flex; align-items: center; gap: 0.65rem; }
+.dataFooter a { transition: color 150ms ease; }
+.dataFooter a:hover { color: var(--fg); }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .raceCard { min-height: 430px; }
+  .raceDistance { margin-top: 2rem; }
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .sectionHeading, .aerobicSection, .pipeline { grid-template-columns: 1fr; }
+  .aerobicSection { gap: 3rem; }
+  .pipeline { gap: 2rem; }
+}
+
+@media (max-width: 640px) {
+  .page { width: min(calc(100% - 1rem), 1180px); padding-top: 1rem; }
+  .heroCopy { padding: 1.5rem; }
+  .hero h1 { font-size: clamp(3.2rem, 16vw, 5rem); }
+  .goalStrip { grid-template-columns: 1fr 1fr; }
+  .goalStrip div:last-child { grid-column: 1 / -1; }
+  .metrics { grid-template-columns: 1fr; }
+  .metric > span { white-space: normal; }
+  .sectionHeading { gap: 1rem; }
+  .chartHeader { align-items: flex-start; flex-direction: column; gap: 1rem; }
+  .legend { width: 100%; }
+  .chartFooter { flex-direction: column; }
+  .aerobicSection { padding-inline: 0.5rem; }
+  .aerobicRules { grid-template-columns: 1fr 1fr; }
+  .latestRunCard { box-shadow: 0.65rem 0.65rem 0 color-mix(in srgb, var(--accent) 13%, transparent); }
+  .latestRunStats { grid-template-columns: repeat(2, 1fr); }
+  .runTable { border-radius: 0.8rem; }
+  .runTableHead { display: none; }
+  .runRow { grid-template-columns: 0.75fr 1.1fr 1fr; gap: 0.6rem; min-height: 4.5rem; padding: 0.75rem 1rem; }
+  .runRow > span:nth-child(4), .runRow > span:nth-child(5) { display: none; }
+  .runPrimary { align-items: flex-start; flex-direction: column; gap: 0.1rem; }
+  .pipeline { grid-template-columns: 1fr; padding: 1.5rem; }
+  .dataFooter { align-items: flex-start; flex-direction: column; padding-left: 0.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .volumeBar, .runRow { transition: none; }
+}
