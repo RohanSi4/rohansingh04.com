@@ -1,69 +1,34 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { FitnessAutoRefresh } from "./FitnessAutoRefresh";
 import type { WeekPlanRow, WeekPlanTask } from "./weekly-plan";
 import styles from "./fitness.module.css";
 
 type WeeklyPlanTableProps = {
-  weekKey: string;
   range: string;
   prescribedMiles: number | null;
   rows: WeekPlanRow[];
 };
 
-function storedChecks(key: string): Record<string, boolean> {
-  try {
-    const value = JSON.parse(window.localStorage.getItem(key) ?? "{}");
-    if (!value || typeof value !== "object" || Array.isArray(value)) return {};
-    return Object.fromEntries(
-      Object.entries(value).filter((entry): entry is [string, boolean] => entry[1] === true),
-    );
-  } catch {
-    return {};
-  }
-}
-
-function PlanTasks({
-  tasks,
-  manualChecks,
-  onToggle,
-}: {
-  tasks: WeekPlanTask[];
-  manualChecks: Record<string, boolean>;
-  onToggle: (id: string) => void;
-}) {
+function PlanTasks({ tasks }: { tasks: WeekPlanTask[] }) {
   if (tasks.length === 0) return <span className={styles.weekPlanEmptyCell}>nothing planned</span>;
 
   return (
     <ul className={styles.weekPlanTaskList}>
       {tasks.map((task) => {
         const synced = task.actual != null;
-        const done = synced || manualChecks[task.id] === true;
         return (
-          <li key={task.id}>
-            <button
-              type="button"
-              className={`${styles.weekPlanTask} ${done ? styles.weekPlanTaskDone : ""}`}
-              aria-pressed={done}
-              aria-label={
-                synced
-                  ? `${task.text}, synced from activity data`
-                  : `${done ? "Uncheck" : "Check off"} ${task.text}`
-              }
-              disabled={synced}
-              onClick={() => onToggle(task.id)}
-            >
-              <span className={styles.weekPlanCheck} aria-hidden="true">{done ? "✓" : ""}</span>
-              <span className={styles.weekPlanTaskCopy}>
-                <span>{task.text}</span>
-                {task.actual ? (
-                  <small>{task.actual} · synced</small>
-                ) : done ? (
-                  <small>checked on this device</small>
-                ) : null}
-              </span>
-            </button>
+          <li
+            className={`${styles.weekPlanTask} ${synced ? styles.weekPlanTaskDone : ""} ${task.trackable ? "" : styles.weekPlanTaskNote}`}
+            key={task.id}
+          >
+            {task.trackable ? (
+              <span className={styles.weekPlanCheck} aria-hidden="true">{synced ? "✓" : ""}</span>
+            ) : null}
+            <span className={styles.weekPlanTaskCopy}>
+              <span>{task.text}</span>
+              {task.actual ? (
+                <small>{task.actual} · HealthFit</small>
+              ) : null}
+            </span>
           </li>
         );
       })}
@@ -72,42 +37,20 @@ function PlanTasks({
 }
 
 export function WeeklyPlanTable({
-  weekKey,
   range,
   prescribedMiles,
   rows,
 }: WeeklyPlanTableProps) {
-  const router = useRouter();
-  const storageKey = `fitness-plan-checks:${weekKey}`;
-  const [manualChecks, setManualChecks] = useState<Record<string, boolean>>({});
-
-  useEffect(() => {
-    setManualChecks(storedChecks(storageKey));
-    const refresh = () => router.refresh();
-    const interval = window.setInterval(refresh, 60_000);
-    window.addEventListener("focus", refresh);
-    return () => {
-      window.clearInterval(interval);
-      window.removeEventListener("focus", refresh);
-    };
-  }, [router, storageKey]);
-
-  const toggle = (id: string) => {
-    setManualChecks((current) => {
-      const next = { ...current };
-      if (next[id]) delete next[id];
-      else next[id] = true;
-      window.localStorage.setItem(storageKey, JSON.stringify(next));
-      return next;
-    });
-  };
-
   const tasks = rows.flatMap((row) => [...row.runTasks, ...row.otherTasks]);
-  const done = tasks.filter((task) => task.actual != null || manualChecks[task.id]).length;
-  const percent = tasks.length > 0 ? Math.round((done / tasks.length) * 100) : 0;
+  const plannedWorkouts = tasks.filter((task) => task.trackable && !task.isExtra);
+  const done = plannedWorkouts.filter((task) => task.actual != null).length;
+  const percent = plannedWorkouts.length > 0
+    ? Math.round((done / plannedWorkouts.length) * 100)
+    : 0;
 
   return (
     <div className={styles.weekPlanCard}>
+      <FitnessAutoRefresh />
       <div className={styles.weekPlanToolbar}>
         <div>
           <span>this week&apos;s plan</span>
@@ -115,11 +58,11 @@ export function WeeklyPlanTable({
           <p>{range}</p>
         </div>
         <div className={styles.weekPlanProgress}>
-          <div><span>{done} of {tasks.length} done</span><span>{percent}%</span></div>
+          <div><span>{done} of {plannedWorkouts.length} workouts logged</span><span>{percent}%</span></div>
           <div className={styles.weekPlanProgressTrack} aria-hidden="true">
             <span style={{ width: `${percent}%` }} />
           </div>
-          <small>Watch workouts sync themselves. Taps stay on this device.</small>
+          <small>Completed workouts fill in from HealthFit automatically.</small>
         </div>
       </div>
 
@@ -139,10 +82,10 @@ export function WeeklyPlanTable({
                 {row.isToday ? <span>today</span> : row.isKeyDay ? <span>key day</span> : null}
               </th>
               <td data-label="run">
-                <PlanTasks tasks={row.runTasks} manualChecks={manualChecks} onToggle={toggle} />
+                <PlanTasks tasks={row.runTasks} />
               </td>
               <td data-label="lift + other">
-                <PlanTasks tasks={row.otherTasks} manualChecks={manualChecks} onToggle={toggle} />
+                <PlanTasks tasks={row.otherTasks} />
               </td>
             </tr>
           ))}

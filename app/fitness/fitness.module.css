@@ -664,20 +664,10 @@
   border-radius: 0.65rem;
   color: var(--fg);
   text-align: left;
-  transition: background 150ms ease;
 }
 
-.weekPlanTask:not(:disabled):hover {
-  background: color-mix(in srgb, var(--accent) 8%, transparent);
-}
-
-.weekPlanTask:not(:disabled):focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.weekPlanTask:disabled {
-  cursor: default;
+.weekPlanTaskNote {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .weekPlanCheck {

@@ -23,11 +23,11 @@ describe("weekly plan rows", () => {
     }], "2026-07-13");
 
     expect(rows[0].runTasks).toEqual([
-      { id: "2026-07-13:run:0", text: "Easy 5 miles at an easy effort", actual: "5.1 mi · 47 min" },
-      { id: "2026-07-13:run:1", text: "4×20s strides (flat, relaxed, full walk recovery)", actual: null },
+      { id: "2026-07-13:run:0", text: "Easy 5 miles at an easy effort", actual: "5.1 mi · 47 min", trackable: true, isExtra: false },
+      { id: "2026-07-13:run:1", text: "4×20s strides (flat, relaxed, full walk recovery)", actual: null, trackable: false, isExtra: false },
     ]);
     expect(rows[0].otherTasks).toEqual([
-      { id: "2026-07-13:other:2", text: "upper body lift", actual: "62 min" },
+      { id: "2026-07-13:other:2", text: "upper body lift", actual: "62 min", trackable: true, isExtra: false },
     ]);
   });
 
@@ -46,9 +46,33 @@ describe("weekly plan rows", () => {
     }], "2026-07-18");
 
     expect(rows[0].runTasks[0].text).toBe("Rest");
+    expect(rows[0].runTasks[0].trackable).toBe(false);
     expect(rows[0].otherTasks).toEqual([
-      { id: "2026-07-17:other:1", text: "optional walk/golf", actual: null },
-      { id: "2026-07-17:actual:Basketball", text: "basketball", actual: "45 min" },
+      { id: "2026-07-17:other:1", text: "optional walk/golf", actual: null, trackable: true, isExtra: false },
+      { id: "2026-07-17:actual:Basketball", text: "basketball", actual: "45 min", trackable: true, isExtra: true },
     ]);
+  });
+
+  it("uses a HealthFit workout to fill in circuit work", () => {
+    const rows = buildWeekPlanRows([{
+      date: "2026-07-19",
+      dayLabel: "Sun 7/19",
+      text: "Rest + circuit",
+      isKeyDay: false,
+    }], [{
+      date: "2026-07-19",
+      sport: "Workout",
+      name: "Workout",
+      movingMins: 24,
+      distanceMi: 0,
+    }], "2026-07-19");
+
+    expect(rows[0].otherTasks[0]).toEqual({
+      id: "2026-07-19:other:1",
+      text: "circuit",
+      actual: "24 min",
+      trackable: true,
+      isExtra: false,
+    });
   });
 });

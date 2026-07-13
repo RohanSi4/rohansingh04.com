@@ -40,7 +40,6 @@ export function WeeklyPlan({ today, plan, activities }: WeeklyPlanProps) {
 
       {plan && days.length > 0 ? (
         <WeeklyPlanTable
-          weekKey={plan.weekStart ?? days[0].date}
           range={planRange(plan)}
           prescribedMiles={plan.prescribedMiles}
           rows={rows}

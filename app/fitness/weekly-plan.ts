@@ -7,6 +7,8 @@ export type WeekPlanTask = {
   id: string;
   text: string;
   actual: string | null;
+  trackable: boolean;
+  isExtra: boolean;
 };
 
 export type WeekPlanRow = {
@@ -52,6 +54,7 @@ function taskSpec(text: string): TaskSpec {
   if (/\b(ride|bike|cycling)\b/.test(value)) return { column: "other", sports: ["Ride"] };
   if (value.includes("swim")) return { column: "other", sports: ["Swim"] };
   if (value.includes("hike")) return { column: "other", sports: ["Hike"] };
+  if (value.includes("circuit")) return { column: "other", sports: ["WeightTraining", "Workout"] };
   return { column: "other", sports: [] };
 }
 
@@ -98,6 +101,8 @@ export function buildWeekPlanRows(
         id: `${day.date}:${spec.column}:${index}`,
         text,
         actual,
+        trackable: spec.sports.length > 0,
+        isExtra: false,
       };
       (spec.column === "run" ? runTasks : otherTasks).push(task);
     });
@@ -114,6 +119,8 @@ export function buildWeekPlanRows(
         id: `${day.date}:actual:${sport}`,
         text: activityLabel(sport),
         actual: actualText([sport], extras),
+        trackable: true,
+        isExtra: true,
       };
       (sport === "Run" ? runTasks : otherTasks).push(task);
     }
