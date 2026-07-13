@@ -171,5 +171,16 @@
     "notes": "",
     "photos": [],
     "tripSlug": null
+  },
+  {
+    "id": "amsterdam-unknown",
+    "name": "Amsterdam",
+    "country": "Netherlands",
+    "lat": 52.3676,
+    "lng": 4.9041,
+    "visitedDate": null,
+    "notes": "7-hour layover, went into the city for a bit",
+    "photos": [],
+    "tripSlug": null
   }
 ]
