@@ -182,5 +182,16 @@
     "notes": "7-hour layover, went into the city for a bit",
     "photos": [],
     "tripSlug": null
+  },
+  {
+    "id": "niagara-falls-unknown",
+    "name": "Niagara Falls",
+    "country": "Canada",
+    "lat": 43.0896,
+    "lng": -79.0849,
+    "visitedDate": null,
+    "notes": "",
+    "photos": [],
+    "tripSlug": null
   }
 ]
