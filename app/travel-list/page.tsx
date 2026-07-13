@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/travel-list" },
 };
 
+export const dynamic = "force-dynamic";
+
 function formatVisitedDate(value: string): string {
   const [year, month] = value.split("-").map(Number);
   if (!year) return value;

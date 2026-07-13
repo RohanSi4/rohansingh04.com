@@ -1,5 +1,27 @@
 [
   {
+    "id": "iceland-ring-road-2026",
+    "name": "Iceland Ring Road",
+    "country": "Iceland",
+    "lat": 64.9631,
+    "lng": -19.0208,
+    "visitedDate": "2026-05",
+    "notes": "drove the Ring Road",
+    "photos": [],
+    "tripSlug": null
+  },
+  {
+    "id": "london-2026",
+    "name": "London",
+    "country": "England",
+    "lat": 51.5074,
+    "lng": -0.1278,
+    "visitedDate": "2026-05",
+    "notes": "",
+    "photos": [],
+    "tripSlug": null
+  },
+  {
     "id": "barcelona-2026",
     "name": "Barcelona",
     "country": "Spain",
