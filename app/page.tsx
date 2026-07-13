@@ -65,7 +65,7 @@ export default async function HomePage() {
       />
       <section className="site-container grid gap-12 py-16 sm:py-24 lg:grid-cols-[1fr_22rem] lg:items-end lg:py-32">
         <div>
-          <p className="eyebrow mb-5">CS at UVA · graduating May 2027</p>
+          <p className="eyebrow mb-5">ML intern at Expedia · CS at UVA</p>
           <h1 className="page-title max-w-[13ch]">
             I build useful software from messy, real-world data.
           </h1>
@@ -92,10 +92,10 @@ export default async function HomePage() {
               <dt className="text-muted">location</dt><dd className="font-medium text-fg">{site.currentLocation}</dd>
             </div>
             <div className="grid grid-cols-[5.5rem_1fr] gap-4 px-5 py-4 text-sm">
-              <dt className="text-muted">focus</dt><dd className="font-medium leading-relaxed text-fg">{site.currentFocus}</dd>
+              <dt className="text-muted">role</dt><dd className="font-medium text-fg">{site.currentRole.title} at {site.currentRole.org}</dd>
             </div>
             <div className="grid grid-cols-[5.5rem_1fr] gap-4 px-5 py-4 text-sm">
-              <dt className="text-muted">looking for</dt><dd className="font-medium text-fg">software and data opportunities</dd>
+              <dt className="text-muted">focus</dt><dd className="font-medium leading-relaxed text-fg">{site.currentFocus}</dd>
             </div>
           </dl>
         </aside>

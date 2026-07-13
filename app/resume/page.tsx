@@ -22,8 +22,19 @@ export default function ResumePage() {
   return (
     <div className="content-container page-section">
       <header className="mb-12 border-b border-border pb-8">
-        <p className="eyebrow mb-4">résumé</p>
-        <h1 className="page-title">Rohan Singh</h1>
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p className="eyebrow mb-4">résumé</p>
+            <h1 className="page-title">Rohan Singh</h1>
+          </div>
+          <a
+            href="/rohan-singh-resume.pdf"
+            download="Rohan-Singh-Resume.pdf"
+            className="button-primary w-fit shrink-0"
+          >
+            download PDF <span aria-hidden="true">↓</span>
+          </a>
+        </div>
 
         <p className="mt-5 text-base text-muted">
           Computer science at UVA, graduating May 2027 · software, data, and ML systems

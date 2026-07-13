@@ -50,6 +50,7 @@ all structured data lives in `/content`. edit json files directly.
 - `history.json` -- work, school, milestones for /history and /resume
 - `projects/*/meta.json` -- project metadata, `featured: true` surfaces on landing
 - `running-dashboard.json` -- deploy-safe fallback for `/fitness`
+- `public/rohan-singh-resume.pdf` -- downloadable recruiter-facing résumé
 
 ## fitness page
 

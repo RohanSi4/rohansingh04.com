@@ -1,5 +1,18 @@
 [
   {
+    "id": "expedia-2026",
+    "type": "work",
+    "title": "Machine Learning Intern",
+    "org": "Expedia Group",
+    "startDate": "2026-06",
+    "endDate": null,
+    "location": "San Jose, CA",
+    "summary": "Working on personalization and member-retention models for the Membership & Engagement team.",
+    "bullets": [
+      "Building personalization and member-retention models with Python, PyTorch, and SQL"
+    ]
+  },
+  {
     "id": "uva-cs",
     "type": "school",
     "title": "BSCS, Data Science minor",
@@ -15,7 +28,7 @@
     "title": "Software Engineer Intern",
     "org": "Freddie Mac",
     "startDate": "2025-05",
-    "endDate": "2025-08",
+    "endDate": "2025-07",
     "location": "McLean, VA",
     "summary": "Built backend APIs, test automation, and data tooling across a Spring Boot and AWS stack.",
     "bullets": [

@@ -1,15 +1,20 @@
-I built this project to learn how recommendations can emerge from listening
-behavior rather than a hand-written list of rules. The system uses Python and
-collaborative filtering to work from listening history and find relationships
-between users and music.
+I built this because music recommendations are more interesting when they can
+adapt to intent. Sometimes I want tracks similar to one song; sometimes I want a
+specific mood; sometimes I want to start from an artist and explore outward.
 
-The scope was intentionally smaller than my later recommendation work: this was
-about understanding the core ML idea, not building a production serving stack.
-It gave me a practical starting point for thinking about sparse behavioral data,
-similarity, and the difference between a model that runs and a recommendation
-someone might actually want.
+The system pulls listening history, audio features, and artist data through the
+Spotify Web API. Its hybrid ranking path blends cosine similarity with Spotify's
+recommendation engine, while separate mood, content, and artist modes make the
+same underlying data useful in different ways.
 
-The project is complete and the source remains available on GitHub. I would
-approach the evaluation and product layer differently today, but that is also why
-I keep it here: it shows the point where recommendation systems became more than
-a classroom concept for me.
+## from model to playlist
+
+A Streamlit interface makes the system usable without dropping into a notebook.
+It can generate recommendations in under 500ms and optionally turn the result
+into a playlist. OAuth tokens are cached so repeat sessions do not create
+unnecessary authentication and API traffic.
+
+The measured result is a 64% match rate@25 on my evaluation set, with token
+caching reducing redundant Spotify API calls by 42%. The project is still a
+work in progress, but it now has the full loop I wanted: personal data in,
+ranked music out, and a practical way to listen to the result.

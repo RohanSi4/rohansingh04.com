@@ -1,15 +1,24 @@
-I started this as a standalone Swift app for logging workouts and health
-metrics. The useful question was simple: could I keep my own activity history in
-a form I controlled and make it easier to understand than a collection of
-screens inside separate fitness apps?
+I built this as a native morning view for the health signals that are otherwise
+scattered across Apple Health. The core question is intentionally practical:
+what happened yesterday, how did last night's sleep compare with normal, and is
+there one useful thing worth noticing?
 
-The app itself was archived after the idea moved in a different direction. A
-lightweight iOS shortcut and webhook pipeline was a better fit for collecting
-data automatically, while the website became the place to display it. That path
-removed the need to maintain a full native interface just to move information
-from a phone into a personal dashboard.
+## the daily recap
 
-The original repository remains available as a snapshot of the first approach.
-Its more important outcome is the system it led to: the live health and fitness
-data on this site grew from the same desire to own the data flow and present it
-in a way that feels personal.
+The SwiftUI app reads sleep, steps, walking distance, and active energy through
+HealthKit. It identifies the sleep session that just ended, compares the result
+with seven-day averages, and presents the information as one daily recap rather
+than a collection of disconnected charts.
+
+The sleep score combines duration, efficiency, and wake-time consistency with
+asymmetric scoring curves. That makes the score harder to game with one strong
+metric and lets it distinguish between enough sleep and genuinely consistent
+sleep.
+
+## making it useful at the right time
+
+Scheduled morning notifications surface a sleep highlight and deep-link into
+the recap. Weekly Swift Charts views provide the longer trend without crowding
+the daily screen. The project is still evolving, but the working MVP now covers
+HealthKit ingestion, scoring, movement comparisons, notifications, and the
+daily interface around them.
