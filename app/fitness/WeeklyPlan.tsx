@@ -3,11 +3,15 @@ import {
   getPlanWeekDays,
   type PublicTrainingPlan,
 } from "@/lib/running";
+import type { HealthSummary } from "@/lib/types";
+import { WeeklyPlanTable } from "./WeeklyPlanTable";
+import { buildWeekPlanRows } from "./weekly-plan";
 import styles from "./fitness.module.css";
 
 type WeeklyPlanProps = {
   today: string;
   plan: PublicTrainingPlan | null;
+  activities: HealthSummary["recentActivities"];
 };
 
 function planRange(plan: PublicTrainingPlan): string {
@@ -17,9 +21,9 @@ function planRange(plan: PublicTrainingPlan): string {
   return "the latest week from my coach bot";
 }
 
-export function WeeklyPlan({ today, plan }: WeeklyPlanProps) {
+export function WeeklyPlan({ today, plan, activities }: WeeklyPlanProps) {
   const days = plan ? getPlanWeekDays(plan) : [];
-  const keyDay = days.find((day) => day.isKeyDay);
+  const rows = buildWeekPlanRows(days, activities, today);
 
   return (
     <section className={styles.weekPlanSection} aria-labelledby="week-plan-title">
@@ -35,44 +39,12 @@ export function WeeklyPlan({ today, plan }: WeeklyPlanProps) {
       </div>
 
       {plan && days.length > 0 ? (
-        <div className={styles.weekPlanCard}>
-          <div className={styles.weekPlanSummary}>
-            <span>the bot&apos;s plan</span>
-            <h3>
-              {plan.prescribedMiles != null
-                ? `${plan.prescribedMiles} miles on deck.`
-                : "One week at a time."}
-            </h3>
-            <p>{planRange(plan)}</p>
-            <dl>
-              <div>
-                <dt>days laid out</dt>
-                <dd>{days.length}</dd>
-              </div>
-              <div>
-                <dt>long run</dt>
-                <dd>{keyDay?.dayLabel ?? "not set"}</dd>
-              </div>
-            </dl>
-          </div>
-
-          <ol className={styles.weekPlanDays}>
-            {days.map((day) => {
-              const isToday = day.date === today;
-              const isPast = day.date < today;
-              return (
-                <li
-                  className={`${styles.weekPlanDay} ${isToday ? styles.weekPlanDayToday : ""} ${isPast ? styles.weekPlanDayPast : ""}`}
-                  key={day.date}
-                >
-                  <time dateTime={day.date}>{day.dayLabel}</time>
-                  <p>{day.text}</p>
-                  {isToday ? <strong>today</strong> : day.isKeyDay ? <strong>key day</strong> : null}
-                </li>
-              );
-            })}
-          </ol>
-        </div>
+        <WeeklyPlanTable
+          weekKey={plan.weekStart ?? days[0].date}
+          range={planRange(plan)}
+          prescribedMiles={plan.prescribedMiles}
+          rows={rows}
+        />
       ) : (
         <div className={styles.weekPlanEmpty}>
           <strong>The next week isn&apos;t up yet.</strong>

@@ -169,7 +169,11 @@ export default async function FitnessPage() {
 
       <TodayPlan today={today} health={data.health} week={data.currentWeek} plan={data.trainingPlan} />
 
-      <WeeklyPlan today={today} plan={data.trainingPlan} />
+      <WeeklyPlan
+        today={today}
+        plan={data.trainingPlan}
+        activities={data.health.recentActivities}
+      />
 
       <section className={styles.section} aria-labelledby="progress-title">
         <div className={styles.sectionHeading}>
