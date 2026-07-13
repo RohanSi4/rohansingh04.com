@@ -332,6 +332,8 @@ async function publishSnapshot(serialized) {
 }
 
 async function main() {
+  const publishOnly = process.argv.includes("--publish-only");
+  const shouldPublish = publishOnly || process.argv.includes("--publish");
   const profilePath = path.join(marathonRoot, "data", "athlete-profile.json");
   const activitiesDir = path.join(marathonRoot, "data", "activities");
   const profile = JSON.parse(await readFile(profilePath, "utf8"));
@@ -413,7 +415,7 @@ async function main() {
   const longestRun = [...allRuns].sort((a, b) => b.distanceMi - a.distanceMi)[0];
   const activeRunDates = new Set(allRuns.map((run) => run.date));
   const currentWeek = weeks.at(-1);
-  const sourceGeneratedAt = profile.generatedAt ?? runs[0].start_date;
+  const sourceGeneratedAt = new Date().toISOString();
 
   const snapshot = {
     schemaVersion: 2,
@@ -458,13 +460,19 @@ async function main() {
     if (serialized.includes(field)) throw new Error(`Privacy check failed: snapshot contains ${field}`);
   }
 
-  await writeFile(outputPath, serialized, "utf8");
-  console.log(
-    `Synced ${allRuns.length} runs, ${activities.length} activities, and ${yearlyHistory.length} years to ${path.relative(siteRoot, outputPath)}.`,
-  );
+  if (!publishOnly) {
+    await writeFile(outputPath, serialized, "utf8");
+    console.log(
+      `Synced ${allRuns.length} runs, ${activities.length} activities, and ${yearlyHistory.length} years to ${path.relative(siteRoot, outputPath)}.`,
+    );
+  } else {
+    console.log(
+      `Built ${allRuns.length} runs, ${activities.length} activities, and ${yearlyHistory.length} years for live publishing.`,
+    );
+  }
   console.log("Privacy check passed: locations, source files, descriptions, and private notes were excluded.");
 
-  if (process.argv.includes("--publish")) await publishSnapshot(serialized);
+  if (shouldPublish) await publishSnapshot(serialized);
 }
 
 main().catch((error) => {

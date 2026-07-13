@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-12T03:00:45.536Z",
+  "generatedAt": "2026-07-13T05:04:24.818Z",
   "dataThrough": "2026-07-11",
   "race": {
     "name": "Richmond Marathon",
@@ -19,7 +19,7 @@
     "longestRunDate": "2026-04-26",
     "peakWeekMiles": 28.1,
     "peakWeekStart": "2026-07-06",
-    "totalActivities": 1347
+    "totalActivities": 1349
   },
   "currentWeek": {
     "weekStart": "2026-07-06",
@@ -29,7 +29,7 @@
     "liftDays": 3,
     "qualityRuns": 1,
     "averageHeartRate": 141,
-    "trainingLoad": 414
+    "trainingLoad": 433
   },
   "recentFourWeekMiles": 82.6,
   "weeks": [
@@ -271,7 +271,7 @@
       "liftDays": 3,
       "qualityRuns": 1,
       "averageHeartRate": 141,
-      "trainingLoad": 414
+      "trainingLoad": 433
     }
   ],
   "monthlyHistory": [
@@ -585,7 +585,7 @@
       "runs": 29,
       "runDays": 26,
       "longestRunMiles": 13.1,
-      "activities": 298
+      "activities": 300
     }
   ],
   "recentRuns": [
@@ -759,45 +759,59 @@
     }
   ],
   "health": {
-    "updatedAt": "2026-07-12T03:00:45.536Z",
+    "updatedAt": "2026-07-13T05:04:24.818Z",
     "today": {
-      "exerciseMinutes": 104,
-      "activeCalories": 1326,
-      "distanceMi": 10.7,
-      "sport": "Run"
+      "exerciseMinutes": 98,
+      "activeCalories": 366,
+      "distanceMi": 3.7,
+      "sport": "Walk"
     },
     "lastActivity": {
-      "date": "2026-07-11",
-      "sport": "Run",
-      "name": "Outdoor run",
-      "movingMins": 104,
-      "distanceMi": 10.69
+      "date": "2026-07-12",
+      "sport": "Walk",
+      "name": "Walk",
+      "movingMins": 72,
+      "distanceMi": 2.66
     },
     "streak": {
-      "currentDays": 1,
+      "currentDays": 2,
       "bestDays": 24
     },
     "thisMonth": {
-      "activeDays": 10,
-      "activeDaysDeltaVsLastMonth": -9,
-      "distanceMi": 55.2,
-      "activeCalories": 11021,
+      "activeDays": 11,
+      "activeDaysDeltaVsLastMonth": -8,
+      "distanceMi": 58.8,
+      "activeCalories": 11387,
       "weeklyMinutes": [
         974,
-        252,
+        350,
         0,
         0
       ]
     },
     "thisYear": {
-      "distanceMi": 429.6,
-      "activeDays": 132
+      "distanceMi": 433.3,
+      "activeDays": 133
     },
     "allTime": {
-      "activeDays": 740,
+      "activeDays": 741,
       "sinceDate": "2022-11-22"
     },
     "recentActivities": [
+      {
+        "date": "2026-07-12",
+        "sport": "Walk",
+        "name": "Walk",
+        "movingMins": 72,
+        "distanceMi": 2.66
+      },
+      {
+        "date": "2026-07-12",
+        "sport": "Walk",
+        "name": "Walk",
+        "movingMins": 26,
+        "distanceMi": 1.01
+      },
       {
         "date": "2026-07-11",
         "sport": "Run",
@@ -888,30 +902,9 @@
         "name": "Treadmill run",
         "movingMins": 43,
         "distanceMi": 4.82
-      },
-      {
-        "date": "2026-07-02",
-        "sport": "WeightTraining",
-        "name": "Strength training",
-        "movingMins": 92,
-        "distanceMi": 0
-      },
-      {
-        "date": "2026-07-02",
-        "sport": "Basketball",
-        "name": "Basketball",
-        "movingMins": 45,
-        "distanceMi": 1.73
       }
     ],
     "heatmap": [
-      {
-        "date": "2025-07-12",
-        "intensity": 0,
-        "exerciseMinutes": 0,
-        "sport": null,
-        "distanceMi": 0
-      },
       {
         "date": "2025-07-13",
         "intensity": 0,
@@ -3459,6 +3452,13 @@
         "exerciseMinutes": 104,
         "sport": "Run",
         "distanceMi": 10.7
+      },
+      {
+        "date": "2026-07-12",
+        "intensity": 4,
+        "exerciseMinutes": 98,
+        "sport": "Walk",
+        "distanceMi": 3.7
       }
     ]
   }
