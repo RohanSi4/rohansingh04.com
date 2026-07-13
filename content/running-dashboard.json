@@ -1,13 +1,14 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-13T05:04:24.818Z",
+  "generatedAt": "2026-07-13T05:16:20.349Z",
   "dataThrough": "2026-07-11",
   "race": {
     "name": "Richmond Marathon",
     "date": "2026-11-14",
     "distanceMi": 26.2,
     "goalTime": "3:45:00",
-    "goalPace": "8:35 /mi"
+    "goalPace": "8:35 /mi",
+    "trainingStart": "2026-06-22"
   },
   "totals": {
     "runMiles": 250,
@@ -590,7 +591,7 @@
   ],
   "recentRuns": [
     {
-      "id": "run-2026-07-11-1",
+      "id": "run-5098c55f2ae7",
       "date": "2026-07-11",
       "surface": "outdoor",
       "distanceMi": 10.69,
@@ -604,7 +605,7 @@
       "easyZonePct": 96
     },
     {
-      "id": "run-2026-07-09-2",
+      "id": "run-0224cd233ed0",
       "date": "2026-07-09",
       "surface": "outdoor",
       "distanceMi": 5.13,
@@ -618,7 +619,7 @@
       "easyZonePct": 94
     },
     {
-      "id": "run-2026-07-08-3",
+      "id": "run-14489c94b455",
       "date": "2026-07-08",
       "surface": "outdoor",
       "distanceMi": 2.8,
@@ -632,7 +633,7 @@
       "easyZonePct": 73
     },
     {
-      "id": "run-2026-07-07-4",
+      "id": "run-f60f4f652454",
       "date": "2026-07-07",
       "surface": "treadmill",
       "distanceMi": 3.68,
@@ -646,7 +647,7 @@
       "easyZonePct": 91
     },
     {
-      "id": "run-2026-07-07-5",
+      "id": "run-b143fa26d27d",
       "date": "2026-07-07",
       "surface": "treadmill",
       "distanceMi": 2,
@@ -660,7 +661,7 @@
       "easyZonePct": 100
     },
     {
-      "id": "run-2026-07-06-6",
+      "id": "run-2710d9437fef",
       "date": "2026-07-06",
       "surface": "treadmill",
       "distanceMi": 3.84,
@@ -674,7 +675,7 @@
       "easyZonePct": 100
     },
     {
-      "id": "run-2026-07-04-7",
+      "id": "run-baa37480369b",
       "date": "2026-07-04",
       "surface": "treadmill",
       "distanceMi": 8.3,
@@ -688,7 +689,7 @@
       "easyZonePct": 100
     },
     {
-      "id": "run-2026-07-02-8",
+      "id": "run-c68ec72526b4",
       "date": "2026-07-02",
       "surface": "treadmill",
       "distanceMi": 4.82,
@@ -702,7 +703,7 @@
       "easyZonePct": 86
     },
     {
-      "id": "run-2026-07-01-9",
+      "id": "run-367717410e53",
       "date": "2026-07-01",
       "surface": "treadmill",
       "distanceMi": 4,
@@ -716,7 +717,7 @@
       "easyZonePct": 99
     },
     {
-      "id": "run-2026-06-30-10",
+      "id": "run-2dd61fac0e14",
       "date": "2026-06-30",
       "surface": "treadmill",
       "distanceMi": 4.01,
@@ -730,7 +731,7 @@
       "easyZonePct": 100
     },
     {
-      "id": "run-2026-06-28-11",
+      "id": "run-e12de5612310",
       "date": "2026-06-28",
       "surface": "treadmill",
       "distanceMi": 8,
@@ -744,7 +745,7 @@
       "easyZonePct": 100
     },
     {
-      "id": "run-2026-06-24-12",
+      "id": "run-ca20cc9d0833",
       "date": "2026-06-24",
       "surface": "outdoor",
       "distanceMi": 7.02,
@@ -758,8 +759,64 @@
       "easyZonePct": 61
     }
   ],
+  "trainingPlan": {
+    "heading": "Week of Jul 13–19, 2026, Phase 1 (Base), ~18 weeks out. San Jose. FIRST 30+ WEEK",
+    "weekStart": "2026-07-13",
+    "weekEnd": "2026-07-19",
+    "prescribedMiles": 32,
+    "days": [
+      {
+        "date": "2026-07-12",
+        "dayLabel": "Sun 7/12",
+        "text": "Rest from running + lower body lift (light/accessory, legs taxed from long run) + circuit",
+        "isKeyDay": false
+      },
+      {
+        "date": "2026-07-13",
+        "dayLabel": "Mon 7/13",
+        "text": "Easy 5 miles at an easy effort + 4×20s strides (flat, relaxed ~7:00-7:15 feel, full walk recovery) + upper body lift",
+        "isKeyDay": false
+      },
+      {
+        "date": "2026-07-14",
+        "dayLabel": "Tue 7/14",
+        "text": "Easy 5.5 miles at an easy effort + lower body lift",
+        "isKeyDay": false
+      },
+      {
+        "date": "2026-07-15",
+        "dayLabel": "Wed 7/15",
+        "text": "Recovery 4 miles at an easy effort + circuit. If anything feels off, make it a rest day.",
+        "isKeyDay": false
+      },
+      {
+        "date": "2026-07-16",
+        "dayLabel": "Thu 7/16",
+        "text": "Easy 6 miles at an easy effort + 4×20s strides + upper body lift",
+        "isKeyDay": false
+      },
+      {
+        "date": "2026-07-17",
+        "dayLabel": "Fri 7/17",
+        "text": "Rest + optional walk/golf",
+        "isKeyDay": false
+      },
+      {
+        "date": "2026-07-18",
+        "dayLabel": "Sat 7/18",
+        "text": "long run 11.5 miles easy, outdoors, morning. Keep it conversational. Bring water and take gels around 40 and 75 minutes.",
+        "isKeyDay": true
+      },
+      {
+        "date": "2026-07-19",
+        "dayLabel": "Sun 7/19",
+        "text": "Rest + lower body lift + circuit",
+        "isKeyDay": false
+      }
+    ]
+  },
   "health": {
-    "updatedAt": "2026-07-13T05:04:24.818Z",
+    "updatedAt": "2026-07-13T05:16:20.349Z",
     "today": {
       "exerciseMinutes": 98,
       "activeCalories": 366,

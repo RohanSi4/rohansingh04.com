@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { createHash } from "node:crypto";
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
@@ -14,6 +15,7 @@ const RACE = {
   distanceMi: 26.2,
   goalTime: "3:45:00",
   goalPace: "8:35 /mi",
+  trainingStart: "2026-06-22",
 };
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
@@ -91,11 +93,13 @@ function zonePercent(activity, zones) {
   return Math.round((inZones / total) * 100);
 }
 
-function publicRun(activity, index) {
+function publicRun(activity) {
   const distanceMi = activity.distance * MILES_PER_METER;
   const date = publicDate(activity.start_date);
+  const identity = activity.key ?? `${activity.start_date}-${activity.type}-${activity.distance}`;
+  const publicId = createHash("sha256").update(identity).digest("hex").slice(0, 12);
   return {
-    id: `run-${date}-${index + 1}`,
+    id: `run-${publicId}`,
     date,
     surface: activity.trainer ? "treadmill" : "outdoor",
     distanceMi: round(distanceMi, 2),
@@ -276,6 +280,56 @@ function trainingWeeks(profile) {
   }));
 }
 
+function fillThroughCurrentWeek(weeks, currentDate) {
+  const filled = weeks.map((week) => ({ ...week }));
+  const currentWeekStart = mondayFor(currentDate);
+  let nextWeekStart = filled.length > 0
+    ? addDays(filled.at(-1).weekStart, 7)
+    : currentWeekStart;
+  while (nextWeekStart <= currentWeekStart) {
+    filled.push({
+      weekStart: nextWeekStart,
+      runMiles: 0,
+      runDays: 0,
+      longRunMiles: 0,
+      liftDays: 0,
+      qualityRuns: 0,
+      averageHeartRate: null,
+      trainingLoad: 0,
+    });
+    nextWeekStart = addDays(nextWeekStart, 7);
+  }
+  return filled;
+}
+
+function validPlan(value) {
+  return value && typeof value === "object"
+    && typeof value.heading === "string"
+    && Array.isArray(value.days)
+    && value.days.every((day) => day
+      && typeof day.date === "string"
+      && typeof day.dayLabel === "string"
+      && typeof day.text === "string"
+      && typeof day.isKeyDay === "boolean");
+}
+
+async function runningPlan() {
+  if (process.env.RUNNING_DASHBOARD_PLAN) {
+    try {
+      const plan = JSON.parse(process.env.RUNNING_DASHBOARD_PLAN);
+      return validPlan(plan) ? plan : null;
+    } catch {
+      return null;
+    }
+  }
+  try {
+    const previous = JSON.parse(await readFile(outputPath, "utf8"));
+    return validPlan(previous.trainingPlan) ? previous.trainingPlan : null;
+  } catch {
+    return null;
+  }
+}
+
 async function localEnvValue(name) {
   const contents = await readFile(path.join(siteRoot, ".env.local"), "utf8").catch(() => "");
   const line = contents.split(/\r?\n/).find((entry) => entry.startsWith(`${name}=`));
@@ -355,7 +409,9 @@ async function main() {
 
   const allRuns = runs.map(publicRun);
   const recentRuns = allRuns.slice(0, 12);
-  const weeks = trainingWeeks(profile);
+  const sourceGeneratedAt = new Date().toISOString();
+  const today = publicDate(sourceGeneratedAt);
+  const weeks = fillThroughCurrentWeek(trainingWeeks(profile), today);
   const weekBuckets = new Map();
   for (const run of allRuns) {
     const weekStart = mondayFor(run.date);
@@ -414,8 +470,9 @@ async function main() {
   const peakWeek = [...weekBuckets.entries()].sort((a, b) => b[1].runMiles - a[1].runMiles)[0];
   const longestRun = [...allRuns].sort((a, b) => b.distanceMi - a.distanceMi)[0];
   const activeRunDates = new Set(allRuns.map((run) => run.date));
-  const currentWeek = weeks.at(-1);
-  const sourceGeneratedAt = new Date().toISOString();
+  const currentWeekStart = mondayFor(today);
+  const currentWeek = weeks.find((week) => week.weekStart === currentWeekStart) ?? weeks.at(-1);
+  const trainingPlan = await runningPlan();
 
   const snapshot = {
     schemaVersion: 2,
@@ -443,6 +500,7 @@ async function main() {
     monthlyHistory,
     yearlyHistory,
     recentRuns,
+    trainingPlan,
     health: buildHealthSummary(activities, sourceGeneratedAt),
   };
 

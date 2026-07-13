@@ -33,6 +33,21 @@ export type PublicRun = {
   easyZonePct: number | null;
 };
 
+export type PublicPlanDay = {
+  date: string;
+  dayLabel: string;
+  text: string;
+  isKeyDay: boolean;
+};
+
+export type PublicTrainingPlan = {
+  heading: string;
+  weekStart: string | null;
+  weekEnd: string | null;
+  prescribedMiles: number | null;
+  days: PublicPlanDay[];
+};
+
 export type RunningMonth = {
   month: string;
   runMiles: number;
@@ -59,6 +74,7 @@ export type RunningDashboard = {
     distanceMi: number;
     goalTime: string;
     goalPace: string;
+    trainingStart: string;
   };
   totals: {
     runMiles: number;
@@ -78,6 +94,7 @@ export type RunningDashboard = {
   monthlyHistory: RunningMonth[];
   yearlyHistory: RunningYear[];
   recentRuns: PublicRun[];
+  trainingPlan: PublicTrainingPlan | null;
   health: HealthSummary;
 };
 
@@ -321,4 +338,10 @@ export function formatRunDate(date: string, includeYear = false): string {
     ...(includeYear ? { year: "numeric" } : {}),
     timeZone: "UTC",
   }).format(new Date(`${date}T12:00:00Z`));
+}
+
+export function fitnessTimeZone(date: Date = new Date()): string {
+  return date < new Date("2026-08-29T19:00:00.000Z")
+    ? "America/Los_Angeles"
+    : "America/New_York";
 }

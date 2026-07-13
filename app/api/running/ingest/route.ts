@@ -34,7 +34,7 @@ function isDashboard(value: unknown): value is RunningDashboard {
 export async function GET() {
   const data = await getRunningDashboard();
   return NextResponse.json(data, {
-    headers: { "Cache-Control": "public, max-age=60, stale-while-revalidate=240" },
+    headers: { "Cache-Control": "private, no-store, max-age=0" },
   });
 }
 

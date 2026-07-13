@@ -3,6 +3,7 @@ import snapshot from "@/content/running-dashboard.json";
 import {
   formatPace,
   formatRunDate,
+  fitnessTimeZone,
   getStaticRunningDashboard,
   mergeLiveHealth,
   mergeLiveRuns,
@@ -21,6 +22,8 @@ describe("running dashboard snapshot", () => {
       "2022", "2023", "2024", "2025", "2026",
     ]);
     expect(data.totals.totalActivities).toBeGreaterThan(1_000);
+    expect(data.trainingPlan?.days.length).toBeGreaterThan(0);
+    expect(data.race.trainingStart).toBe("2026-06-22");
   });
 
   it("keeps private source fields out of the committed snapshot", () => {
@@ -32,6 +35,7 @@ describe("running dashboard snapshot", () => {
       "keyRuns",
       "latitude",
       "longitude",
+      "—",
     ];
 
     for (const field of forbidden) {
@@ -111,5 +115,10 @@ describe("running formatters", () => {
 
   it("formats date-only values without timezone drift", () => {
     expect(formatRunDate("2026-07-11", true)).toBe("Jul 11, 2026");
+  });
+
+  it("switches the fitness timezone when the summer move ends", () => {
+    expect(fitnessTimeZone(new Date("2026-07-12T12:00:00Z"))).toBe("America/Los_Angeles");
+    expect(fitnessTimeZone(new Date("2026-08-30T12:00:00Z"))).toBe("America/New_York");
   });
 });

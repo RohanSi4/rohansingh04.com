@@ -3,8 +3,13 @@ import Link from "next/link";
 import {
   formatPace,
   formatRunDate,
+  fitnessTimeZone,
   getRunningDashboard,
 } from "@/lib/running";
+import { FitnessMetric } from "./FitnessMetric";
+import { MarathonMilestones } from "./MarathonMilestones";
+import { SyncStatus } from "./SyncStatus";
+import { TodayPlan } from "./TodayPlan";
 import TrainingHistoryChart from "./TrainingHistoryChart";
 import styles from "./fitness.module.css";
 
@@ -35,16 +40,6 @@ function daysBetween(start: string, end: string): number {
   );
 }
 
-function Metric({ label, value, detail }: { label: string; value: string; detail: string }) {
-  return (
-    <div className={styles.metric}>
-      <p>{label}</p>
-      <strong>{value}</strong>
-      <span>{detail}</span>
-    </div>
-  );
-}
-
 function activityLabel(sport: string): string {
   const labels: Record<string, string> = {
     Run: "run",
@@ -67,7 +62,7 @@ export default async function FitnessPage() {
     (run) => run.distanceMi >= Math.max(8, data.currentWeek.longRunMiles - 0.25),
   ) ?? latestRun;
   const today = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "America/Los_Angeles",
+    timeZone: fitnessTimeZone(),
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -84,8 +79,9 @@ export default async function FitnessPage() {
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <div className={styles.eyebrow}>
-            <span className={styles.liveDot} aria-hidden="true" />
             <span>fitness log</span>
+            <span className={styles.eyebrowRule} />
+            <SyncStatus generatedAt={data.generatedAt} />
             <span className={styles.eyebrowRule} />
             <span>current goal: richmond</span>
           </div>
@@ -148,32 +144,34 @@ export default async function FitnessPage() {
       </section>
 
       <section className={styles.metrics} aria-label="Fitness highlights">
-        <Metric
+        <FitnessMetric
           label="active this month"
           value={`${data.health.thisMonth.activeDays} days`}
           detail={`${data.health.thisMonth.distanceMi.toFixed(1)} miles moved`}
         />
-        <Metric
+        <FitnessMetric
           label="running this week"
           value={`${data.currentWeek.runMiles.toFixed(1)} mi`}
           detail={`${data.currentWeek.runDays} run days`}
         />
-        <Metric
+        <FitnessMetric
           label="lifting this week"
           value={`${data.currentWeek.liftDays} days`}
           detail="keeping strength in the mix"
         />
-        <Metric
+        <FitnessMetric
           label="active this year"
           value={`${data.health.thisYear.activeDays} days`}
           detail={`${data.totals.totalActivities.toLocaleString()} activities tracked overall`}
         />
       </section>
 
+      <TodayPlan today={today} health={data.health} week={data.currentWeek} plan={data.trainingPlan} />
+
       <section className={styles.section} aria-labelledby="progress-title">
         <div className={styles.sectionHeading}>
           <div>
-            <p>01 / right now</p>
+            <p>02 / the build</p>
             <h2 id="progress-title">Training for Richmond.</h2>
           </div>
           <p className={styles.sectionNote}>
@@ -190,11 +188,12 @@ export default async function FitnessPage() {
             peakWeekMiles={data.totals.peakWeekMiles}
           />
         </div>
+        <MarathonMilestones weeks={data.weeks} trainingStart={data.race.trainingStart} />
       </section>
 
       <section className={styles.aerobicSection} aria-labelledby="latest-title">
         <div className={styles.aerobicCopy}>
-          <p>02 / latest long run</p>
+          <p>03 / latest long run</p>
           <h2 id="latest-title">My latest long run.</h2>
           <p>
             This is the latest long run in the data. I&apos;m watching distance, pace,
@@ -234,7 +233,7 @@ export default async function FitnessPage() {
       <section className={styles.section} aria-labelledby="activity-title">
         <div className={styles.sectionHeading}>
           <div>
-            <p>03 / recent activity</p>
+            <p>04 / recent activity</p>
             <h2 id="activity-title">What I&apos;ve been doing.</h2>
           </div>
           <p className={styles.sectionNote}>
@@ -267,7 +266,7 @@ export default async function FitnessPage() {
 
       <section className={styles.pipeline} aria-labelledby="bigger-goal-title">
         <div className={styles.pipelineIntro}>
-          <p>04 / the bigger goal</p>
+          <p>05 / the bigger goal</p>
           <h2 id="bigger-goal-title">The marathon isn&apos;t the whole point.</h2>
           <p>
             I&apos;m focused on Richmond right now, but I don&apos;t want fitness to become
@@ -283,7 +282,8 @@ export default async function FitnessPage() {
       </section>
 
       <footer className={styles.dataFooter}>
-        <span><i className={styles.liveDot} />updated through {formatRunDate(data.dataThrough, true)}</span>
+        <SyncStatus generatedAt={data.generatedAt} />
+        <span>last activity {data.health.lastActivity ? formatRunDate(data.health.lastActivity.date, true) : "not available"}</span>
         <span>{data.health.allTime.activeDays.toLocaleString()} active days tracked</span>
         <Link href="/projects/marathon-prep-bot">how this page updates →</Link>
       </footer>

@@ -94,7 +94,7 @@ function Chart({ points }: { points: Point[] }) {
             cy={y(point.longest)}
             r={point.longest > 0 ? 3.5 : 2}
           >
-            <title>{point.longest.toFixed(1)} mile longest run</title>
+            <title>{`${point.longest.toFixed(1)} mile longest run`}</title>
           </circle>
         ))}
       </svg>
