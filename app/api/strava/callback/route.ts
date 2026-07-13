@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
 
   const scopes = new Set((data.scope ?? "").split(/[ ,]+/).filter(Boolean));
   if (!scopes.has("activity:read_all")) {
-    return clearState(NextResponse.json({ error: "missing activity:read_all scope — reconnect and approve all permissions" }, { status: 400 }));
+    return clearState(NextResponse.json({ error: "missing activity:read_all scope; reconnect and approve all permissions" }, { status: 400 }));
   }
   if (!data.access_token || !data.refresh_token || !Number.isFinite(data.expires_at)) {
     return clearState(NextResponse.json({ error: "invalid token response" }, { status: 502 }));

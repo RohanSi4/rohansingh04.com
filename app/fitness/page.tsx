@@ -203,7 +203,7 @@ export default async function FitnessPage() {
           </p>
           <div className={styles.aerobicRules}>
             <div><span>distance</span><strong>{featuredRun.distanceMi.toFixed(1)} mi</strong></div>
-            <div><span>average heart rate</span><strong>{featuredRun.averageHeartRate ?? "—"} bpm</strong></div>
+            <div><span>average heart rate</span><strong>{featuredRun.averageHeartRate ?? "n/a"} bpm</strong></div>
             <div><span>time moving</span><strong>{featuredRun.movingMinutes} min</strong></div>
           </div>
         </div>
@@ -222,11 +222,11 @@ export default async function FitnessPage() {
           <div className={styles.latestRunStats}>
             <div><span>pace</span><strong>{formatPace(featuredRun.paceSecondsPerMile)} /mi</strong></div>
             <div><span>time</span><strong>{featuredRun.movingMinutes} min</strong></div>
-            <div><span>avg heart rate</span><strong>{featuredRun.averageHeartRate ?? "—"} bpm</strong></div>
-            <div><span>elevation</span><strong>{featuredRun.elevationFeet ?? "—"} ft</strong></div>
+            <div><span>avg heart rate</span><strong>{featuredRun.averageHeartRate ?? "n/a"} bpm</strong></div>
+            <div><span>elevation</span><strong>{featuredRun.elevationFeet ?? "n/a"} ft</strong></div>
           </div>
           <p className={styles.runReadout}>
-            Conditions · {featuredRun.temperatureF ?? "—"}°F · {featuredRun.surface}
+            Conditions · {featuredRun.temperatureF ?? "n/a"}°F · {featuredRun.surface}
           </p>
         </div>
       </section>
@@ -257,7 +257,7 @@ export default async function FitnessPage() {
                 <strong>{activity.name.toLowerCase()}</strong>
               </td>
               <td>{activity.movingMins} <small>min</small></td>
-              <td>{activity.distanceMi > 0 ? activity.distanceMi.toFixed(1) : "—"} <small>{activity.distanceMi > 0 ? "mi" : ""}</small></td>
+              <td>{activity.distanceMi > 0 ? activity.distanceMi.toFixed(1) : "n/a"} <small>{activity.distanceMi > 0 ? "mi" : ""}</small></td>
               <td><small>{activityLabel(activity.sport)}</small></td>
             </tr>
           ))}

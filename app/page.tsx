@@ -7,18 +7,18 @@ import ProjectFeatureCard from "@/components/projects/ProjectFeatureCard";
 import FitnessPreview from "@/components/fitness/FitnessPreview";
 
 export const metadata: Metadata = {
-  title: { absolute: "Rohan Singh — projects, running, and more" },
+  title: { absolute: "Rohan Singh: projects, running, and more" },
   description:
     "I'm Rohan, a UVA computer science student who likes making things around running, movies, music, travel, and whatever else I'm curious about.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Rohan Singh — projects, running, and more",
+    title: "Rohan Singh: projects, running, and more",
     description: "A UVA student making things he actually wants to use.",
     url: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rohan Singh — projects, running, and more",
+    title: "Rohan Singh: projects, running, and more",
     description: "A UVA student making things he actually wants to use.",
   },
 };
@@ -70,7 +70,7 @@ export default async function HomePage() {
           <p className="mt-7 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
             I&apos;m a computer science student at UVA, spending this summer in San Jose
             working on machine learning at Expedia. Most of my projects start with
-            something I&apos;m already into—running, movies, music, or a problem that keeps
+            something I&apos;m already into: running, movies, music, or a problem that keeps
             bugging me.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -142,8 +142,8 @@ export default async function HomePage() {
           <div className="mb-10 grid gap-5 md:grid-cols-[1fr_.7fr] md:items-end">
             <div><p className="eyebrow mb-3">the rest of me</p><h2 className="section-title">I do other stuff too.</h2></div>
             <p className="text-sm leading-relaxed text-muted">
-              Running, lifting, travel, and music are a big part of my life—and,
-              somehow, they keep turning into side projects.
+              Running, lifting, travel, and music are a big part of my life. Somehow,
+              they keep turning into side projects.
             </p>
           </div>
 

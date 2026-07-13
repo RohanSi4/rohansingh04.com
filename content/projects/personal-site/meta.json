@@ -3,7 +3,7 @@
   "title": "Personal Site",
   "tagline": "My own corner of the internet for the things I make and care about",
   "summary": "A resume never really captures the whole person, so I built a site that could. It brings together my work, fitness, travel, music, and the projects I keep coming back to.",
-  "outcome": "It became a portfolio I actually enjoy updating—and one place for all the side projects I keep starting.",
+  "outcome": "It became a portfolio I actually enjoy updating and one place for all the side projects I keep starting.",
   "visual": "site",
   "tags": ["next.js", "typescript", "data"],
   "startDate": "2026-04",

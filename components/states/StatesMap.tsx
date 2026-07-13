@@ -15,15 +15,15 @@ const GRID: Record<string, [number, number]> = {
   WA: [0,  2],  MT: [1,  2],  ND: [2,  2],  MN: [3,  2],
   WI: [4,  2],  MI: [5,  2],
   NY: [8,  2],  MA: [9,  2],  RI: [10, 2],
-  // row 3 — WY slots in here (same latitude band as OR/ID/SD)
+  // row 3: WY slots in here (same latitude band as OR/ID/SD)
   OR: [0,  3],  ID: [1,  3],  WY: [2,  3],  SD: [3,  3],
   IA: [4,  3],  IL: [5,  3],  IN: [6,  3],  OH: [7,  3],
   PA: [8,  3],  NJ: [9,  3],  CT: [10, 3],
-  // row 4 — UT takes WY's old col; whole east block shifts right so VA is inland
+  // row 4: UT takes WY's old col; whole east block shifts right so VA is inland
   CA: [0,  4],  NV: [1,  4],  UT: [2,  4],  CO: [3,  4],
   NE: [4,  4],  MO: [5,  4],  KY: [6,  4],  WV: [7,  4],
   VA: [8,  4],  MD: [9,  4],  DE: [10, 4],
-  // row 5 — NC directly below VA, SC directly right of NC
+  // row 5: NC directly below VA, SC directly right of NC
   AZ: [1,  5],  NM: [2,  5],  KS: [3,  5],  OK: [4,  5],
   AR: [5,  5],  TN: [6,  5],  NC: [7,  5],  SC: [8,  5],  DC: [9, 5],
   // row 6

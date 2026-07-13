@@ -24,7 +24,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Rohan Singh — projects, running, and more",
+    default: "Rohan Singh: projects, running, and more",
     template: "%s | Rohan Singh",
   },
   description:
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     "University of Virginia",
   ],
   openGraph: {
-    title: "Rohan Singh — projects, running, and more",
+    title: "Rohan Singh: projects, running, and more",
     description:
       "Projects, running, travel, and whatever Rohan is into right now.",
     url: "https://rohansingh04.com",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rohan Singh — projects, running, and more",
+    title: "Rohan Singh: projects, running, and more",
     description:
       "Projects, running, travel, and whatever Rohan is into right now.",
   },
