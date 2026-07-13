@@ -11,7 +11,10 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-function formatVisitedDate(value: string, approximate = false): string {
+const UNKNOWN_DATE_KEY = "not-sure-when";
+
+function formatVisitedDate(value: string | null, approximate = false): string {
+  if (!value) return "not sure when";
   const [year, month] = value.split("-").map(Number);
   if (!year) return value;
   if (approximate) return String(year);
@@ -25,16 +28,20 @@ function formatVisitedDate(value: string, approximate = false): string {
 
 export default async function TravelListPage() {
   const places = (await getPlaces()).sort((a, b) =>
-    b.visitedDate.localeCompare(a.visitedDate)
+    (b.visitedDate ?? "").localeCompare(a.visitedDate ?? "")
   );
 
   const byYear = places.reduce<Record<string, typeof places>>((acc, p) => {
-    const year = p.visitedDate.slice(0, 4);
+    const year = p.visitedDate?.slice(0, 4) ?? UNKNOWN_DATE_KEY;
     (acc[year] ??= []).push(p);
     return acc;
   }, {});
 
-  const years = Object.keys(byYear).sort((a, b) => Number(b) - Number(a));
+  const years = Object.keys(byYear).sort((a, b) => {
+    if (a === UNKNOWN_DATE_KEY) return 1;
+    if (b === UNKNOWN_DATE_KEY) return -1;
+    return Number(b) - Number(a);
+  });
   const countryCount = new Set(places.map((place) => place.country)).size;
 
   return (
@@ -53,7 +60,7 @@ export default async function TravelListPage() {
         {years.map((year) => (
           <section key={year} aria-labelledby={`travel-year-${year}`}>
             <h2 id={`travel-year-${year}`} className="eyebrow mb-4 border-b border-border pb-3">
-              {year}
+              {year === UNKNOWN_DATE_KEY ? "not sure when" : year}
             </h2>
             <ul className="divide-y divide-border border-y border-border">
               {byYear[year].map((place) => (
@@ -68,12 +75,16 @@ export default async function TravelListPage() {
                     )}
                   </div>
                   <div className="shrink-0 sm:text-right">
-                    <time dateTime={place.visitedDate} className="font-mono text-xs text-muted">
-                      {formatVisitedDate(place.visitedDate, place._needsDate)}
-                      {place._needsDate && (
-                        <span className="ml-1 text-muted/70">(approx.)</span>
-                      )}
-                    </time>
+                    {place.visitedDate ? (
+                      <time dateTime={place.visitedDate} className="font-mono text-xs text-muted">
+                        {formatVisitedDate(place.visitedDate, place._needsDate)}
+                        {place._needsDate && (
+                          <span className="ml-1 text-muted/70">(approx.)</span>
+                        )}
+                      </time>
+                    ) : (
+                      <span className="font-mono text-xs text-muted">not sure when</span>
+                    )}
                   </div>
                 </li>
               ))}

@@ -96,7 +96,7 @@ export type Place = {
   country: string;
   lat: number;
   lng: number;
-  visitedDate: string; // YYYY-MM
+  visitedDate: string | null; // YYYY-MM when known
   notes: string;
   photos: string[];
   tripSlug: string | null;

@@ -26,7 +26,8 @@ function useReducedMotion() {
   return reducedMotion;
 }
 
-function formatVisitedDate(value: string, approximate = false) {
+function formatVisitedDate(value: string | null, approximate = false) {
+  if (!value) return "not sure when";
   const [year, month] = value.split("-").map(Number);
   if (!year) return value;
   if (approximate) return String(year);
@@ -501,12 +502,10 @@ export default function GlobeScene({ places: initialPlaces, isAdmin }: Props) {
               ×
             </button>
           </div>
-          {selected.visitedDate && (
-            <p className="mb-1 font-mono text-xs text-white/70">
-              {formatVisitedDate(selected.visitedDate, selected._needsDate)}
-              {selected._needsDate && " (approx)"}
-            </p>
-          )}
+          <p className="mb-1 font-mono text-xs text-white/70">
+            {formatVisitedDate(selected.visitedDate, selected._needsDate)}
+            {selected._needsDate && " (approx)"}
+          </p>
           {selected.notes && (
             <p className="text-xs text-white/50 mb-2">{selected.notes}</p>
           )}

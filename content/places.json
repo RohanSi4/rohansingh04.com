@@ -149,5 +149,27 @@
     "photos": [],
     "tripSlug": null,
     "_needsDate": true
+  },
+  {
+    "id": "dubai-unknown",
+    "name": "Dubai",
+    "country": "United Arab Emirates",
+    "lat": 25.2048,
+    "lng": 55.2708,
+    "visitedDate": null,
+    "notes": "",
+    "photos": [],
+    "tripSlug": null
+  },
+  {
+    "id": "qatar-unknown",
+    "name": "Qatar",
+    "country": "Qatar",
+    "lat": 25.3548,
+    "lng": 51.1839,
+    "visitedDate": null,
+    "notes": "",
+    "photos": [],
+    "tripSlug": null
   }
 ]
