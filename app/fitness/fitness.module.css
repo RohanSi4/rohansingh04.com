@@ -375,16 +375,58 @@
 
 .todayPlanCard h3 {
   max-width: 42rem;
-  margin: auto 0;
-  padding: 2rem 0;
   font-family: var(--font-fraunces), serif;
-  font-size: clamp(2rem, 4vw, 3.7rem);
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
   font-weight: 520;
   letter-spacing: -0.045em;
   line-height: 1.02;
 }
 
-.todayPlanCard > p {
+.todayPlanBody {
+  margin: auto 0;
+  padding: 2rem 0 1.5rem;
+}
+
+.todayPlanDetails {
+  max-width: 38rem;
+  margin-top: 1.6rem;
+  border-top: 1px solid color-mix(in srgb, var(--run-cream) 15%, transparent);
+}
+
+.todayPlanDetails li {
+  display: grid;
+  grid-template-columns: 0.45rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--run-cream) 10%, transparent);
+}
+
+.todayPlanDetails li::before {
+  width: 0.35rem;
+  height: 0.35rem;
+  margin-top: 0.42rem;
+  border-radius: 50%;
+  background: var(--run-orange);
+  content: "";
+}
+
+.todayPlanDetails span {
+  color: var(--run-cream);
+  font-size: 0.82rem;
+  font-weight: 550;
+  line-height: 1.4;
+}
+
+.todayPlanDetails small {
+  display: block;
+  margin-top: 0.2rem;
+  color: color-mix(in srgb, var(--run-cream) 55%, transparent);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.todayPlanDate {
   color: color-mix(in srgb, var(--run-cream) 62%, transparent);
   font-family: var(--font-jetbrains-mono), monospace;
   font-size: 0.68rem;

@@ -18,6 +18,47 @@ function sportLabel(sport: string | null): string {
   return sport?.toLowerCase() ?? "activity";
 }
 
+type PlanDetail = {
+  label: string;
+  note: string | null;
+};
+
+function cleanPlanText(value: string): string {
+  return value.trim().replace(/[.!?]+$/, "");
+}
+
+function planDetail(value: string): PlanDetail {
+  const clean = cleanPlanText(value);
+  const parenthetical = clean.match(/^(.+?)\s*\((.+)\)$/);
+  return parenthetical
+    ? { label: cleanPlanText(parenthetical[1]), note: cleanPlanText(parenthetical[2]) }
+    : { label: clean.replace(/^at an\s+/i, ""), note: null };
+}
+
+export function todayPlanDisplay(text: string | null): {
+  title: string;
+  details: PlanDetail[];
+} {
+  if (!text) {
+    return { title: "Nothing specific is planned today.", details: [] };
+  }
+
+  const chunks = text
+    .split(/\s+\+\s+|(?<=[.!?])\s+/)
+    .map(cleanPlanText)
+    .filter(Boolean);
+  const first = chunks.shift() ?? text;
+  const workout = first.match(/^((?:easy|recovery|long run)\s+\d+(?:\.\d+)?\s+miles)\b(.*)$/i);
+  const title = cleanPlanText(workout?.[1] ?? first);
+  const remainder = cleanPlanText(workout?.[2] ?? "");
+  const details = [remainder, ...chunks].filter(Boolean).map(planDetail);
+
+  return {
+    title: title.charAt(0).toUpperCase() + title.slice(1),
+    details,
+  };
+}
+
 export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
   const planDays = plan ? getPlanWeekDays(plan) : [];
   const planned = planDays.find((day) => day.date === today);
@@ -31,6 +72,7 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
     ? Math.min(100, Math.round((week.runMiles / weeklyGoal) * 100))
     : null;
   const movedToday = health.today.exerciseMinutes > 0;
+  const display = todayPlanDisplay(planned?.text ?? null);
 
   return (
     <section className={styles.todaySection} aria-labelledby="today-title">
@@ -50,8 +92,24 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
             <span>on the plan</span>
             {planned?.isKeyDay ? <strong>key day</strong> : null}
           </div>
-          <h3>{planned?.text ?? "Nothing specific is planned today."}</h3>
-          <p>{planned ? planned.dayLabel : "A free day to move however feels good."}</p>
+          <div className={styles.todayPlanBody}>
+            <h3>{display.title}</h3>
+            {display.details.length > 0 ? (
+              <ul className={styles.todayPlanDetails}>
+                {display.details.map((detail) => (
+                  <li key={`${detail.label}-${detail.note ?? ""}`}>
+                    <div>
+                      <span>{detail.label}</span>
+                      {detail.note ? <small>{detail.note}</small> : null}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+          <p className={styles.todayPlanDate}>
+            {planned ? planned.dayLabel : "A free day to move however feels good."}
+          </p>
         </article>
 
         <div className={styles.todaySideCards}>
