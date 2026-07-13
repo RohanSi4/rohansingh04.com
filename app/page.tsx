@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { getFeaturedProjects, getHistory, getPlaces, getSiteConfig, getStates } from "@/lib/content";
 import { formatDateRange } from "@/lib/dates";
@@ -61,7 +62,7 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema).replace(/</g, "\\u003c") }}
       />
-      <section className="site-container grid gap-12 py-16 sm:py-24 lg:grid-cols-[1fr_22rem] lg:items-end lg:py-32">
+      <section className="site-container grid gap-12 py-16 sm:py-24 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)] lg:items-center lg:gap-16 lg:py-24">
         <div>
           <p className="eyebrow mb-5">hey, i&apos;m rohan</p>
           <h1 className="page-title max-w-[16ch]">
@@ -77,27 +78,51 @@ export default async function HomePage() {
             <Link href="/projects" className="button-primary">see what I&apos;ve made <span aria-hidden="true">→</span></Link>
             <a href="mailto:rohan.singh04@outlook.com" className="button-secondary">say hey</a>
           </div>
-        </div>
 
-        <aside className="surface-card overflow-hidden" aria-label="What Rohan is doing right now">
-          <div className="border-b border-border bg-surface px-5 py-4">
+          <div className="mt-10">
             <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
               <span className="size-1.5 rounded-full bg-warm ring-4 ring-warm/15" />
               right now
             </p>
+            <dl className="mt-4 grid overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3 sm:gap-px">
+              <div className="bg-bg p-4">
+                <dt className="text-xs text-muted">in</dt>
+                <dd className="mt-1 text-sm font-medium text-fg">{site.currentLocation}</dd>
+              </div>
+              <div className="border-t border-border bg-bg p-4 sm:border-t-0">
+                <dt className="text-xs text-muted">this summer</dt>
+                <dd className="mt-1 text-sm font-medium text-fg">ML at {site.currentRole.org}</dd>
+              </div>
+              <div className="border-t border-border bg-bg p-4 sm:border-t-0">
+                <dt className="text-xs text-muted">training for</dt>
+                <dd className="mt-1 text-sm font-medium leading-relaxed text-fg">my first {running.race.name}</dd>
+              </div>
+            </dl>
           </div>
-          <dl className="divide-y divide-border bg-bg">
-            <div className="grid grid-cols-[5.5rem_1fr] gap-4 px-5 py-4 text-sm">
-              <dt className="text-muted">in</dt><dd className="font-medium text-fg">{site.currentLocation}</dd>
-            </div>
-            <div className="grid grid-cols-[5.5rem_1fr] gap-4 px-5 py-4 text-sm">
-              <dt className="text-muted">this summer</dt><dd className="font-medium text-fg">ML at {site.currentRole.org}</dd>
-            </div>
-            <div className="grid grid-cols-[5.5rem_1fr] gap-4 px-5 py-4 text-sm">
-              <dt className="text-muted">training for</dt><dd className="font-medium leading-relaxed text-fg">my first {running.race.name}</dd>
-            </div>
-          </dl>
-        </aside>
+        </div>
+
+        <figure className="relative mx-auto aspect-[3/4] w-full max-w-md overflow-hidden rounded-2xl border border-border bg-surface shadow-sm lg:mx-0">
+          <Image
+            src="/images/rohan-iceland-waterfall.jpg"
+            alt="Rohan standing behind a waterfall in Iceland"
+            fill
+            preload
+            sizes="(max-width: 1023px) min(100vw - 2rem, 28rem), 24rem"
+            className="object-cover"
+          />
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/85 via-black/35 to-transparent"
+            aria-hidden="true"
+          />
+          <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-white">
+            <span className="max-w-52 text-sm font-medium leading-snug">
+              somewhere along Iceland&apos;s Ring Road
+            </span>
+            <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.12em] text-white/70">
+              May 2026
+            </span>
+          </figcaption>
+        </figure>
       </section>
 
       <section className="border-y border-border bg-surface/40">
