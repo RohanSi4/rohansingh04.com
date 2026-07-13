@@ -11,6 +11,7 @@ import { MarathonMilestones } from "./MarathonMilestones";
 import { SyncStatus } from "./SyncStatus";
 import { TodayPlan } from "./TodayPlan";
 import TrainingHistoryChart from "./TrainingHistoryChart";
+import { WeeklyPlan } from "./WeeklyPlan";
 import styles from "./fitness.module.css";
 
 export const metadata: Metadata = {
@@ -168,10 +169,12 @@ export default async function FitnessPage() {
 
       <TodayPlan today={today} health={data.health} week={data.currentWeek} plan={data.trainingPlan} />
 
+      <WeeklyPlan today={today} plan={data.trainingPlan} />
+
       <section className={styles.section} aria-labelledby="progress-title">
         <div className={styles.sectionHeading}>
           <div>
-            <p>02 / the build</p>
+            <p>03 / the build</p>
             <h2 id="progress-title">Training for Richmond.</h2>
           </div>
           <p className={styles.sectionNote}>
@@ -193,7 +196,7 @@ export default async function FitnessPage() {
 
       <section className={styles.aerobicSection} aria-labelledby="latest-title">
         <div className={styles.aerobicCopy}>
-          <p>03 / latest long run</p>
+          <p>04 / latest long run</p>
           <h2 id="latest-title">My latest long run.</h2>
           <p>
             This is the latest long run in the data. I&apos;m watching distance, pace,
@@ -233,7 +236,7 @@ export default async function FitnessPage() {
       <section className={styles.section} aria-labelledby="activity-title">
         <div className={styles.sectionHeading}>
           <div>
-            <p>04 / recent activity</p>
+            <p>05 / recent activity</p>
             <h2 id="activity-title">What I&apos;ve been doing.</h2>
           </div>
           <p className={styles.sectionNote}>
@@ -266,7 +269,7 @@ export default async function FitnessPage() {
 
       <section className={styles.pipeline} aria-labelledby="bigger-goal-title">
         <div className={styles.pipelineIntro}>
-          <p>05 / the bigger goal</p>
+          <p>06 / the bigger goal</p>
           <h2 id="bigger-goal-title">The marathon isn&apos;t the whole point.</h2>
           <p>
             I&apos;m focused on Richmond right now, but I don&apos;t want fitness to become

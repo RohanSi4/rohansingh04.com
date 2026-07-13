@@ -4,6 +4,7 @@ import {
   formatPace,
   formatRunDate,
   fitnessTimeZone,
+  getPlanWeekDays,
   getStaticRunningDashboard,
   mergeLiveHealth,
   mergeLiveRuns,
@@ -46,6 +47,20 @@ describe("running dashboard snapshot", () => {
   it("keeps recent runs newest first", () => {
     const dates = getStaticRunningDashboard().recentRuns.map((run) => run.date);
     expect(dates).toEqual([...dates].sort().reverse());
+  });
+
+  it("keeps the public plan inside its stated week", () => {
+    const plan = getStaticRunningDashboard().trainingPlan;
+    expect(plan).not.toBeNull();
+    if (!plan) return;
+
+    const days = getPlanWeekDays(plan);
+    expect(days[0]?.date).toBe(plan.weekStart);
+    expect(days.at(-1)?.date).toBe(plan.weekEnd);
+    expect(days.every((day) => (
+      (!plan.weekStart || day.date >= plan.weekStart)
+      && (!plan.weekEnd || day.date <= plan.weekEnd)
+    ))).toBe(true);
   });
 
   it("merges a newer live run without double-counting the archive", () => {

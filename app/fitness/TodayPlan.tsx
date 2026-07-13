@@ -1,5 +1,9 @@
 import type { HealthSummary } from "@/lib/types";
-import type { PublicTrainingPlan, RunningWeek } from "@/lib/running";
+import {
+  getPlanWeekDays,
+  type PublicTrainingPlan,
+  type RunningWeek,
+} from "@/lib/running";
 import styles from "./fitness.module.css";
 
 type TodayPlanProps = {
@@ -15,8 +19,9 @@ function sportLabel(sport: string | null): string {
 }
 
 export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
-  const planned = plan?.days.find((day) => day.date === today);
-  const futureDays = plan?.days.filter((day) => day.date > today) ?? [];
+  const planDays = plan ? getPlanWeekDays(plan) : [];
+  const planned = planDays.find((day) => day.date === today);
+  const futureDays = planDays.filter((day) => day.date > today);
   const nextDay = futureDays.find((day) => day.isKeyDay) ?? futureDays[0];
   const weeklyGoal = plan?.weekStart === week.weekStart ? plan.prescribedMiles : null;
   const nextWeekGoal = plan?.weekStart && plan.weekStart > week.weekStart
@@ -35,8 +40,7 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
           <h2 id="today-title">What today looks like.</h2>
         </div>
         <p>
-          The plan and the actual activity live together now, so this is useful before
-          and after the workout.
+          The quick answer for when I just need to know what I&apos;m doing today.
         </p>
       </div>
 

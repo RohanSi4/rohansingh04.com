@@ -447,6 +447,149 @@
   background: var(--run-orange);
 }
 
+.weekPlanSection {
+  padding-top: clamp(5rem, 10vw, 8rem);
+}
+
+.weekPlanCard {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.62fr) minmax(0, 1.38fr);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 1.2rem;
+  background: var(--surface);
+}
+
+.weekPlanSummary {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.75rem, 4vw, 3rem);
+  background: var(--run-ink);
+  color: var(--run-cream);
+}
+
+.weekPlanSummary > span,
+.weekPlanSummary dt,
+.weekPlanDay time,
+.weekPlanDay strong {
+  font-family: var(--font-jetbrains-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+}
+
+.weekPlanSummary > span {
+  color: var(--run-orange);
+  font-size: 0.62rem;
+}
+
+.weekPlanSummary h3 {
+  margin-top: 1.5rem;
+  font-family: var(--font-fraunces), serif;
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-weight: 520;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+}
+
+.weekPlanSummary > p {
+  margin-top: 1rem;
+  color: color-mix(in srgb, var(--run-cream) 62%, transparent);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.weekPlanSummary dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 2.5rem;
+}
+
+.weekPlanSummary dl > div {
+  padding-top: 0.85rem;
+  border-top: 1px solid color-mix(in srgb, var(--run-cream) 15%, transparent);
+}
+
+.weekPlanSummary dt {
+  color: color-mix(in srgb, var(--run-cream) 52%, transparent);
+  font-size: 0.55rem;
+}
+
+.weekPlanSummary dd {
+  margin-top: 0.45rem;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.82rem;
+}
+
+.weekPlanDays {
+  display: flex;
+  flex-direction: column;
+}
+
+.weekPlanDay {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr) auto;
+  gap: 1.25rem;
+  align-items: center;
+  min-height: 5rem;
+  padding: 1rem 1.35rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.weekPlanDay:last-child { border-bottom: 0; }
+
+.weekPlanDay time {
+  color: var(--muted);
+  font-size: 0.62rem;
+}
+
+.weekPlanDay p {
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.weekPlanDay strong {
+  padding: 0.35rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--run-orange) 45%, transparent);
+  border-radius: 999px;
+  color: var(--run-orange);
+  font-size: 0.54rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.weekPlanDayToday {
+  background: color-mix(in srgb, var(--run-orange) 9%, var(--bg));
+  box-shadow: inset 3px 0 0 var(--run-orange);
+}
+
+.weekPlanDayToday time,
+.weekPlanDayToday p {
+  color: var(--fg);
+}
+
+.weekPlanDayPast {
+  color: var(--muted);
+}
+
+.weekPlanEmpty {
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+}
+
+.weekPlanEmpty strong {
+  font-family: var(--font-fraunces), serif;
+  font-size: 1.5rem;
+}
+
+.weekPlanEmpty p {
+  margin-top: 0.5rem;
+  color: var(--muted);
+}
+
 .section {
   padding-top: clamp(5rem, 10vw, 8rem);
 }
@@ -875,7 +1018,7 @@
   .raceCard { min-height: 430px; }
   .raceDistance { margin-top: 2rem; }
   .metrics { grid-template-columns: repeat(2, 1fr); }
-  .todayHeading, .todayGrid, .sectionHeading, .aerobicSection, .pipeline, .milestones { grid-template-columns: 1fr; }
+  .todayHeading, .todayGrid, .weekPlanCard, .sectionHeading, .aerobicSection, .pipeline, .milestones { grid-template-columns: 1fr; }
   .aerobicSection { gap: 3rem; }
   .pipeline { gap: 2rem; }
   .milestoneTrack {
@@ -898,6 +1041,9 @@
   .todayPlanCard { min-height: 290px; padding: 1.5rem; }
   .todaySideCards { grid-template-columns: 1fr; }
   .todaySmallCard:last-child { grid-column: auto; }
+  .weekPlanSummary dl { margin-top: 0; }
+  .weekPlanDay { grid-template-columns: 4.8rem minmax(0, 1fr); gap: 0.8rem; align-items: start; padding: 1rem; }
+  .weekPlanDay strong { grid-column: 2; justify-self: start; margin-top: -0.25rem; }
   .milestones { overflow: hidden; padding-inline: 1.25rem; }
   .milestoneTrack { padding-bottom: 0.5rem; }
   .chartHeader { align-items: flex-start; flex-direction: column; gap: 1rem; }

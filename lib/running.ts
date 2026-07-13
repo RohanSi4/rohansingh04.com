@@ -48,6 +48,16 @@ export type PublicTrainingPlan = {
   days: PublicPlanDay[];
 };
 
+export function getPlanWeekDays(plan: PublicTrainingPlan): PublicPlanDay[] {
+  const uniqueDays = new Map<string, PublicPlanDay>();
+  for (const day of plan.days) {
+    if (plan.weekStart && day.date < plan.weekStart) continue;
+    if (plan.weekEnd && day.date > plan.weekEnd) continue;
+    uniqueDays.set(day.date, day);
+  }
+  return [...uniqueDays.values()].sort((a, b) => a.date.localeCompare(b.date));
+}
+
 export type RunningMonth = {
   month: string;
   runMiles: number;
