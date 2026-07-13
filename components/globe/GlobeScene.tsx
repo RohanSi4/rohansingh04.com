@@ -26,9 +26,10 @@ function useReducedMotion() {
   return reducedMotion;
 }
 
-function formatVisitedDate(value: string) {
+function formatVisitedDate(value: string, approximate = false) {
   const [year, month] = value.split("-").map(Number);
   if (!year) return value;
+  if (approximate) return String(year);
   if (!month) return String(year);
   return new Intl.DateTimeFormat("en-US", {
     month: "long",
@@ -502,7 +503,7 @@ export default function GlobeScene({ places: initialPlaces, isAdmin }: Props) {
           </div>
           {selected.visitedDate && (
             <p className="mb-1 font-mono text-xs text-white/70">
-              {formatVisitedDate(selected.visitedDate)}
+              {formatVisitedDate(selected.visitedDate, selected._needsDate)}
               {selected._needsDate && " (approx)"}
             </p>
           )}

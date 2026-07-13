@@ -9,7 +9,7 @@
   },
   {
     "code": "CO", "name": "Colorado", "visited": true,
-    "notes": "Denver", "photos": [], "cities": ["Denver"], "visitedDate": null
+    "notes": "Denver", "photos": [], "cities": ["Denver"], "visitedDate": "2019-01"
   },
   {
     "code": "CT", "name": "Connecticut", "visited": true,

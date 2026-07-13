@@ -11,9 +11,10 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-function formatVisitedDate(value: string): string {
+function formatVisitedDate(value: string, approximate = false): string {
   const [year, month] = value.split("-").map(Number);
   if (!year) return value;
+  if (approximate) return String(year);
   if (!month) return String(year);
   return new Intl.DateTimeFormat("en-US", {
     month: "long",
@@ -68,7 +69,7 @@ export default async function TravelListPage() {
                   </div>
                   <div className="shrink-0 sm:text-right">
                     <time dateTime={place.visitedDate} className="font-mono text-xs text-muted">
-                      {formatVisitedDate(place.visitedDate)}
+                      {formatVisitedDate(place.visitedDate, place._needsDate)}
                       {place._needsDate && (
                         <span className="ml-1 text-muted/70">(approx.)</span>
                       )}
