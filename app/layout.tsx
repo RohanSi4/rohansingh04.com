@@ -24,11 +24,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Rohan Singh — software, data, and real-world systems",
+    default: "Rohan Singh — projects, running, and more",
     template: "%s | Rohan Singh",
   },
   description:
-    "Rohan Singh is a computer science student at UVA building useful software from messy, real-world data.",
+    "I'm Rohan, a UVA computer science student who likes making things I can actually use. This is where I keep my projects, running progress, travel, and whatever I'm working on now.",
   metadataBase: new URL("https://rohansingh04.com"),
   alternates: { canonical: "/" },
   authors: [{ name: "Rohan Singh", url: "https://rohansingh04.com" }],
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
     "University of Virginia",
   ],
   openGraph: {
-    title: "Rohan Singh — software, data, and real-world systems",
+    title: "Rohan Singh — projects, running, and more",
     description:
-      "A portfolio of useful software, data systems, and projects grounded in real life.",
+      "Projects, running, travel, and whatever Rohan is into right now.",
     url: "https://rohansingh04.com",
     siteName: "Rohan Singh",
     locale: "en_US",
@@ -51,9 +51,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rohan Singh — software, data, and real-world systems",
+    title: "Rohan Singh — projects, running, and more",
     description:
-      "A portfolio of useful software, data systems, and projects grounded in real life.",
+      "Projects, running, travel, and whatever Rohan is into right now.",
   },
   robots: {
     index: true,

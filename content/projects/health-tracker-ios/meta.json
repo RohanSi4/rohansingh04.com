@@ -1,9 +1,9 @@
 {
   "slug": "health-tracker-ios",
   "title": "Health Score Dashboard",
-  "tagline": "A sleep-first daily health recap built with SwiftUI and HealthKit",
-  "summary": "I built a native iOS dashboard that turns HealthKit sleep and movement data into a daily recap, a multi-factor sleep score, and useful seven-day comparisons.",
-  "outcome": "Shipped a working daily recap with HealthKit ingestion, sleep scoring, trend views, and scheduled morning alerts.",
+  "tagline": "One morning view for sleep, movement, and how the week is going",
+  "summary": "Apple Health had the numbers I cared about, but I wanted a quicker way to understand them each morning. So I built an iOS dashboard that brings sleep, movement, and seven-day comparisons into one recap.",
+  "outcome": "The working app now gives me a daily recap, sleep score, trend views, and scheduled morning alerts from HealthKit data.",
   "visual": "health",
   "tags": ["swift", "swiftui", "healthkit"],
   "startDate": "2025-04",

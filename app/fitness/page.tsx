@@ -11,7 +11,7 @@ import styles from "./fitness.module.css";
 export const metadata: Metadata = {
   title: "fitness",
   description:
-    "Rohan's fitness progress—running, lifting, staying active, and currently training for the 2026 Richmond Marathon.",
+    "A live look at Rohan's running, lifting, and training for the 2026 Richmond Marathon.",
   alternates: { canonical: "/fitness" },
   openGraph: {
     title: "fitness in progress",
@@ -89,16 +89,16 @@ export default async function FitnessPage() {
             <span className={styles.eyebrowRule} />
             <span>current goal: richmond</span>
           </div>
-          <p className={styles.kicker}>running, lifting, and staying ready to play.</p>
+          <p className={styles.kicker}>running, lifting, and whatever gets me moving.</p>
           <h1>
-            Fitness,
+            Training for
             <br />
-            in <em>progress.</em>
+            <em>my first marathon.</em>
           </h1>
           <p className={styles.heroIntro}>
-            I like having something to train for. Right now that&apos;s my first marathon.
-            The bigger goal is simpler: stay fit, get stronger, and be ready to run
-            around or play whatever sport comes up.
+            Right now I&apos;m training for Richmond. After that, I still want to run,
+            lift, play pickup, and say yes when friends want to do something active.
+            This page is where I keep track of all of it.
           </p>
           <div className={styles.goalStrip}>
             <div>
@@ -177,8 +177,8 @@ export default async function FitnessPage() {
             <h2 id="progress-title">Training for Richmond.</h2>
           </div>
           <p className={styles.sectionNote}>
-            The marathon is the current chapter, so running gets the detailed chart.
-            The recent view shows the build; the other tabs keep the older miles around.
+            Running gets the most detail right now because that&apos;s what I&apos;m training
+            for. Use the tabs to look back at older miles.
           </p>
         </div>
         <div className={styles.chartCard}>
@@ -195,11 +195,11 @@ export default async function FitnessPage() {
       <section className={styles.aerobicSection} aria-labelledby="latest-title">
         <div className={styles.aerobicCopy}>
           <p>02 / latest long run</p>
-          <h2 id="latest-title">A solid long run.</h2>
+          <h2 id="latest-title">My latest long run.</h2>
           <p>
-            Long runs are where the marathon starts to feel real. This one stayed
-            comfortable, covered some solid ground, and finished without turning into
-            a race against myself.
+            This is the latest long run in the data. I&apos;m watching distance, pace,
+            and heart rate to see how the build is going without turning every run
+            into a test.
           </p>
           <div className={styles.aerobicRules}>
             <div><span>distance</span><strong>{featuredRun.distanceMi.toFixed(1)} mi</strong></div>
@@ -226,7 +226,7 @@ export default async function FitnessPage() {
             <div><span>elevation</span><strong>{featuredRun.elevationFeet ?? "—"} ft</strong></div>
           </div>
           <p className={styles.runReadout}>
-            Comfortable effort · {featuredRun.temperatureF ?? "—"}°F · {featuredRun.surface}
+            Conditions · {featuredRun.temperatureF ?? "—"}°F · {featuredRun.surface}
           </p>
         </div>
       </section>
@@ -268,11 +268,11 @@ export default async function FitnessPage() {
       <section className={styles.pipeline} aria-labelledby="bigger-goal-title">
         <div className={styles.pipelineIntro}>
           <p>04 / the bigger goal</p>
-          <h2 id="bigger-goal-title">Fit for more than one thing.</h2>
+          <h2 id="bigger-goal-title">The marathon isn&apos;t the whole point.</h2>
           <p>
-            Richmond gives the next few months a clear direction. After that, the goal
-            is to keep a balanced base that makes running, lifting, pickup games, hikes,
-            and the next challenge all feel available.
+            I&apos;m focused on Richmond right now, but I don&apos;t want fitness to become
+            one race. I want enough endurance and strength to play sports, hike, try
+            new things, and feel good doing it.
           </p>
         </div>
         <ol className={styles.pipelineSteps}>

@@ -28,7 +28,7 @@ app/           next.js app router pages + api routes
 components/    react components
   layout/      header, footer, theme toggle
   fitness/     fitness previews and dashboard components
-  widgets/     small live data widgets (spotify and github)
+  widgets/     a small live music widget
   globe/        r3f globe components
   states/      us states svg map
   projects/    project grid + cards

@@ -71,14 +71,6 @@ is not required for dashboard freshness.
    ```
 6. copy the `refresh_token` from the response -- that's `SPOTIFY_REFRESH_TOKEN`
 
-### github latest commit
-| var | description |
-|-----|-------------|
-| `GITHUB_TOKEN` | github personal access token, read-only scopes: `public_repo` |
-
-create at github.com > settings > developer settings > personal access tokens (fine-grained).
-scope: contents:read on public repos is enough.
-
 ### optional strava sync
 
 The sibling marathon publisher is the primary fitness source. Strava can be

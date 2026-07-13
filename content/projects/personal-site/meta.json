@@ -1,9 +1,9 @@
 {
   "slug": "personal-site",
   "title": "Personal Site",
-  "tagline": "A living portfolio for my work, fitness, travel, and interests",
-  "summary": "I designed and built this Next.js site as both a portfolio and a home for projects that do not fit in a static resume. It combines written case studies with live fitness data, travel maps, music, and small signals from the things I am doing now.",
-  "outcome": "Shipped one evolving site that connects professional work with live, privacy-conscious personal data.",
+  "tagline": "My own corner of the internet for the things I make and care about",
+  "summary": "A resume never really captures the whole person, so I built a site that could. It brings together my work, fitness, travel, music, and the projects I keep coming back to.",
+  "outcome": "It became a portfolio I actually enjoy updating—and one place for all the side projects I keep starting.",
   "visual": "site",
   "tags": ["next.js", "typescript", "data"],
   "startDate": "2026-04",

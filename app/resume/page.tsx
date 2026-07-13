@@ -37,7 +37,7 @@ export default function ResumePage() {
         </div>
 
         <p className="mt-5 text-base text-muted">
-          Computer science at UVA, graduating May 2027 · software, data, and ML systems
+          Computer science at UVA, graduating May 2027 · interested in software, data, and machine learning
         </p>
         <p className="mt-3 flex flex-wrap gap-x-2 text-sm text-muted">
           <span>{site.currentLocation}</span><span aria-hidden="true">·</span>

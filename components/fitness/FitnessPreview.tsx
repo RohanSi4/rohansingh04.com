@@ -22,13 +22,14 @@ export default function FitnessPreview({ data }: { data: RunningDashboard }) {
         <div>
           <p className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#ee5f3b]" />
-            fitness · current goal: richmond
+            fitness · what I&apos;m training for
           </p>
           <h2 className="font-serif text-2xl font-semibold tracking-tight text-fg sm:text-3xl">
-            Training for Richmond
+            My first marathon.
           </h2>
           <p className="mt-1.5 max-w-lg text-sm leading-relaxed text-muted">
-            Running, lifting, and staying active. The marathon is the current goal; staying fit is the long game.
+            I&apos;m training for Richmond right now, but the bigger goal is staying fit
+            enough to run, lift, and play whatever sport comes up.
           </p>
         </div>
         <span className="relative mt-1 text-sm text-muted transition-transform group-hover:translate-x-1 group-hover:text-fg">

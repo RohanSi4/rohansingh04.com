@@ -20,7 +20,7 @@ interface WidgetCardProps {
  *
  * Usage:
  *   <WidgetCard
- *     title="now playing"
+ *     title="listening lately"
  *     state={state}
  *     errorMessage="spotify's taking a nap"
  *     emptyMessage="not listening to anything right now"

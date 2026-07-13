@@ -5,23 +5,21 @@ import { formatDateRange } from "@/lib/dates";
 import { getRunningDashboard } from "@/lib/running";
 import ProjectFeatureCard from "@/components/projects/ProjectFeatureCard";
 import FitnessPreview from "@/components/fitness/FitnessPreview";
-import SpotifyNowPlaying from "@/components/widgets/SpotifyNowPlaying";
-import GithubLatestCommit from "@/components/widgets/GithubLatestCommit";
 
 export const metadata: Metadata = {
-  title: { absolute: "Rohan Singh — software, data, and useful systems" },
+  title: { absolute: "Rohan Singh — projects, running, and more" },
   description:
-    "Rohan Singh is a computer science student at UVA building data-rich products, reliable systems, and personal tools.",
+    "I'm Rohan, a UVA computer science student who likes making things around running, movies, music, travel, and whatever else I'm curious about.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "rohan singh — software, data, and useful systems",
-    description: "CS at UVA. Building thoughtful software from messy, real-world data.",
+    title: "Rohan Singh — projects, running, and more",
+    description: "A UVA student making things he actually wants to use.",
     url: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "rohan singh — software, data, and useful systems",
-    description: "CS at UVA. Building thoughtful software from messy, real-world data.",
+    title: "Rohan Singh — projects, running, and more",
+    description: "A UVA student making things he actually wants to use.",
   },
 };
 
@@ -65,37 +63,38 @@ export default async function HomePage() {
       />
       <section className="site-container grid gap-12 py-16 sm:py-24 lg:grid-cols-[1fr_22rem] lg:items-end lg:py-32">
         <div>
-          <p className="eyebrow mb-5">ML intern at Expedia · CS at UVA</p>
-          <h1 className="page-title max-w-[13ch]">
-            I build useful software from messy, real-world data.
+          <p className="eyebrow mb-5">hey, i&apos;m rohan</p>
+          <h1 className="page-title max-w-[16ch]">
+            I like making things I actually want to use.
           </h1>
           <p className="mt-7 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-            I&apos;m Rohan, a computer science student interested in software, data, and
-            machine-learning systems. I like taking projects past the notebook—into
-            APIs, interfaces, and tools people can actually use.
+            I&apos;m a computer science student at UVA, spending this summer in San Jose
+            working on machine learning at Expedia. Most of my projects start with
+            something I&apos;m already into—running, movies, music, or a problem that keeps
+            bugging me.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/projects" className="button-primary">see my work <span aria-hidden="true">→</span></Link>
-            <a href="mailto:rohan.singh04@outlook.com" className="button-secondary">email me</a>
+            <Link href="/projects" className="button-primary">see what I&apos;ve made <span aria-hidden="true">→</span></Link>
+            <a href="mailto:rohan.singh04@outlook.com" className="button-secondary">say hey</a>
           </div>
         </div>
 
-        <aside className="surface-card overflow-hidden" aria-label="Current status">
+        <aside className="surface-card overflow-hidden" aria-label="What Rohan is doing right now">
           <div className="border-b border-border bg-surface px-5 py-4">
             <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
               <span className="size-1.5 rounded-full bg-warm ring-4 ring-warm/15" />
-              currently
+              right now
             </p>
           </div>
           <dl className="divide-y divide-border bg-bg">
             <div className="grid grid-cols-[5.5rem_1fr] gap-4 px-5 py-4 text-sm">
-              <dt className="text-muted">location</dt><dd className="font-medium text-fg">{site.currentLocation}</dd>
+              <dt className="text-muted">in</dt><dd className="font-medium text-fg">{site.currentLocation}</dd>
             </div>
             <div className="grid grid-cols-[5.5rem_1fr] gap-4 px-5 py-4 text-sm">
-              <dt className="text-muted">role</dt><dd className="font-medium text-fg">{site.currentRole.title} at {site.currentRole.org}</dd>
+              <dt className="text-muted">this summer</dt><dd className="font-medium text-fg">ML at {site.currentRole.org}</dd>
             </div>
             <div className="grid grid-cols-[5.5rem_1fr] gap-4 px-5 py-4 text-sm">
-              <dt className="text-muted">focus</dt><dd className="font-medium leading-relaxed text-fg">{site.currentFocus}</dd>
+              <dt className="text-muted">training for</dt><dd className="font-medium leading-relaxed text-fg">my first {running.race.name}</dd>
             </div>
           </dl>
         </aside>
@@ -104,8 +103,8 @@ export default async function HomePage() {
       <section className="border-y border-border bg-surface/40">
         <div className="site-container page-section">
           <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div><p className="eyebrow mb-3">selected work</p><h2 className="section-title">Things I&apos;ve built.</h2></div>
-            <Link href="/projects" className="text-sm text-muted transition-colors hover:text-fg">all projects →</Link>
+            <div><p className="eyebrow mb-3">a few favorites</p><h2 className="section-title">Projects I kept coming back to.</h2></div>
+            <Link href="/projects" className="text-sm text-muted transition-colors hover:text-fg">see everything →</Link>
           </div>
           <div className="grid gap-5 lg:grid-cols-2">
             {featured.map((project, index) => (
@@ -119,10 +118,10 @@ export default async function HomePage() {
 
       <section className="site-container page-section">
         <div className="mb-10 grid gap-5 md:grid-cols-[1fr_.7fr] md:items-end">
-          <div><p className="eyebrow mb-3">experience</p><h2 className="section-title">Built in real teams, too.</h2></div>
+          <div><p className="eyebrow mb-3">where I&apos;ve worked</p><h2 className="section-title">Some work I&apos;m proud of.</h2></div>
           <p className="text-sm leading-relaxed text-muted">
-            Internships and research taught me how to work through constraints, measure
-            impact, and leave systems better than I found them.
+            I&apos;ve gotten to work on machine learning, backend code, and tools used by
+            real people. These are a few things I&apos;m glad I got to build.
           </p>
         </div>
         <ol className="grid overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-3 md:gap-px">
@@ -135,15 +134,16 @@ export default async function HomePage() {
             </li>
           ))}
         </ol>
-        <Link href="/history" className="mt-5 inline-flex min-h-11 items-center text-sm text-accent-dim hover:text-fg">full experience →</Link>
+        <Link href="/history" className="mt-5 inline-flex min-h-11 items-center text-sm text-accent-dim hover:text-fg">the full timeline →</Link>
       </section>
 
       <section className="border-y border-border bg-surface/40">
         <div className="site-container page-section">
           <div className="mb-10 grid gap-5 md:grid-cols-[1fr_.7fr] md:items-end">
-            <div><p className="eyebrow mb-3">outside the editor</p><h2 className="section-title">A few things I keep alive.</h2></div>
+            <div><p className="eyebrow mb-3">the rest of me</p><h2 className="section-title">I do other stuff too.</h2></div>
             <p className="text-sm leading-relaxed text-muted">
-              This site doubles as a home for the parts of my life that do not fit on a résumé.
+              Running, lifting, travel, and music are a big part of my life—and,
+              somehow, they keep turning into side projects.
             </p>
           </div>
 
@@ -154,8 +154,8 @@ export default async function HomePage() {
               <div className="absolute -right-16 -top-20 size-64 rounded-full border border-accent/20" aria-hidden="true" />
               <div className="absolute -right-6 top-2 size-44 rounded-full border border-accent/15" aria-hidden="true" />
               <p className="eyebrow">places</p>
-              <h3 className="mt-4 font-serif text-3xl font-semibold tracking-tight">Learning the map by going.</h3>
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted">An interactive globe, a states map, and the places that have made it into the story so far.</p>
+              <h3 className="mt-4 font-serif text-3xl font-semibold tracking-tight">Places I&apos;ve been.</h3>
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted">Trips I remember, places I want to go back to, and a globe that&apos;s fun to spin.</p>
               <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between border-t border-border pt-4 sm:bottom-8 sm:left-8 sm:right-8">
                 <span className="font-mono text-xs text-muted">{places.length} places · {visitedStates} states</span><span className="text-sm text-accent-dim transition-transform group-hover:translate-x-1">explore →</span>
               </div>
@@ -164,28 +164,15 @@ export default async function HomePage() {
             <Link href="/now" className="group surface-card flex min-h-64 flex-col p-6 transition-colors hover:border-accent sm:p-8">
               <p className="eyebrow">right now</p>
               <h3 className="mt-4 font-serif text-3xl font-semibold tracking-tight">{site.currentLocation}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{site.currentFocus}.</p>
+              <p className="mt-3 text-sm leading-relaxed text-muted">What I&apos;m doing, what I&apos;m training for, and whatever has my attention lately.</p>
               <div className="mt-auto flex items-end justify-between border-t border-border pt-4">
-                <span className="font-mono text-xs text-muted">updated Jul 12</span><span className="text-sm text-accent-dim transition-transform group-hover:translate-x-1">read more →</span>
+                <span className="font-mono text-xs text-muted">summer 2026</span><span className="text-sm text-accent-dim transition-transform group-hover:translate-x-1">read more →</span>
               </div>
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="site-container py-14 sm:py-20" aria-labelledby="live-title">
-        <div className="grid gap-6 md:grid-cols-[.7fr_1fr] md:items-start">
-          <div>
-            <p className="eyebrow mb-3">live signals</p>
-            <h2 id="live-title" className="font-serif text-2xl font-semibold tracking-tight">What the site sees right now.</h2>
-            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">A small pulse from what I&apos;m listening to and what I last pushed.</p>
-          </div>
-          <div className="surface-card divide-y divide-border px-5 sm:px-6">
-            <SpotifyNowPlaying />
-            <GithubLatestCommit />
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

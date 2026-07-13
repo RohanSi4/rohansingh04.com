@@ -54,7 +54,22 @@ export function getAllProjects(): ProjectMeta[] {
 }
 
 export function getFeaturedProjects(): ProjectMeta[] {
-  return getAllProjects().filter((p) => p.featured);
+  const preferredOrder = [
+    "marathon-prep-bot",
+    "movie-recommender",
+    "personal-site",
+  ];
+
+  return getAllProjects()
+    .filter((project) => project.featured)
+    .sort((a, b) => {
+      const aIndex = preferredOrder.indexOf(a.slug);
+      const bIndex = preferredOrder.indexOf(b.slug);
+      if (aIndex === -1 && bIndex === -1) return b.startDate.localeCompare(a.startDate);
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+      return aIndex - bIndex;
+    });
 }
 
 export function getProjectMeta(slug: string): ProjectMeta | null {

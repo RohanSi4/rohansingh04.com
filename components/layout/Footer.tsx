@@ -8,17 +8,17 @@ export default function Footer() {
       <div className="site-container py-12 sm:py-16">
         <div className="grid gap-8 border-b border-border pb-10 md:grid-cols-[1fr_auto] md:items-end">
           <div>
-            <p className="eyebrow mb-3">let&apos;s build something useful</p>
+            <p className="eyebrow mb-3">want to talk?</p>
             <h2 className="max-w-2xl font-serif text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-              Have an idea, an opportunity, or a problem worth solving?
+              Say hey.
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-              I&apos;m a computer science student at the University of Virginia who likes
-              turning messy problems into thoughtful software.
+              If you want to chat about a project, an internship, running, or anything
+              else, send me a note.
             </p>
           </div>
           <a href="mailto:rohan.singh04@outlook.com" className="button-primary w-fit">
-            say hello <span aria-hidden="true">↗</span>
+            email me <span aria-hidden="true">↗</span>
           </a>
         </div>
 

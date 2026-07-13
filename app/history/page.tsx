@@ -4,7 +4,7 @@ import { formatDateRange } from "@/lib/dates";
 
 export const metadata: Metadata = {
   title: "Experience",
-  description: "Rohan Singh's software engineering, machine learning, and education experience.",
+  description: "Where Rohan Singh has worked, what he did there, and the results he is proud of.",
   alternates: { canonical: "/history" },
 };
 
@@ -23,10 +23,10 @@ export default function HistoryPage() {
     <div className="content-container page-section">
       <header className="mb-14 max-w-2xl">
         <p className="eyebrow mb-4">experience</p>
-        <h1 className="page-title">Work that moved a real number.</h1>
+        <h1 className="page-title">Places I&apos;ve worked and what I did there.</h1>
         <p className="mt-6 text-base leading-relaxed text-muted sm:text-lg">
-          Software engineering, data work, and applied machine learning—measured by
-          what got faster, smaller, more reliable, or more useful.
+          I&apos;ve gotten to work on machine learning, backend code, and tools used by
+          real people. Here are the parts I&apos;m most proud of.
         </p>
       </header>
 

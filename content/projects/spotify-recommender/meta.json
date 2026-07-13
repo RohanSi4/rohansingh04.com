@@ -1,8 +1,8 @@
 {
   "slug": "spotify-recommender",
   "title": "Spotify Recommender",
-  "tagline": "A hybrid playlist generator grounded in listening history, mood, and artist preferences",
-  "summary": "I built a Python and Streamlit recommendation system that combines audio-feature similarity with Spotify's recommendation engine across mood, song, and artist modes.",
+  "tagline": "Playlists that start with what I actually feel like listening to",
+  "summary": "I wanted music recommendations that could start with a mood, a song, or an artist instead of treating every listening session the same. So I built a Python and Streamlit tool around my own listening history.",
   "outcome": "Reached a 64% match rate@25, generated playlists in under 500ms, and cut redundant API calls by 42%.",
   "visual": "music",
   "tags": ["python", "streamlit", "spotify"],

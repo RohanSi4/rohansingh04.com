@@ -1,7 +1,7 @@
-I wanted a coach that knew the difference between a hard run and a hot run, remembered the last few months, and could explain its reasoning. So I built one around my own training archive.
+Training apps can tell me how far I ran, but I wanted something that remembered the bigger picture. I wanted it to know the difference between a hard run and a hot run, remember the last few months, and explain what it was seeing. So I built it around my own training archive.
 
 HealthFit exports workout files from my Apple Watch and Polar H10. A TypeScript pipeline deduplicates and normalizes them, then derives heart-rate zones, TRIMP training load, aerobic decoupling, weekly volume, and long-run progression. That context feeds a CLI coach instead of disappearing inside a fitness app.
 
 The public [fitness page](/fitness) is another output of the same system. It shows the progress without turning the page into a technical report. Its sync step uses a strict field whitelist: useful activity summaries are published, while GPS coordinates, source filenames, health notes, and workout descriptions stay local.
 
-The fun part is that the software and the athlete share the same feedback loop. Every run improves the dataset; every pipeline improvement changes how I understand the next run.
+My favorite part is that the project grows along with the training. Every run gives it a little more context, and every improvement to the project helps me understand the next run a little better.

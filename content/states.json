@@ -3,7 +3,10 @@
   { "code": "AK", "name": "Alaska", "visited": false, "photos": [], "cities": [], "visitedDate": null },
   { "code": "AZ", "name": "Arizona", "visited": false, "photos": [], "cities": [], "visitedDate": null },
   { "code": "AR", "name": "Arkansas", "visited": false, "photos": [], "cities": [], "visitedDate": null },
-  { "code": "CA", "name": "California", "visited": false, "photos": [], "cities": [], "visitedDate": null },
+  {
+    "code": "CA", "name": "California", "visited": true,
+    "notes": "spending summer 2026 in San Jose", "photos": [], "cities": ["San Jose"], "visitedDate": "2026-06"
+  },
   {
     "code": "CO", "name": "Colorado", "visited": true,
     "notes": "Denver", "photos": [], "cities": ["Denver"], "visitedDate": null

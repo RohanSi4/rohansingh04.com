@@ -7,9 +7,9 @@ interface Props {
 }
 
 const STATUS_LABEL: Record<ProjectMeta["status"], string> = {
-  shipped: "shipped",
-  "in-progress": "in progress",
-  archived: "archived",
+  shipped: "finished",
+  "in-progress": "still working on it",
+  archived: "older project",
 };
 
 export default function ProjectCard({ project }: Props) {

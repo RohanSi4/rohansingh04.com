@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import WidgetCard, { type WidgetState } from "./WidgetCard";
 
 type SpotifyData = {
@@ -17,11 +18,12 @@ export default function SpotifyNowPlaying() {
 
   useEffect(() => {
     let active = true;
+    const controller = new AbortController();
 
     async function refresh() {
       if (document.visibilityState !== "visible") return;
       try {
-        const res = await fetch("/api/spotify");
+        const res = await fetch("/api/spotify", { signal: controller.signal });
         if (!active) return;
         if (!res.ok) {
           setState("error");
@@ -45,6 +47,7 @@ export default function SpotifyNowPlaying() {
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => {
       active = false;
+      controller.abort();
       window.clearInterval(id);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
@@ -52,19 +55,21 @@ export default function SpotifyNowPlaying() {
 
   return (
     <WidgetCard
-      title="now playing"
+      title="listening lately"
       state={state}
       errorMessage="spotify's taking a nap"
-      emptyMessage="not listening to anything right now"
+      emptyMessage="nothing from spotify right now"
     >
       {data && (
         <div className="flex items-center gap-3">
           {data.albumArt && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={data.albumArt}
               alt={`${data.title} album art`}
-              className="w-10 h-10 rounded object-cover shrink-0"
+              width={40}
+              height={40}
+              unoptimized
+              className="size-10 shrink-0 rounded object-cover"
             />
           )}
           <div className="min-w-0">

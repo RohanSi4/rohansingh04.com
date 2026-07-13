@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "Rohan Singh — software, data, and real-world systems";
+  "Rohan Singh — projects, running, and more";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -54,7 +54,7 @@ export default function OpenGraphImage() {
               letterSpacing: "-0.045em",
             }}
           >
-            I build useful software from messy, real-world data.
+            Hey, I&apos;m Rohan. I like making things I actually want to use.
           </div>
           <div
             style={{
@@ -63,7 +63,7 @@ export default function OpenGraphImage() {
               color: "#c5b9aa",
             }}
           >
-            Software · data · machine learning · systems with a life outside the demo
+            Projects · running · travel · whatever I&apos;m into right now
           </div>
         </div>
       </div>

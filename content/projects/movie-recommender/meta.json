@@ -1,9 +1,9 @@
 {
   "slug": "movie-recommender",
-  "title": "Movie Recommender System",
-  "tagline": "production-style movie ranking system with offline ML and a Go serving layer",
-  "summary": "I built an end-to-end recommendation system instead of stopping at a model notebook. Python handles the offline data and ranking work, a Go service serves recommendations, and a Next.js interface makes the results explorable.",
-  "outcome": "Improved NDCG@10 by 11.8% over baseline and served ranked results at 16.6ms p95 latency.",
+  "title": "Movie Recommender",
+  "tagline": "Movie recommendations that go beyond another trending list",
+  "summary": "I wanted better movie recommendations—and I wanted to turn the model into an app instead of leaving it in a notebook. Python does the learning, Go keeps it fast, and the site lets anyone try it.",
+  "outcome": "The recommendations beat my baseline by 11.8%, and the app returns them in about 17 milliseconds.",
   "visual": "ranking",
   "tags": ["ml", "go", "python", "next.js"],
   "startDate": "2025-12",

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { ProjectMeta } from "@/lib/types";
 
 function FitnessVisual() {
@@ -27,21 +28,17 @@ function FitnessVisual() {
 
 function RankingVisual() {
   return (
-    <div className="flex h-full flex-col gap-3 p-6 sm:p-8" aria-hidden="true">
-      <div className="mb-auto flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">
-        <span>ranked for you</span><span>go api</span>
+    <div className="relative h-full min-h-64" aria-hidden="true">
+      <Image
+        src="/projects/movie-recommender-results.jpg"
+        alt=""
+        fill
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="object-cover object-top"
+      />
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-6 pb-5 pt-16 font-mono text-[10px] uppercase tracking-[0.16em] text-white/75">
+        actual recommendations from the app
       </div>
-      {[
-        ["01", "genre match", "94"],
-        ["02", "similar viewers", "88"],
-        ["03", "watch next", "81"],
-      ].map(([rank, reason, score]) => (
-        <div key={rank} className="grid grid-cols-[2rem_1fr_auto] items-center gap-3 rounded-lg border border-white/[0.12] bg-white/[0.07] p-3 text-white">
-          <span className="font-mono text-xs text-white/45">{rank}</span>
-          <span className="text-sm">{reason}</span>
-          <span className="font-mono text-xs text-[#9ec5ff]">{score}%</span>
-        </div>
-      ))}
     </div>
   );
 }
@@ -125,7 +122,7 @@ export default function ProjectFeatureCard({
       <ProjectVisual visual={project.visual} />
       <div className={`flex flex-col ${lead ? "p-7 sm:p-10" : "p-6"}`}>
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <span className="eyebrow">{project.status === "in-progress" ? "building now" : "case study"}</span>
+          <span className="eyebrow">{project.status === "in-progress" ? "still working on it" : "finished project"}</span>
           <span className="font-mono text-[10px] text-muted">{project.startDate.slice(0, 4)}</span>
         </div>
         <h3 className={`${lead ? "text-3xl sm:text-4xl" : "text-2xl"} font-serif font-semibold leading-tight tracking-tight text-fg transition-colors group-hover:text-accent-dim`}>
@@ -141,7 +138,7 @@ export default function ProjectFeatureCard({
               <span key={tag} className="rounded-full border border-border px-2 py-1 font-mono text-[10px] text-muted">{tag}</span>
             ))}
           </div>
-          <span className="shrink-0 text-sm text-accent-dim transition-transform group-hover:translate-x-1">read →</span>
+          <span className="shrink-0 text-sm text-accent-dim transition-transform group-hover:translate-x-1">take a look →</span>
         </div>
       </div>
     </Link>

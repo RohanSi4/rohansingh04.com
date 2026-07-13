@@ -1,11 +1,11 @@
-A production-style movie recommendation and ranking system that combines an
-offline machine learning pipeline, a low-latency Go service, and a lightweight
-Next.js demo UI.
+I like recommendation systems, but I did not want this project to end as
+another model trapped in a notebook. I wanted to search for a movie, get picks
+that actually made sense, and understand why each title showed up.
 
-The goal was to build something closer to a real MLE system than a notebook:
-raw data comes in, features are built and validated, a ranking model is trained
-offline, and an online service returns ranked recommendations with lightweight
-explanations.
+That meant building the whole path from raw data to a site someone could use.
+Features are built and checked in an offline machine learning pipeline, a
+ranking model is trained there, and a low-latency Go service returns ranked
+recommendations with lightweight explanations to a Next.js interface.
 
 ## what it does
 
@@ -16,7 +16,11 @@ explanations.
   release year, runtime, and poster URLs
 - returns ranked movie cards through a Next.js frontend backed by a Go API
 
-## architecture
+![Searching for movies in the recommender interface](/projects/movie-recommender-ui.jpg)
+
+![Ranked movie recommendations with scores and reasons](/projects/movie-recommender-results.jpg)
+
+## how it works
 
 The system is split into three pieces:
 
@@ -29,7 +33,7 @@ The system is split into three pieces:
 - **demo UI:** a Next.js frontend lets someone search by movie title or enter a
   user id, then renders ranked results as movie cards
 
-## ranking flow
+## how a recommendation gets made
 
 For user-based recommendations, the service accepts a request like:
 
@@ -56,7 +60,7 @@ a heuristic score over exported feature tables, while the LightGBM model is
 trained and saved offline. Wiring the model into online inference is the next
 step.
 
-## stack
+## what I used
 
 - Python for data ingestion, feature engineering, evaluation, and LightGBM
   training
@@ -65,12 +69,11 @@ step.
 - MovieLens for ratings data
 - TMDB for movie metadata and posters
 
-## what i learned
+## what surprised me
 
-This project forced the recommendation problem into separate offline and online
-concerns. The useful part was not just training a model, but designing the
-interface between feature generation, exported service data, ranking endpoints,
-and a frontend that could explain results quickly.
+This project made me think beyond whether the model worked. I also had to decide
+how the training work, exported data, ranking endpoints, and interface should
+fit together so a recommendation could arrive quickly and still make sense.
 
 It also made the tradeoff between model quality and serving complexity more
 concrete. The offline LightGBM pipeline gives a stronger ranking path, while the

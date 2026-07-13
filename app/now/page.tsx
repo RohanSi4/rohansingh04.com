@@ -3,10 +3,11 @@ import fs from "fs";
 import path from "path";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { daysSince } from "@/lib/dates";
+import SpotifyNowPlaying from "@/components/widgets/SpotifyNowPlaying";
 
 export const metadata: Metadata = {
   title: "Now",
-  description: "What Rohan Singh is focused on right now—in work, fitness, and life.",
+  description: "What Rohan Singh is working on, training for, and thinking about right now.",
   alternates: { canonical: "/now" },
 };
 
@@ -31,7 +32,7 @@ export default async function NowPage() {
     <div className="content-container page-section">
       <header className="mb-10">
       <p className="eyebrow mb-4">right now</p>
-      <h1 className="page-title">What I&apos;m focused on.</h1>
+      <h1 className="page-title">What I&apos;m up to.</h1>
       <p className="mt-5 text-xs text-muted font-mono">
         last updated {lastUpdated}
         {age > 0 && ` · ${age}d ago`}
@@ -44,11 +45,15 @@ export default async function NowPage() {
         </div>
       )}
 
-      <article className="surface-card p-6 sm:p-8">
-      <div className="prose prose-base max-w-none text-fg [&_p]:mb-5 [&_p]:leading-relaxed [&_a]:text-accent-dim [&_a]:underline [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1">
-        {content}
-      </div>
+      <article className="border-l-2 border-warm pl-5 sm:pl-7">
+        <div className="prose prose-base max-w-none text-fg [&_p]:mb-5 [&_p]:leading-relaxed [&_a]:text-accent-dim [&_a]:underline [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1">
+          {content}
+        </div>
       </article>
+
+      <section className="surface-card mt-8 px-5 sm:px-6" aria-label="What I'm listening to">
+        <SpotifyNowPlaying />
+      </section>
     </div>
   );
 }

@@ -1,6 +1,7 @@
-I built this because music recommendations are more interesting when they can
-adapt to intent. Sometimes I want tracks similar to one song; sometimes I want a
-specific mood; sometimes I want to start from an artist and explore outward.
+The music I want depends on the moment. Sometimes I want more songs like one I
+already love, sometimes I have a mood in mind, and sometimes I want to start
+with an artist and see where it goes. I built this so those choices could lead
+to genuinely different playlists.
 
 The system pulls listening history, audio features, and artist data through the
 Spotify Web API. Its hybrid ranking path blends cosine similarity with Spotify's
@@ -15,6 +16,7 @@ into a playlist. OAuth tokens are cached so repeat sessions do not create
 unnecessary authentication and API traffic.
 
 The measured result is a 64% match rate@25 on my evaluation set, with token
-caching reducing redundant Spotify API calls by 42%. The project is still a
-work in progress, but it now has the full loop I wanted: personal data in,
-ranked music out, and a practical way to listen to the result.
+caching reducing redundant Spotify API calls by 42%. It is still a work in
+progress, but the part I cared about is there: start with what I feel like
+hearing, get a ranked set of songs, and turn it into something I can actually
+listen to.
