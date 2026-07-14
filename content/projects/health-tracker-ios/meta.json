@@ -3,7 +3,7 @@
   "title": "Health Recap",
   "tagline": "One calm morning recap for sleep, movement, and recovery",
   "summary": "Apple Health had the numbers I cared about, but I wanted a faster way to understand them each morning. Health Recap turns sleep and movement into one score, one useful takeaway, and a clean daily view.",
-  "outcome": "The rebuilt SwiftUI app has a reviewable Simulator demo, correct overlap-safe sleep math, seven-day baselines, and 11 focused domain tests.",
+  "outcome": "The native SwiftUI app now has correct overlap-safe sleep math, seven-day baselines, 11 focused domain tests, and an interactive browser demo anyone can review.",
   "visual": "health",
   "tags": ["swift", "swiftui", "healthkit"],
   "startDate": "2025-04",
@@ -11,6 +11,6 @@
   "status": "shipped",
   "featured": true,
   "githubUrl": "https://github.com/RohanSi4/Health-Tracker-IOS-App",
-  "liveUrl": null,
+  "liveUrl": "https://health-recap.vercel.app",
   "subProjects": []
 }

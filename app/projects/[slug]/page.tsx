@@ -77,7 +77,7 @@ export default async function ProjectPage({ params }: Props) {
               {meta.liveUrl && (meta.liveUrl.startsWith("/") ? (
                 <Link href={meta.liveUrl} className="button-primary">try it <span aria-hidden="true">↗</span></Link>
               ) : (
-                <a href={meta.liveUrl} target="_blank" rel="noopener noreferrer" className="button-primary">try it <span aria-hidden="true">↗</span></a>
+                <a href={meta.liveUrl} target="_blank" rel="noopener noreferrer" className="button-primary">open the demo <span aria-hidden="true">↗</span></a>
               ))}
               {meta.githubUrl && <a href={meta.githubUrl} target="_blank" rel="noopener noreferrer" className="button-secondary">see the code <span aria-hidden="true">↗</span></a>}
             </div>

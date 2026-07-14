@@ -3,7 +3,7 @@
   "title": "Spotify Recommender",
   "tagline": "A music recommender that shows why each track made the cut",
   "summary": "I wanted recommendations that could start with a song or a mood and still make sense. Signal ranks tracks across nine audio features, explains the closest matches, and includes a demo that works without a Spotify account.",
-  "outcome": "The rebuilt app has a deterministic 72-track demo, an offline evaluator, and nine passing tests covering the ranking path.",
+  "outcome": "The rebuilt project has a live 72-track browser demo, the original Python ranking engine, an offline evaluator, and nine tests covering the recommendation path.",
   "visual": "music",
   "tags": ["python", "streamlit", "spotify"],
   "startDate": "2025-05",
@@ -11,6 +11,6 @@
   "status": "shipped",
   "featured": false,
   "githubUrl": "https://github.com/RohanSi4/spotifyrecommender",
-  "liveUrl": null,
+  "liveUrl": "https://signal-recommender.vercel.app",
   "subProjects": []
 }

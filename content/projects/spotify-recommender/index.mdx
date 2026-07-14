@@ -7,6 +7,12 @@ Pick a reference track or a mood and the app builds a target across nine audio
 features. It normalizes the different scales, applies documented weights, ranks
 the candidate catalog, and shows the two closest traits for every result.
 
+The [Signal browser demo](https://signal-recommender.vercel.app) ports that same
+weighted nine-feature method to TypeScript. Choose any of 72 deterministic demo
+tracks or start from a mood, adjust the blend, and rank the catalog entirely in
+your browser. The interaction is real, nothing is sent to a server, and no
+Spotify login is required.
+
 ![Signal ranking tracks from its offline demo catalog](/projects/spotify-signal.png)
 
 ## making it work without a perfect API setup
@@ -21,6 +27,12 @@ needs no account, credentials, or network connection. Spotify OAuth is still
 there for library access and private playlist export when an app has the right
 permissions, but the actual recommendation work can be opened, tested, and
 understood by anyone.
+
+The Python engine remains the reference implementation for Spotify experiments,
+the evaluator, and the test suite. The hosted TypeScript experience is the
+public proof layer. It uses made-up track names and feature profiles because
+Spotify's development rules do not allow republishing its catalog as an open
+portfolio dataset.
 
 ## what changed in the rebuild
 

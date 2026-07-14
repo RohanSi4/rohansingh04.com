@@ -8,6 +8,12 @@ same room. The app covers both sides of the marketplace: renters can search,
 filter, book, pay, and review, while hosts can list spaces, manage availability,
 confirm reservations, and keep track of what is happening across their spots.
 
+The [hosted demo](https://parking-shark.vercel.app) makes that full loop easy to
+review. You can request a sample spot as a renter, switch to the host view to
+approve and complete the stay, then return as the renter to record payment and
+leave a review. Each visitor gets isolated signed demo state, so the workflow is
+real without exposing student accounts or collecting payment details.
+
 ![Parking Shark home page with search and marketplace overview](/projects/parking-shark-home.png)
 
 ## the part underneath the screens
@@ -24,6 +30,12 @@ actions crossed table boundaries.
 - status changes follow one valid path instead of accepting arbitrary updates
 - a database-aware health check catches the difference between a running web
   server and a working app
+
+The hosted version is intentionally a portfolio demo, not a replacement for
+that database system. It runs the marketplace workflow against safe sample
+state because the original course database is not publicly available. The
+Express routes, MySQL schema, stored procedure, overlap trigger, and local
+database bootstrap remain the source of truth for the original application.
 
 ![Host dashboard with listings, reservations, and reviews](/projects/parking-shark-hosting.png)
 
