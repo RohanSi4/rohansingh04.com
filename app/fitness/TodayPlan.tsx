@@ -23,6 +23,13 @@ type PlanDetail = {
   note: string | null;
 };
 
+type DayActivitySummary = {
+  runCount: number;
+  runDistanceMi: number;
+  runMinutes: number;
+  strengthMinutes: number;
+};
+
 function cleanPlanText(value: string): string {
   return value.trim().replace(/[.!?]+$/, "");
 }
@@ -59,11 +66,30 @@ export function todayPlanDisplay(text: string | null): {
   };
 }
 
+export function summarizeDayActivities(
+  activities: HealthSummary["recentActivities"],
+  date: string,
+): DayActivitySummary {
+  const dayActivities = activities.filter((activity) => activity.date === date);
+  const runs = dayActivities.filter((activity) => activity.sport === "Run");
+  const runDistanceMi = runs.reduce((sum, activity) => sum + activity.distanceMi, 0);
+
+  return {
+    runCount: runs.length,
+    runDistanceMi: Math.round(runDistanceMi * 10) / 10,
+    runMinutes: runs.reduce((sum, activity) => sum + activity.movingMins, 0),
+    strengthMinutes: dayActivities
+      .filter((activity) => activity.sport === "WeightTraining")
+      .reduce((sum, activity) => sum + activity.movingMins, 0),
+  };
+}
+
 export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
   const planDays = plan ? getPlanWeekDays(plan) : [];
   const planned = planDays.find((day) => day.date === today);
   const futureDays = planDays.filter((day) => day.date > today);
-  const nextDay = futureDays.find((day) => day.isKeyDay) ?? futureDays[0];
+  const upNext = futureDays[0];
+  const nextKeyDay = futureDays.find((day) => day.isKeyDay) ?? upNext;
   const weeklyGoal = plan?.weekStart === week.weekStart ? plan.prescribedMiles : null;
   const nextWeekGoal = plan?.weekStart && plan.weekStart > week.weekStart
     ? plan.prescribedMiles
@@ -72,6 +98,8 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
     ? Math.min(100, Math.round((week.runMiles / weeklyGoal) * 100))
     : null;
   const movedToday = health.today.exerciseMinutes > 0;
+  const activity = summarizeDayActivities(health.recentActivities, today);
+  const ranToday = activity.runCount > 0;
   const display = todayPlanDisplay(planned?.text ?? null);
 
   return (
@@ -79,22 +107,38 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
       <div className={styles.todayHeading}>
         <div>
           <p>01 / today</p>
-          <h2 id="today-title">What today looks like.</h2>
+          <h2 id="today-title">{ranToday ? "The run is in." : "What today looks like."}</h2>
         </div>
         <p>
-          The quick answer for when I just need to know what I&apos;m doing today.
+          {ranToday
+            ? "Today’s run is done, so tomorrow’s plan moves up next."
+            : "The quick answer for when I just need to know what I’m doing today."}
         </p>
       </div>
 
       <div className={styles.todayGrid}>
         <article className={styles.todayPlanCard}>
           <div className={styles.todayCardLabel}>
-            <span>on the plan</span>
-            {planned?.isKeyDay ? <strong>key day</strong> : null}
+            <span>{ranToday ? "done today" : "on the plan"}</span>
+            {ranToday ? <strong>HealthFit</strong> : planned?.isKeyDay ? <strong>key day</strong> : null}
           </div>
           <div className={styles.todayPlanBody}>
-            <h3>{display.title}</h3>
-            {display.details.length > 0 ? (
+            <h3>{ranToday ? `${activity.runDistanceMi.toFixed(1)} miles done.` : display.title}</h3>
+            {ranToday ? (
+              <ul className={styles.todayPlanDetails}>
+                <li>
+                  <div>
+                    <span>{activity.runMinutes} min running</span>
+                    {activity.runCount > 1 ? <small>{activity.runCount} activities combined</small> : null}
+                  </div>
+                </li>
+                {activity.strengthMinutes > 0 ? (
+                  <li>
+                    <div><span>{activity.strengthMinutes} min strength training</span></div>
+                  </li>
+                ) : null}
+              </ul>
+            ) : display.details.length > 0 ? (
               <ul className={styles.todayPlanDetails}>
                 {display.details.map((detail) => (
                   <li key={`${detail.label}-${detail.note ?? ""}`}>
@@ -108,19 +152,33 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
             ) : null}
           </div>
           <p className={styles.todayPlanDate}>
-            {planned ? planned.dayLabel : "A free day to move however feels good."}
+            {ranToday
+              ? `${planned?.dayLabel ?? today} · synced from HealthFit`
+              : planned
+                ? planned.dayLabel
+                : "A free day to move however feels good."}
           </p>
         </article>
 
         <div className={styles.todaySideCards}>
           <article className={styles.todaySmallCard}>
-            <span>done today</span>
-            <strong>{movedToday ? `${health.today.exerciseMinutes} min` : "nothing yet"}</strong>
-            <p>
-              {movedToday
-                ? `${health.today.distanceMi.toFixed(1)} miles of ${sportLabel(health.today.sport)}`
-                : "The page will update after the next activity syncs."}
-            </p>
+            {ranToday ? (
+              <>
+                <span>up next</span>
+                <strong>{upNext?.dayLabel ?? "plan coming soon"}</strong>
+                <p>{upNext?.text ?? "The next plan will show up here when it is ready."}</p>
+              </>
+            ) : (
+              <>
+                <span>done today</span>
+                <strong>{movedToday ? `${health.today.exerciseMinutes} min` : "nothing yet"}</strong>
+                <p>
+                  {movedToday
+                    ? `${health.today.distanceMi.toFixed(1)} miles of ${sportLabel(health.today.sport)}`
+                    : "The page will update after the next activity syncs."}
+                </p>
+              </>
+            )}
           </article>
 
           <article className={styles.todaySmallCard}>
@@ -149,8 +207,8 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
 
           <article className={styles.todaySmallCard}>
             <span>next big one</span>
-            <strong>{nextDay?.dayLabel ?? "not set yet"}</strong>
-            <p>{nextDay?.text ?? "The next plan will show up here when it is ready."}</p>
+            <strong>{nextKeyDay?.dayLabel ?? "not set yet"}</strong>
+            <p>{nextKeyDay?.text ?? "The next plan will show up here when it is ready."}</p>
           </article>
         </div>
       </div>
