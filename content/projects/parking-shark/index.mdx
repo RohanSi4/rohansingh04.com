@@ -1,0 +1,40 @@
+Parking around Grounds is a weird problem. A driveway can sit empty a block
+away while someone else circles for a spot. We built Parking Shark to connect
+those two people without making either side manage the arrangement through a
+group chat.
+
+This was a four-person UVA database project, and we built it together in the
+same room. The app covers both sides of the marketplace: renters can search,
+filter, book, pay, and review, while hosts can list spaces, manage availability,
+confirm reservations, and keep track of what is happening across their spots.
+
+![Parking Shark home page with search and marketplace overview](/projects/parking-shark-home.png)
+
+## the part underneath the screens
+
+The Express app sits on a 13-table MySQL model covering people, vehicles,
+parking spots, schedules, reservations, payments, extensions, and reviews. The
+important part was not just storing all of it. The rules had to hold when real
+actions crossed table boundaries.
+
+- booking and extension checks run inside transactions so two overlapping
+  requests cannot both win
+- reservation actions are tied to the right renter or host
+- payments only work for an eligible renter and reservation state
+- status changes follow one valid path instead of accepting arbitrary updates
+- a database-aware health check catches the difference between a running web
+  server and a working app
+
+![Host dashboard with listings, reservations, and reviews](/projects/parking-shark-hosting.png)
+
+## giving the project a proper second pass
+
+The first course version proved the idea, but it still had the kind of gaps
+that show up when a team is racing toward a deadline. I came back to it and
+tightened the boundaries: stricter validation, role-safe actions, same-origin
+request protection, rate limiting around login, security headers, a clean
+database bootstrap, automated tests, and CI.
+
+That second pass made the project more useful to show because it is no longer
+just a set of screens. The renter and host paths now agree with the rules in the
+database, and the repository explains how to reproduce the whole thing locally.

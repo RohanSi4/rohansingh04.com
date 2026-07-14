@@ -57,7 +57,7 @@ export function getFeaturedProjects(): ProjectMeta[] {
   const preferredOrder = [
     "marathon-prep-bot",
     "movie-recommender",
-    "personal-site",
+    "health-tracker-ios",
   ];
 
   return getAllProjects()

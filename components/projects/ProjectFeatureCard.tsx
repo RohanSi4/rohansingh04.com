@@ -28,7 +28,7 @@ function FitnessVisual() {
 
 function RankingVisual() {
   return (
-    <div className="relative h-full min-h-64" aria-hidden="true">
+    <div className="absolute inset-0" aria-hidden="true">
       <Image
         src="/projects/movie-recommender-results.jpg"
         alt=""
@@ -65,20 +65,17 @@ function SiteVisual() {
 }
 
 function MusicVisual() {
-  const levels = [28, 52, 76, 45, 88, 62, 38, 70, 48, 82, 55, 34];
   return (
-    <div className="flex h-full flex-col justify-between p-6 sm:p-8" aria-hidden="true">
-      <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">
-        <span>listening patterns</span><span>collaborative filtering</span>
-      </div>
-      <div className="flex h-28 items-center gap-2">
-        {levels.map((height, index) => (
-          <span key={index} className="flex-1 rounded-full bg-[#d6a5e8]" style={{ height: `${height}%`, opacity: 0.45 + (index % 4) * 0.12 }} />
-        ))}
-      </div>
-      <div className="flex items-center gap-3 border-t border-white/15 pt-4 text-white">
-        <span className="grid size-10 place-items-center rounded-full border border-white/20"><span className="size-2 rounded-full bg-[#d6a5e8]" /></span>
-        <div><p className="text-sm">patterns over playlists</p><p className="text-xs text-white/45">Python · ML</p></div>
+    <div className="absolute inset-0" aria-hidden="true">
+      <Image
+        src="/projects/spotify-signal.png"
+        alt=""
+        fill
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="object-cover object-top"
+      />
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-6 pb-5 pt-16 font-mono text-[10px] uppercase tracking-[0.16em] text-white/75">
+        the working offline demo
       </div>
     </div>
   );
@@ -86,11 +83,16 @@ function MusicVisual() {
 
 function HealthVisual() {
   return (
-    <div className="grid h-full place-items-center p-6 sm:p-8" aria-hidden="true">
-      <div className="w-full max-w-sm rounded-2xl border border-white/[0.12] bg-white/[0.07] p-5 text-white">
-        <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-white/50"><span>daily movement</span><span>iOS</span></div>
-        <div className="my-7 flex items-end justify-between"><strong className="font-mono text-5xl font-medium text-[#f59a80]">42</strong><span className="pb-1 text-xs text-white/45">active min</span></div>
-        <div className="h-2 overflow-hidden rounded-full bg-white/10"><span className="block h-full w-3/4 rounded-full bg-[#f59a80]" /></div>
+    <div className="absolute inset-0" aria-hidden="true">
+      <Image
+        src="/projects/health-recap-card.jpg"
+        alt=""
+        fill
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="object-cover object-center"
+      />
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#222852]/90 to-transparent px-6 pb-5 pt-16 font-mono text-[10px] uppercase tracking-[0.16em] text-white/80">
+        the working simulator recap
       </div>
     </div>
   );

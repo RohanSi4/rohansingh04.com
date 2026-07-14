@@ -1,24 +1,42 @@
-Apple Health had the numbers, but checking several places every morning was not
-how I wanted to use them. I wanted one quick answer to three questions: what
-happened yesterday, how did last night's sleep compare with normal, and is
-there one useful thing worth noticing?
+Apple Health had the numbers, but checking a collection of charts every morning
+was not how I wanted to use them. I wanted one quick answer: how did yesterday
+go, and is there anything useful I should carry into today?
 
-## the daily recap
+Health Recap reads sleep, steps, walking distance, and active energy on iPhone.
+It turns them into one daily score, a plain-language takeaway, and the details
+behind both. On Simulator it automatically loads the same deterministic sample
+day every time, so the whole experience is easy to open and review without my
+personal Health data.
 
-The SwiftUI app reads sleep, steps, walking distance, and active energy through
-HealthKit. It identifies the sleep session that just ended, compares the result
-with seven-day averages, and presents the information as one daily recap rather
-than a collection of disconnected charts.
+![Health Recap showing its sample daily score, takeaway, and sleep details](/projects/health-recap.jpg)
 
-The sleep score combines duration, efficiency, and wake-time consistency with
-asymmetric scoring curves. That makes the score harder to game with one strong
-metric and lets it distinguish between enough sleep and genuinely consistent
-sleep.
+## the part that needed more care
 
-## making it useful at the right time
+Health data gets messy around the edges. Sleep stages can overlap, the clock
+wraps at midnight, and an average stops being useful if today's value is
+quietly included in its own baseline. The rebuild handles those cases directly:
 
-Scheduled morning notifications surface a sleep highlight and deep-link into
-the recap. Weekly Swift Charts views provide the longer trend without crowding
-the daily screen. The project is still evolving, but the working MVP now covers
-HealthKit ingestion, scoring, movement comparisons, notifications, and the
-daily interface around them.
+- overlapping sleep-stage intervals are merged before duration is calculated
+- bedtime and wake-time averages use circular clock math across midnight
+- movement compares the recap day with the seven days before it
+- sleep efficiency is kept inside a valid range
+- stable metric identities keep SwiftUI updates predictable
+
+## making the app feel finished
+
+I split the original recap screen into focused SwiftUI components and gave the
+whole flow a proper loading state, sample-data state, error recovery, pull to
+refresh, Dynamic Type support, and clear accessibility labels. HealthKit and
+notification code now sit behind small protocols, which makes the real data
+path easier to test without tying the interface to a physical phone.
+
+Notification permission is also an explicit choice now. Loading the recap does
+not trigger a surprise system prompt. If reminders are enabled, the app can
+schedule a recap after it sees a completed sleep session. Background HealthKit
+delivery is not built yet, so those reminders are best-effort rather than a
+guaranteed alarm.
+
+The current suite has 11 domain tests plus a deterministic UI flow covering the
+sample recap's main sections. Real HealthKit queries still need a signed iPhone,
+but the interface, scoring rules, baselines, and failure states can all be
+reviewed in Simulator.

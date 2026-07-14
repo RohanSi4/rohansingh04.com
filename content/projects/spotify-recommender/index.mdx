@@ -1,22 +1,40 @@
-The music I want depends on the moment. Sometimes I want more songs like one I
-already love, sometimes I have a mood in mind, and sometimes I want to start
-with an artist and see where it goes. I built this so those choices could lead
-to genuinely different playlists.
+The music I want changes with the moment. Sometimes I want more songs like one
+I already love. Sometimes I know the energy I want but not the song. I built
+Signal so either starting point could lead somewhere useful, and so the result
+would explain itself instead of feeling random.
 
-The system pulls listening history, audio features, and artist data through the
-Spotify Web API. Its hybrid ranking path blends cosine similarity with Spotify's
-recommendation engine, while separate mood, content, and artist modes make the
-same underlying data useful in different ways.
+Pick a reference track or a mood and the app builds a target across nine audio
+features. It normalizes the different scales, applies documented weights, ranks
+the candidate catalog, and shows the two closest traits for every result.
 
-## from model to playlist
+![Signal ranking tracks from its offline demo catalog](/projects/spotify-signal.png)
 
-A Streamlit interface makes the system usable without dropping into a notebook.
-It can generate recommendations in under 500ms and optionally turn the result
-into a playlist. OAuth tokens are cached so repeat sessions do not create
-unnecessary authentication and API traffic.
+## making it work without a perfect API setup
 
-The measured result is a 64% match rate@25 on my evaluation set, with token
-caching reducing redundant Spotify API calls by 42%. It is still a work in
-progress, but the part I cared about is there: start with what I feel like
-hearing, get a ranked set of songs, and turn it into something I can actually
-listen to.
+Spotify changed access to several of the endpoints this project originally
+used. New development apps often cannot read Audio Features or use Spotify's
+Recommendations endpoint at all. Instead of hiding that limitation, I split
+the ranking engine from the Spotify connection.
+
+The default app now runs against a deterministic 72-track demo catalog. It
+needs no account, credentials, or network connection. Spotify OAuth is still
+there for library access and private playlist export when an app has the right
+permissions, but the actual recommendation work can be opened, tested, and
+understood by anyone.
+
+## what changed in the rebuild
+
+- fixed a ranking bug that excluded the entire user library instead of only the
+  selected seed tracks
+- moved the recommendation logic into a credential-free core
+- added an offline evaluator and a fixed synthetic regression set
+- made every result include its score and plain-language match reasons
+- replaced the older UI with one focused Streamlit flow
+- added nine tests around ranking order, exclusions, invalid data, pagination,
+  API restrictions, and evaluator determinism
+
+The included fixture reaches 100% hit-rate@5 and 0.993 mean reciprocal rank,
+but those numbers are only regression checks on deliberately separated
+synthetic clusters. They are not a claim about real listeners. The result I
+care about is simpler: the project now works out of the box, and its claims can
+be reproduced from the repository.

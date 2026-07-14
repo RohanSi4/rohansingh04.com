@@ -9,7 +9,7 @@
   "startDate": "2026-04",
   "endDate": null,
   "status": "in-progress",
-  "featured": true,
+  "featured": false,
   "githubUrl": "https://github.com/RohanSi4/rohansingh04.com",
   "liveUrl": "https://rohansingh04.com",
   "subProjects": []

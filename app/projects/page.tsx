@@ -6,17 +6,17 @@ import ProjectFeatureCard from "@/components/projects/ProjectFeatureCard";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Things Rohan Singh made around running, movies, music, health, and whatever else caught his attention.",
+  description: "Things Rohan Singh has built around fitness, recommendations, travel, and everyday problems worth solving.",
   alternates: { canonical: "/projects" },
   openGraph: {
     title: "Projects | Rohan Singh",
-    description: "Things I made because I wanted them to exist.",
+    description: "Things I have built on my own and with good people.",
     url: "/projects",
   },
   twitter: {
     card: "summary_large_image",
     title: "Projects | Rohan Singh",
-    description: "Things I made because I wanted them to exist.",
+    description: "Things I have built on my own and with good people.",
   },
 };
 
@@ -29,11 +29,11 @@ export default function ProjectsPage() {
     <div>
       <header className="site-container page-section pb-12 sm:pb-16">
         <p className="eyebrow mb-4">projects</p>
-        <h1 className="page-title">Things I made because I wanted them to exist.</h1>
+        <h1 className="page-title">Things I&apos;ve built on my own and with good people.</h1>
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-          Most started with something I wanted for myself: better marathon training,
-          movie picks I could trust, or a site that felt more like me. Here&apos;s what I
-          ended up making.
+          Most started with something I actually wanted: better marathon training,
+          movie picks I could trust, or an easier way to find parking. Here&apos;s what
+          happened when I kept going with the idea.
         </p>
       </header>
 
@@ -52,7 +52,7 @@ export default function ProjectsPage() {
       {rest.length > 0 && (
         <section className="site-container page-section">
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-            <div><p className="eyebrow mb-3">more projects</p><h2 className="section-title">A few more things I made.</h2></div>
+            <div><p className="eyebrow mb-3">more projects</p><h2 className="section-title">A few more things I&apos;ve worked on.</h2></div>
             <Link href="/history" className="text-sm text-muted hover:text-fg">where I&apos;ve worked →</Link>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
