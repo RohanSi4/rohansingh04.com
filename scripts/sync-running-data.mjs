@@ -262,7 +262,7 @@ function buildHealthSummary(activities, updatedAt) {
       activeDays: activeDates.length,
       sinceDate: activeDates[0] ?? today,
     },
-    recentActivities: normalized.slice(0, 15).map(({ calories: _calories, ...activity }) => activity),
+    recentActivities: normalized.slice(0, 15),
     heatmap,
   };
 }

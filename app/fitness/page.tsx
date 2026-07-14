@@ -41,21 +41,6 @@ function daysBetween(start: string, end: string): number {
   );
 }
 
-function activityLabel(sport: string): string {
-  const labels: Record<string, string> = {
-    Run: "run",
-    WeightTraining: "lift",
-    Workout: "workout",
-    Walk: "walk",
-    Ride: "ride",
-    Swim: "swim",
-    Hike: "hike",
-    Golf: "golf",
-    Basketball: "basketball",
-  };
-  return labels[sport] ?? sport.toLowerCase();
-}
-
 export default async function FitnessPage() {
   const data = await getRunningDashboard();
   const latestRun = data.recentRuns[0];
@@ -252,7 +237,7 @@ export default async function FitnessPage() {
           <caption className="sr-only">Ten most recent fitness activities</caption>
           <thead>
           <tr className={`${styles.runRow} ${styles.runTableHead}`}>
-            <th scope="col">date</th><th scope="col">activity</th><th scope="col">duration</th><th scope="col">distance</th><th scope="col">type</th>
+            <th scope="col">date</th><th scope="col">activity</th><th scope="col">duration</th><th scope="col">distance</th><th scope="col">calories</th>
           </tr>
           </thead>
           <tbody>
@@ -264,7 +249,7 @@ export default async function FitnessPage() {
               </td>
               <td>{activity.movingMins} <small>min</small></td>
               <td>{activity.distanceMi > 0 ? activity.distanceMi.toFixed(1) : "n/a"} <small>{activity.distanceMi > 0 ? "mi" : ""}</small></td>
-              <td><small>{activityLabel(activity.sport)}</small></td>
+              <td>{activity.calories && activity.calories > 0 ? activity.calories.toLocaleString() : "n/a"} <small>{activity.calories && activity.calories > 0 ? "kcal" : ""}</small></td>
             </tr>
           ))}
           </tbody>

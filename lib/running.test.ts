@@ -23,6 +23,10 @@ describe("running dashboard snapshot", () => {
       "2022", "2023", "2024", "2025", "2026",
     ]);
     expect(data.totals.totalActivities).toBeGreaterThan(1_000);
+    expect(data.health.recentActivities.every((activity) => (
+      typeof activity.calories === "number" && activity.calories >= 0
+    ))).toBe(true);
+    expect(data.health.recentActivities.some((activity) => (activity.calories ?? 0) > 0)).toBe(true);
     expect(data.trainingPlan?.days.length).toBeGreaterThan(0);
     expect(data.race.trainingStart).toBe("2026-06-22");
   });
@@ -65,9 +69,12 @@ describe("running dashboard snapshot", () => {
 
   it("merges a newer live run without double-counting the archive", () => {
     const data = getStaticRunningDashboard();
+    const nextDate = new Date(`${data.dataThrough}T12:00:00Z`);
+    nextDate.setUTCDate(nextDate.getUTCDate() + 1);
+    const liveDate = nextDate.toISOString().slice(0, 10);
     const updated = mergeLiveRuns(data, [{
       id: 999,
-      date: "2026-07-13",
+      date: liveDate,
       sport: "Run",
       name: "Morning Run",
       movingMins: 30,
@@ -76,7 +83,7 @@ describe("running dashboard snapshot", () => {
       avgHR: 142,
     }]);
 
-    expect(updated.dataThrough).toBe("2026-07-13");
+    expect(updated.dataThrough).toBe(liveDate);
     expect(updated.totals.totalRuns).toBe(data.totals.totalRuns + 1);
     expect(updated.totals.runMiles).toBe(data.totals.runMiles + 3.1);
     expect(updated.recentRuns[0].id).toBe("live-999");

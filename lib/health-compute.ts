@@ -152,6 +152,7 @@ export function computeHealthSummary(activities: StravaActivity[], prevBestStrea
       name: a.name,
       movingMins: a.movingMins,
       distanceMi: a.distanceMi,
+      calories: a.calories,
     })),
 
     heatmap: buildHeatmap(by, now),
