@@ -3,13 +3,25 @@ import type { Place, StateEntry, HealthSummary } from "./types";
 import type { RunningDashboard } from "./running";
 import placesJson from "../content/places.json";
 import statesJson from "../content/states.json";
+import { addSeedPhotos } from "./travel";
+
+const PLACE_PHOTO_SEED_KEY = "places:photo-seed:v1";
 
 export async function getPlacesKV(): Promise<Place[]> {
   const seed = placesJson as Place[];
   try {
     const data = await kv.get<Place[]>("places");
-    if (data) return data;
+    if (data) {
+      const seeded = await kv.get<boolean>(PLACE_PHOTO_SEED_KEY);
+      if (seeded) return data;
+
+      const merged = addSeedPhotos(data, seed);
+      if (merged.changed) await kv.set("places", merged.places);
+      await kv.set(PLACE_PHOTO_SEED_KEY, true);
+      return merged.places;
+    }
     await kv.set("places", seed);
+    await kv.set(PLACE_PHOTO_SEED_KEY, true);
     return seed;
   } catch {
     return seed;

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { getPlaces } from "@/lib/content";
 import { isAdmin } from "@/lib/admin-auth";
 import GlobeLoader from "@/components/globe/GlobeLoader";
@@ -13,17 +15,20 @@ export const metadata: Metadata = {
 export default async function GlobePage() {
   const [places, admin] = await Promise.all([getPlaces(), isAdmin()]);
   const countryCount = new Set(places.map((place) => place.country)).size;
+  const photoEntries = places.flatMap((place) =>
+    place.photos.map((url) => ({ place, url })),
+  );
 
   return (
     <div className="site-container page-section">
       <header className="max-w-3xl">
-        <p className="eyebrow mb-4">outside the code editor</p>
-        <h1 className="page-title">A growing map of places I&apos;ve been.</h1>
+        <p className="eyebrow mb-4">places that stuck with me</p>
+        <h1 className="page-title">Where I&apos;ve made it so far.</h1>
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
           {places.length} stops across {countryCount} countries so far. Spin the globe,
-          jump straight to a place, or switch views to explore the list.
+          find a trip, or head to the photo journal for the parts worth keeping.
         </p>
-        <TravelNav current="globe" />
+        <TravelNav current="globe" isAdmin={admin} />
       </header>
 
       <section
@@ -36,6 +41,41 @@ export default async function GlobePage() {
           drag to rotate · scroll to zoom
         </p>
       </section>
+
+      {photoEntries.length > 0 ? (
+        <section className="mt-16" aria-labelledby="globe-photos-heading">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="eyebrow mb-2">from the camera roll</p>
+              <h2 id="globe-photos-heading" className="section-title">Some proof I was there.</h2>
+            </div>
+            <Link href="/travel-list" className="button-secondary">see every trip</Link>
+          </div>
+
+          <div className={`grid gap-3 ${photoEntries.length > 1 ? "sm:grid-cols-2 lg:grid-cols-3" : ""}`}>
+            {photoEntries.slice(0, 3).map(({ place, url }, index) => (
+              <figure
+                key={`${place.id}-${url}`}
+                className={`group relative min-h-80 overflow-hidden rounded-2xl bg-surface ${
+                  photoEntries.length === 1 ? "sm:min-h-[38rem]" : ""
+                }`}
+              >
+                <Image
+                  src={url}
+                  alt={`A view from ${place.name}, ${place.country}`}
+                  fill
+                  sizes={photoEntries.length === 1 ? "100vw" : "(max-width: 640px) 100vw, 33vw"}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                />
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-5 pb-5 pt-20 font-serif text-2xl font-semibold text-white">
+                  {place.name}, {place.country}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }

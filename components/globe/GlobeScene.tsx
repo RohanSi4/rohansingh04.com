@@ -232,7 +232,12 @@ function AdminEditPanel({
 
         <PhotoUpload
           folder={`places/${place.id}`}
-          onUploaded={(url) => set("photos", [...form.photos, url])}
+          onUploaded={(url) => {
+            setForm((current) => ({
+              ...current,
+              photos: [...current.photos, url],
+            }));
+          }}
         />
 
         {saveError && <p className="text-xs text-red-400 font-mono">{saveError}</p>}

@@ -15,7 +15,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "no file" }, { status: 400 });
   }
 
-  const blob = await put(`${folder}/${file.name}`, file, {
+  if (!file.type.startsWith("image/")) {
+    return NextResponse.json({ error: "file must be an image" }, { status: 415 });
+  }
+
+  if (file.size > 15 * 1024 * 1024) {
+    return NextResponse.json({ error: "image must be under 15 MB" }, { status: 413 });
+  }
+
+  const safeFolder = folder.replace(/[^a-zA-Z0-9/_-]/g, "").replace(/^\/+/, "") || "photos";
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+
+  const blob = await put(`${safeFolder}/${safeName}`, file, {
     access: "public",
     addRandomSuffix: true,
   });

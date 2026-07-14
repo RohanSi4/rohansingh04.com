@@ -4,34 +4,45 @@ import { useRef, useState } from "react";
 
 interface Props {
   folder: string;
-  onUploaded: (url: string) => void;
+  onUploaded: (url: string) => void | Promise<void>;
+  label?: string;
 }
 
-export default function PhotoUpload({ folder, onUploaded }: Props) {
+export default function PhotoUpload({
+  folder,
+  onUploaded,
+  label = "drop photos or click to add",
+}: Props) {
   const [dragging, setDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  async function upload(file: File) {
-    setUploading(true);
-    setError("");
+  async function upload(file: File): Promise<string> {
     const form = new FormData();
     form.append("file", file);
     form.append("folder", folder);
     const res = await fetch("/api/admin/photos", { method: "POST", body: form });
-    if (res.ok) {
-      const { url } = await res.json();
-      onUploaded(url);
-    } else {
-      setError(`upload failed (${res.status})`);
-    }
-    setUploading(false);
+    if (!res.ok) throw new Error(`upload failed (${res.status})`);
+    const { url } = await res.json();
+    return url;
   }
 
-  function handleFiles(files: FileList | null) {
-    if (!files) return;
-    Array.from(files).forEach(upload);
+  async function handleFiles(files: FileList | null) {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    setError("");
+    try {
+      for (const file of Array.from(files)) {
+        const url = await upload(file);
+        await onUploaded(url);
+      }
+    } catch (uploadError) {
+      setError(uploadError instanceof Error ? uploadError.message : "upload failed");
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
   }
 
   return (
@@ -45,7 +56,7 @@ export default function PhotoUpload({ folder, onUploaded }: Props) {
           dragging ? "border-accent text-accent" : "border-border text-muted hover:border-accent/50"
         }`}
       >
-        {uploading ? "uploading..." : "drop photos or click to add"}
+        {uploading ? "adding photos..." : label}
         <input
           ref={inputRef}
           type="file"

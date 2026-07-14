@@ -22,7 +22,7 @@ export default async function StatesPage() {
           A tile map of road trips, college stops, weekends away, and places that
           felt worth remembering. Select any state for the details.
         </p>
-        <TravelNav current="states" />
+        <TravelNav current="states" isAdmin={admin} />
       </header>
 
       <section className="surface-card mt-10 p-4 sm:p-8" aria-labelledby="states-map-heading">

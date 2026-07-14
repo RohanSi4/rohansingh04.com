@@ -8,7 +8,13 @@ const views: Array<{ id: TravelView; href: string; label: string }> = [
   { id: "list", href: "/travel-list", label: "place list" },
 ];
 
-export default function TravelNav({ current }: { current: TravelView }) {
+export default function TravelNav({
+  current,
+  isAdmin = false,
+}: {
+  current: TravelView;
+  isAdmin?: boolean;
+}) {
   return (
     <nav aria-label="Travel views" className="mt-7 flex flex-wrap gap-2">
       {views.map((view) => {
@@ -28,6 +34,14 @@ export default function TravelNav({ current }: { current: TravelView }) {
           </Link>
         );
       })}
+      {isAdmin ? (
+        <Link
+          href="/admin/travel"
+          className="inline-flex min-h-11 items-center rounded-full border border-dashed border-accent px-4 text-sm font-medium text-accent-dim transition-colors hover:bg-accent hover:text-bg"
+        >
+          add photos
+        </Link>
+      ) : null}
     </nav>
   );
 }
