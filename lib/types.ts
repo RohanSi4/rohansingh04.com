@@ -67,6 +67,8 @@ export type ProjectMeta = {
   tagline: string;
   summary: string;
   outcome: string;
+  role: string;
+  proofPoints: string[];
   visual: "fitness" | "ranking" | "site" | "music" | "health";
   tags: string[];
   startDate: string; // YYYY-MM

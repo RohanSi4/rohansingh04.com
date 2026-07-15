@@ -4,6 +4,12 @@
   "tagline": "My own corner of the internet for the things I make and care about",
   "summary": "A resume never really captures the whole person, so I built a site that could. It brings together my work, fitness, travel, music, and the projects I keep coming back to.",
   "outcome": "It became a portfolio I actually enjoy updating and one place for all the side projects I keep starting.",
+  "role": "Designer and full-stack developer",
+  "proofPoints": [
+    "One shared content model for projects, work, travel, and fitness",
+    "Live health and music data with privacy-safe fallbacks",
+    "Automated metadata, project integrity checks, and Vercel deployment"
+  ],
   "visual": "site",
   "tags": ["next.js", "typescript", "data"],
   "startDate": "2026-04",

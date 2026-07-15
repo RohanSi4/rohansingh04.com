@@ -2,14 +2,19 @@
   "name": "rohansingh04.com",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "sync:running": "node scripts/sync-running-data.mjs",
     "publish:running": "node scripts/sync-running-data.mjs --publish-only",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "check:live": "node scripts/check-live.mjs",
+    "check": "pnpm typecheck && pnpm test && pnpm build"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
@@ -24,6 +29,8 @@
     "three": "^0.183.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4.3.2",
     "@types/node": "^20",
     "@types/react": "^19.2.17",

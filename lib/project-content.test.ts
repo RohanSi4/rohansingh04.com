@@ -42,6 +42,12 @@ describe("project portfolio content", () => {
       expect(meta.title.trim().length, `${directory} has an empty title`).toBeGreaterThan(0);
       expect(meta.summary.trim().length, `${directory} has a thin summary`).toBeGreaterThan(80);
       expect(meta.outcome.trim().length, `${directory} has a thin outcome`).toBeGreaterThan(40);
+      expect(meta.role.trim().length, `${directory} has no role`).toBeGreaterThan(10);
+      expect(meta.proofPoints.length, `${directory} needs two or three proof points`).toBeGreaterThanOrEqual(2);
+      expect(meta.proofPoints.length, `${directory} needs two or three proof points`).toBeLessThanOrEqual(3);
+      for (const point of meta.proofPoints) {
+        expect(point.trim().length, `${directory} has a thin proof point`).toBeGreaterThan(25);
+      }
       expect(meta.tags.length, `${directory} has no technology tags`).toBeGreaterThan(0);
       expect(meta.startDate, `${directory} has an invalid start date`).toMatch(/^\d{4}-(0[1-9]|1[0-2])$/);
 
@@ -98,5 +104,25 @@ describe("project portfolio content", () => {
   it("keeps the featured section to the intended three-project layout", () => {
     const featured = projectDirectories.filter((directory) => projectMeta(directory).featured);
     expect(featured).toHaveLength(3);
+  });
+
+  it("keeps private Marathon data out of public project content", () => {
+    const meta = projectMeta("marathon-prep-bot");
+    const caseStudy = fs.readFileSync(
+      path.join(projectsRoot, "marathon-prep-bot", "index.mdx"),
+      "utf8",
+    );
+    const publicCopy = JSON.stringify(meta) + caseStudy;
+    const privateFields = [
+      "start_latlng",
+      "sourceFile",
+      "injuryNotes",
+      "latitude",
+      "longitude",
+    ];
+    for (const field of privateFields) {
+      expect(publicCopy, `Marathon content exposes private field ${field}`).not.toContain(field);
+    }
+    expect(meta.githubUrl, "Marathon code must remain private").toBeNull();
   });
 });

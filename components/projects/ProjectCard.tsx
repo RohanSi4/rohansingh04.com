@@ -27,6 +27,7 @@ export default function ProjectCard({ project }: Props) {
         </span>
       </div>
 
+      <p className="mb-2 text-xs font-medium leading-relaxed text-fg/80">{project.role}</p>
       <p className="mb-5 text-sm leading-relaxed text-muted">{project.summary}</p>
 
       <div className="mt-auto flex items-end justify-between gap-2">

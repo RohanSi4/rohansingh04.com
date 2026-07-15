@@ -1,4 +1,5 @@
-import { getHistory, getSiteConfig } from "@/lib/content";
+import Link from "next/link";
+import { getFeaturedProjects, getHistory, getSiteConfig } from "@/lib/content";
 import { formatDateRange } from "@/lib/dates";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -11,6 +12,7 @@ export const metadata = pageMetadata({
 export default function ResumePage() {
   const history = getHistory();
   const site = getSiteConfig();
+  const projects = getFeaturedProjects();
   const education = history
     .filter((e) => e.type === "school")
     .sort((a, b) => b.startDate.localeCompare(a.startDate));
@@ -106,6 +108,29 @@ export default function ResumePage() {
                 <p className="text-sm text-muted">{e.summary}</p>
               )}
             </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="eyebrow mb-5 border-b border-border pb-3">
+          selected projects
+        </h2>
+        <div className="space-y-6">
+          {projects.map((project) => (
+            <article key={project.slug}>
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 className="font-semibold text-fg">{project.title}</h3>
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="inline-flex min-h-11 items-center text-sm text-accent-dim hover:text-fg"
+                >
+                  case study <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+              <p className="text-sm text-muted">{project.role}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{project.proofPoints[0]}</p>
+            </article>
           ))}
         </div>
       </section>

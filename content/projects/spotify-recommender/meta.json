@@ -4,6 +4,12 @@
   "tagline": "Start with a real Spotify song and follow the artist connections somewhere new",
   "summary": "Signal helps me get from one song I love to music worth playing next. Search the live Spotify catalog, follow releases and collaborators, or connect an invited account for deeper cuts from artists already in rotation.",
   "outcome": "The live product works with real Spotify songs, artwork, metadata, and listening links. Every pick explains its actual artist or release connection without inventing a similarity score.",
+  "role": "Solo builder across the product, recommendation logic, and Spotify integration",
+  "proofPoints": [
+    "Searches Spotify's real catalog without requiring a login",
+    "Explains the artist or release connection behind every pick",
+    "Offers a secure optional OAuth path for invited listeners"
+  ],
   "visual": "music",
   "tags": ["next.js", "typescript", "spotify"],
   "startDate": "2025-05",

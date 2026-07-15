@@ -4,6 +4,12 @@
   "tagline": "One calm morning recap for sleep, movement, and recovery",
   "summary": "Apple Health had the numbers I cared about, but I wanted a faster way to understand them each morning. Health Recap turns sleep and movement into one score, one useful takeaway, and a clean daily view.",
   "outcome": "The native SwiftUI app now has correct overlap-safe sleep math, seven-day baselines, 11 focused domain tests, and an interactive browser demo anyone can review.",
+  "role": "Solo iOS developer and product designer",
+  "proofPoints": [
+    "Overlap-safe sleep math and rolling seven-day baselines",
+    "11 focused tests around the health scoring rules",
+    "An interactive browser demo that mirrors the native recap"
+  ],
   "visual": "health",
   "tags": ["swift", "swiftui", "healthkit"],
   "startDate": "2025-04",

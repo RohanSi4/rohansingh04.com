@@ -3,7 +3,13 @@
   "title": "Marathon Prep Bot",
   "tagline": "The training dashboard I wanted while getting ready for a marathon",
   "summary": "I wanted one place that could remember my training, put each workout in context, and help me tell whether I was actually improving. So I built it around my own workout history.",
-  "outcome": "My runs now update one place where I can track progress, spot patterns, and plan what comes next.",
+  "outcome": "More than 1,300 workouts now feed a private coaching system and a public dashboard that stays useful without sharing the sensitive parts of my health data.",
+  "role": "Solo builder and the runner using it every week",
+  "proofPoints": [
+    "More than 1,300 workouts processed across history going back to 2022",
+    "HealthFit exports become privacy-safe dashboard updates automatically",
+    "Every seven-day plan is checked before it reaches the site"
+  ],
   "visual": "fitness",
   "tags": ["typescript", "data", "fitness"],
   "startDate": "2026-06",

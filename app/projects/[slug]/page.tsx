@@ -6,7 +6,9 @@ import path from "path";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { getProjectMeta, getAllProjects } from "@/lib/content";
 import { formatDateRange } from "@/lib/dates";
+import { getStaticRunningDashboard } from "@/lib/running";
 import { ProjectVisual } from "@/components/projects/ProjectFeatureCard";
+import MarathonArchitecture from "@/components/projects/MarathonArchitecture";
 import { socialImage } from "@/lib/metadata";
 
 const statusLabel = {
@@ -60,6 +62,7 @@ export default async function ProjectPage({ params }: Props) {
   if (!fs.existsSync(mdxPath)) notFound();
   const source = fs.readFileSync(mdxPath, "utf-8");
   const { content } = await compileMDX({ source, options: { parseFrontmatter: true } });
+  const running = meta.slug === "marathon-prep-bot" ? getStaticRunningDashboard() : null;
 
   return (
     <article>
@@ -73,6 +76,25 @@ export default async function ProjectPage({ params }: Props) {
           </div>
           <div>
             <p className="border-l-2 border-warm pl-4 text-sm font-medium leading-relaxed text-fg sm:text-base">{meta.outcome}</p>
+            <dl className="mt-6 border-y border-border py-5">
+              <div>
+                <dt className="eyebrow">my role</dt>
+                <dd className="mt-2 text-sm leading-relaxed text-fg">{meta.role}</dd>
+              </div>
+              <div className="mt-5">
+                <dt className="eyebrow">proof</dt>
+                <dd>
+                  <ul className="mt-2 space-y-2">
+                    {meta.proofPoints.map((point) => (
+                      <li key={point} className="flex gap-2 text-sm leading-relaxed text-muted">
+                        <span className="mt-2 size-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            </dl>
             <div className="mt-6 flex flex-wrap gap-2">
               {meta.tags.map((tag) => <span key={tag} className="rounded-full border border-border px-2.5 py-1 font-mono text-[10px] text-muted">{tag}</span>)}
             </div>
@@ -84,6 +106,12 @@ export default async function ProjectPage({ params }: Props) {
               ))}
               {meta.githubUrl && <a href={meta.githubUrl} target="_blank" rel="noopener noreferrer" className="button-secondary">see the code <span aria-hidden="true">↗</span></a>}
             </div>
+            {meta.slug === "marathon-prep-bot" && (
+              <p className="mt-4 text-xs leading-relaxed text-muted">
+                The working code stays private because the repository contains raw
+                health, timestamp, and location data.
+              </p>
+            )}
           </div>
         </div>
       </header>
@@ -91,6 +119,14 @@ export default async function ProjectPage({ params }: Props) {
       <div className="site-container overflow-hidden rounded-2xl border border-border [&>div]:min-h-[22rem]">
         <ProjectVisual visual={meta.visual} />
       </div>
+
+      {running && (
+        <MarathonArchitecture
+          totalActivities={running.totals.totalActivities}
+          runMiles={running.totals.runMiles}
+          trackedSince={running.totals.trackedSince}
+        />
+      )}
 
       <div className="content-container page-section">
         <div className="text-[0.98rem] leading-7 text-muted [&_a]:font-medium [&_a]:text-accent-dim [&_a]:underline [&_a]:underline-offset-4 [&_code]:rounded [&_code]:bg-surface [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm [&_h2]:mb-4 [&_h2]:mt-14 [&_h2]:font-serif [&_h2]:text-3xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h2]:text-fg [&_h3]:mb-3 [&_h3]:mt-10 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-fg [&_img]:my-8 [&_img]:w-full [&_img]:rounded-xl [&_img]:border [&_img]:border-border [&_li]:mb-2 [&_p]:mb-5 [&_p]:leading-7 [&_pre]:mb-6 [&_pre]:overflow-x-auto [&_pre]:rounded-xl [&_pre]:bg-surface [&_pre]:p-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6">

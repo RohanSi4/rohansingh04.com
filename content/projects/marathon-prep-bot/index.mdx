@@ -1,7 +1,43 @@
-Training apps can tell me how far I ran, but I wanted something that remembered the bigger picture. I wanted it to know the difference between a hard run and a hot run, remember the last few months, and explain what it was seeing. So I built it around my own training archive.
+## what I wanted
 
-HealthFit exports workout files from my Apple Watch and Polar H10. A TypeScript pipeline deduplicates and normalizes them, then derives heart-rate zones, TRIMP training load, aerobic decoupling, weekly volume, and long-run progression. That context feeds a CLI coach instead of disappearing inside a fitness app.
+Training apps can tell me how far I ran. I wanted something that remembered the
+bigger picture. It should know the difference between a hard run and a hot run,
+remember the last few months, and help me understand what to do next.
 
-The public [fitness page](/fitness) is another output of the same system. It shows the progress without turning the page into a technical report. Its sync step uses a strict field whitelist: useful activity summaries are published, while GPS coordinates, source filenames, health notes, and workout descriptions stay local.
+That mattered more once I signed up for my first marathon. A single workout can
+look good while the month around it tells a completely different story.
 
-My favorite part is that the project grows along with the training. Every run gives it a little more context, and every improvement to the project helps me understand the next run a little better.
+## what I built
+
+HealthFit exports workout files from my Apple Watch and Polar H10. A TypeScript
+pipeline cleans and deduplicates them, then works out heart-rate zones, TRIMP
+training load, aerobic decoupling, weekly volume, and long-run progression.
+
+The coach gets the full private history when it helps write the next week. The
+public [fitness page](/fitness) gets a much smaller version with the progress,
+recent workouts, and plan. New files are picked up automatically, and a written
+plan has to contain seven valid days before it can be published.
+
+## what was difficult
+
+The hard part was deciding what the numbers actually meant. The pipeline has to
+handle duplicate exports, edited workouts, missing recovery data, treadmill and
+outdoor runs, and weather that can make the same pace feel completely different.
+
+Privacy was just as important. Raw files include workout timestamps and GPS
+coordinates. Notes can include health context. Those stay in the private archive.
+The site only receives fields from a strict allowlist, such as distance, time,
+heart rate, training load, and broad workout type.
+
+That is also why the main repository is private. A public code link is not worth
+turning years of health and location data into a public dataset.
+
+## what works now
+
+The archive holds more than 1,300 workouts going back to 2022. A background sync
+can move a new HealthFit export all the way to the site, while the plan publisher
+checks the week and confirms that production received the same seven days.
+
+My favorite part is that the project grows with the training. Every run gives it
+more context, and every improvement to the system helps me understand the next
+run a little better.

@@ -6,7 +6,7 @@ function FitnessVisual() {
   const bars = [22, 36, 28, 54, 48, 72, 64, 92];
   return (
     <div className="flex h-full flex-col justify-between p-6 sm:p-8" aria-hidden="true">
-      <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">
+      <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-white/65">
         <span>weekly miles</span><span>live</span>
       </div>
       <div className="flex h-28 items-end gap-2">
@@ -19,8 +19,8 @@ function FitnessVisual() {
         ))}
       </div>
       <div className="flex items-end justify-between border-t border-white/15 pt-4">
-        <div><strong className="font-mono text-3xl font-medium text-white">26.2</strong><p className="text-xs text-white/50">current goal</p></div>
-        <div className="text-right"><strong className="font-mono text-lg font-medium text-white">250 mi</strong><p className="text-xs text-white/50">in the archive</p></div>
+        <div><strong className="font-mono text-3xl font-medium text-white">26.2</strong><p className="text-xs text-white/65">current goal</p></div>
+        <div className="text-right"><strong className="font-mono text-lg font-medium text-white">250 mi</strong><p className="text-xs text-white/65">in the archive</p></div>
       </div>
     </div>
   );
@@ -46,7 +46,7 @@ function RankingVisual() {
 function SiteVisual() {
   return (
     <div className="grid h-full grid-cols-5 grid-rows-4 gap-2 p-6 sm:p-8" aria-hidden="true">
-      <div className="col-span-5 flex items-center justify-between rounded-lg border border-white/[0.12] bg-white/[0.07] px-4 text-[10px] uppercase tracking-[0.15em] text-white/55">
+      <div className="col-span-5 flex items-center justify-between rounded-lg border border-white/[0.12] bg-white/[0.07] px-4 text-[10px] uppercase tracking-[0.15em] text-white/65">
         <span>rohan singh</span><span className="size-1.5 rounded-full bg-[#8dd4a0]" />
       </div>
       <div className="col-span-3 row-span-2 rounded-lg border border-white/[0.12] bg-white/[0.07] p-4">
@@ -130,6 +130,7 @@ export default function ProjectFeatureCard({
         <h3 className={`${lead ? "text-3xl sm:text-4xl" : "text-2xl"} font-serif font-semibold leading-tight tracking-tight text-fg transition-colors group-hover:text-accent-dim`}>
           {project.title}
         </h3>
+        <p className="mt-2 text-xs font-medium leading-relaxed text-fg/80">{project.role}</p>
         <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">{project.summary}</p>
         <p className="mt-5 border-l-2 border-warm pl-3 text-sm font-medium leading-relaxed text-fg">
           {project.outcome}

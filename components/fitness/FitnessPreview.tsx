@@ -48,7 +48,7 @@ export default function FitnessPreview({ data }: { data: RunningDashboard }) {
         </div>
         <div>
           <p className="text-[10px] uppercase tracking-widest text-muted">running this week</p>
-          <p className="mt-1 font-mono text-xl text-[#ee5f3b]">{data.currentWeek.runMiles.toFixed(1)} mi</p>
+          <p className="mt-1 font-mono text-xl text-warm">{data.currentWeek.runMiles.toFixed(1)} mi</p>
         </div>
       </div>
 
