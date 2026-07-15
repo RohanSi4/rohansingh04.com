@@ -77,13 +77,13 @@ export const healthMock: HealthSummary = {
   },
 
   recentActivities: [
-    { date: "2026-04-14", sport: "Run", name: "morning run", movingMins: 52, distanceMi: 3.1, calories: 480 },
-    { date: "2026-04-13", sport: "Ride", name: "sunday spin", movingMins: 48, distanceMi: 12.4, calories: 410 },
-    { date: "2026-04-12", sport: "Run", name: "easy 5k", movingMins: 31, distanceMi: 3.1, calories: 302 },
-    { date: "2026-04-11", sport: "WeightTraining", name: "upper body", movingMins: 45, distanceMi: 0, calories: 265 },
-    { date: "2026-04-10", sport: "Run", name: "tempo run", movingMins: 38, distanceMi: 4.2, calories: 388 },
-    { date: "2026-04-09", sport: "Ride", name: "afternoon ride", movingMins: 62, distanceMi: 16.1, calories: 530 },
-    { date: "2026-04-08", sport: "Run", name: "morning run", movingMins: 29, distanceMi: 3.0, calories: 286 },
+    { date: "2026-04-14", sport: "Run", name: "morning run", movingMins: 52, distanceMi: 3.1, calories: 480, averageHeartRate: 142 },
+    { date: "2026-04-13", sport: "Ride", name: "sunday spin", movingMins: 48, distanceMi: 12.4, calories: 410, averageHeartRate: 131 },
+    { date: "2026-04-12", sport: "Run", name: "easy 5k", movingMins: 31, distanceMi: 3.1, calories: 302, averageHeartRate: 138 },
+    { date: "2026-04-11", sport: "WeightTraining", name: "upper body", movingMins: 45, distanceMi: 0, calories: 265, averageHeartRate: 106 },
+    { date: "2026-04-10", sport: "Run", name: "tempo run", movingMins: 38, distanceMi: 4.2, calories: 388, averageHeartRate: 157 },
+    { date: "2026-04-09", sport: "Ride", name: "afternoon ride", movingMins: 62, distanceMi: 16.1, calories: 530, averageHeartRate: 136 },
+    { date: "2026-04-08", sport: "Run", name: "morning run", movingMins: 29, distanceMi: 3.0, calories: 286, averageHeartRate: 145 },
   ],
 
   heatmap: buildHeatmap(),

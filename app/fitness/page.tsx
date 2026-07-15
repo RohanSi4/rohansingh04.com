@@ -237,7 +237,7 @@ export default async function FitnessPage() {
           <caption className="sr-only">Ten most recent fitness activities</caption>
           <thead>
           <tr className={`${styles.runRow} ${styles.runTableHead}`}>
-            <th scope="col">date</th><th scope="col">activity</th><th scope="col">duration</th><th scope="col">distance</th><th scope="col">calories</th>
+            <th scope="col">date</th><th scope="col">activity</th><th scope="col">duration</th><th scope="col">distance</th><th scope="col">avg heart rate</th>
           </tr>
           </thead>
           <tbody>
@@ -249,7 +249,7 @@ export default async function FitnessPage() {
               </td>
               <td>{activity.movingMins} <small>min</small></td>
               <td>{activity.distanceMi > 0 ? activity.distanceMi.toFixed(1) : "n/a"} <small>{activity.distanceMi > 0 ? "mi" : ""}</small></td>
-              <td>{activity.calories && activity.calories > 0 ? activity.calories.toLocaleString() : "n/a"} <small>{activity.calories && activity.calories > 0 ? "kcal" : ""}</small></td>
+              <td>{activity.averageHeartRate && activity.averageHeartRate > 0 ? Math.round(activity.averageHeartRate) : "n/a"} <small>{activity.averageHeartRate && activity.averageHeartRate > 0 ? "bpm" : ""}</small></td>
             </tr>
           ))}
           </tbody>

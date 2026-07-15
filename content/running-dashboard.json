@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-14T23:38:46.929Z",
+  "generatedAt": "2026-07-15T00:04:01.283Z",
   "dataThrough": "2026-07-13",
   "race": {
     "name": "Richmond Marathon",
@@ -826,7 +826,7 @@
     ]
   },
   "health": {
-    "updatedAt": "2026-07-14T23:38:46.929Z",
+    "updatedAt": "2026-07-15T00:04:01.283Z",
     "today": {
       "exerciseMinutes": 0,
       "activeCalories": 0,
@@ -871,7 +871,8 @@
         "name": "Strength training",
         "movingMins": 89,
         "distanceMi": 0,
-        "calories": 482
+        "calories": 482,
+        "averageHeartRate": 102
       },
       {
         "date": "2026-07-13",
@@ -879,7 +880,8 @@
         "name": "Strength training",
         "movingMins": 9,
         "distanceMi": 0,
-        "calories": 44
+        "calories": 44,
+        "averageHeartRate": 101
       },
       {
         "date": "2026-07-13",
@@ -887,7 +889,8 @@
         "name": "Treadmill run",
         "movingMins": 19,
         "distanceMi": 2,
-        "calories": 237
+        "calories": 237,
+        "averageHeartRate": 130
       },
       {
         "date": "2026-07-13",
@@ -895,7 +898,8 @@
         "name": "Treadmill run",
         "movingMins": 40,
         "distanceMi": 4.33,
-        "calories": 538
+        "calories": 538,
+        "averageHeartRate": 140
       },
       {
         "date": "2026-07-12",
@@ -903,7 +907,8 @@
         "name": "Walk",
         "movingMins": 72,
         "distanceMi": 2.66,
-        "calories": 266
+        "calories": 266,
+        "averageHeartRate": 86
       },
       {
         "date": "2026-07-12",
@@ -911,7 +916,8 @@
         "name": "Walk",
         "movingMins": 26,
         "distanceMi": 1.01,
-        "calories": 100
+        "calories": 100,
+        "averageHeartRate": 96
       },
       {
         "date": "2026-07-11",
@@ -919,7 +925,8 @@
         "name": "Outdoor run",
         "movingMins": 104,
         "distanceMi": 10.69,
-        "calories": 1326
+        "calories": 1326,
+        "averageHeartRate": 140
       },
       {
         "date": "2026-07-09",
@@ -927,7 +934,8 @@
         "name": "Strength training",
         "movingMins": 77,
         "distanceMi": 0,
-        "calories": 372
+        "calories": 372,
+        "averageHeartRate": 97
       },
       {
         "date": "2026-07-09",
@@ -935,7 +943,8 @@
         "name": "Outdoor run",
         "movingMins": 47,
         "distanceMi": 5.13,
-        "calories": 643
+        "calories": 643,
+        "averageHeartRate": 141
       },
       {
         "date": "2026-07-08",
@@ -943,7 +952,8 @@
         "name": "Outdoor run",
         "movingMins": 24,
         "distanceMi": 2.8,
-        "calories": 348
+        "calories": 348,
+        "averageHeartRate": 144
       },
       {
         "date": "2026-07-07",
@@ -951,7 +961,8 @@
         "name": "Strength training",
         "movingMins": 78,
         "distanceMi": 0,
-        "calories": 420
+        "calories": 420,
+        "averageHeartRate": 101
       },
       {
         "date": "2026-07-07",
@@ -959,7 +970,8 @@
         "name": "Treadmill run",
         "movingMins": 19,
         "distanceMi": 2,
-        "calories": 252
+        "calories": 252,
+        "averageHeartRate": 139
       },
       {
         "date": "2026-07-07",
@@ -967,7 +979,8 @@
         "name": "Treadmill run",
         "movingMins": 36,
         "distanceMi": 3.68,
-        "calories": 506
+        "calories": 506,
+        "averageHeartRate": 143
       },
       {
         "date": "2026-07-06",
@@ -975,7 +988,8 @@
         "name": "Strength training",
         "movingMins": 49,
         "distanceMi": 0,
-        "calories": 233
+        "calories": 233,
+        "averageHeartRate": 98
       },
       {
         "date": "2026-07-06",
@@ -983,7 +997,8 @@
         "name": "Treadmill run",
         "movingMins": 38,
         "distanceMi": 3.84,
-        "calories": 492
+        "calories": 492,
+        "averageHeartRate": 138
       }
     ],
     "heatmap": [

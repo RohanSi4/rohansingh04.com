@@ -47,6 +47,7 @@ export type HealthSummary = {
     movingMins: number;
     distanceMi: number;
     calories?: number;
+    averageHeartRate?: number | null;
   }>;
 
   // exactly 365 entries, ordered oldest to newest

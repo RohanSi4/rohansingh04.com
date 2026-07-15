@@ -151,6 +151,9 @@ function buildHealthSummary(activities, updatedAt) {
       movingMins: Math.max(0, Math.round((activity.moving_time ?? 0) / 60)),
       distanceMi: round((activity.distance ?? 0) * MILES_PER_METER, 2),
       calories: Math.max(0, Math.round(activity.calories ?? 0)),
+      averageHeartRate: activity.average_heartrate == null
+        ? null
+        : Math.round(activity.average_heartrate),
     }))
     .sort((a, b) => b.date.localeCompare(a.date));
 

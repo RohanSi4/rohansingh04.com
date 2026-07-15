@@ -24,9 +24,10 @@ describe("running dashboard snapshot", () => {
     ]);
     expect(data.totals.totalActivities).toBeGreaterThan(1_000);
     expect(data.health.recentActivities.every((activity) => (
-      typeof activity.calories === "number" && activity.calories >= 0
+      activity.averageHeartRate === null
+      || (typeof activity.averageHeartRate === "number" && activity.averageHeartRate > 0)
     ))).toBe(true);
-    expect(data.health.recentActivities.some((activity) => (activity.calories ?? 0) > 0)).toBe(true);
+    expect(data.health.recentActivities.some((activity) => (activity.averageHeartRate ?? 0) > 0)).toBe(true);
     expect(data.trainingPlan?.days.length).toBeGreaterThan(0);
     expect(data.race.trainingStart).toBe("2026-06-22");
   });
