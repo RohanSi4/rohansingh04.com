@@ -44,6 +44,7 @@ export default function Header() {
         {/* name / home link */}
         <Link
           href="/"
+          aria-current={pathname === "/" ? "page" : undefined}
           className="flex min-h-11 items-center font-serif text-lg font-semibold tracking-tight text-fg transition-colors hover:text-accent"
         >
           rohan singh
@@ -87,7 +88,6 @@ export default function Header() {
             aria-label={menuOpen ? "close menu" : "open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
-            aria-haspopup="true"
             onClick={() => setMenuOpen((o) => !o)}
             className="flex size-11 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface hover:text-fg"
           >

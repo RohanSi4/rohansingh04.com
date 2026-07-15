@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import fs from "fs";
 import path from "path";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { daysSince } from "@/lib/dates";
+import { pageMetadata } from "@/lib/metadata";
 import SpotifyNowPlaying from "@/components/widgets/SpotifyNowPlaying";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Now",
   description: "What Rohan Singh is working on, training for, and thinking about right now.",
-  alternates: { canonical: "/now" },
-};
+  path: "/now",
+});
 
 const STALE_DAYS = 90;
 

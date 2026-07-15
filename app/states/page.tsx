@@ -1,14 +1,14 @@
-import type { Metadata } from "next";
 import { getStates } from "@/lib/content";
 import { isAdmin } from "@/lib/admin-auth";
+import { pageMetadata } from "@/lib/metadata";
 import StatesMap from "@/components/states/StatesMap";
 import TravelNav from "@/components/globe/TravelNav";
 
-export const metadata: Metadata = {
-  title: "states",
+export const metadata = pageMetadata({
+  title: "States",
   description: "US states Rohan has visited.",
-  alternates: { canonical: "/states" },
-};
+  path: "/states",
+});
 
 export default async function StatesPage() {
   const [states, admin] = await Promise.all([getStates(), isAdmin()]);

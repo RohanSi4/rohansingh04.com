@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { isAdmin } from "@/lib/admin-auth";
 import { getPlaces } from "@/lib/content";
+import { pageMetadata } from "@/lib/metadata";
 import TravelNav from "@/components/globe/TravelNav";
 
-export const metadata: Metadata = {
-  title: "travel",
+export const metadata = pageMetadata({
+  title: "Travel journal",
   description: "Places Rohan has visited and the photos he brought home.",
-  alternates: { canonical: "/travel-list" },
-};
+  path: "/travel-list",
+});
 
 export const dynamic = "force-dynamic";
 

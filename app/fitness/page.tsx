@@ -13,6 +13,7 @@ import { TodayPlan } from "./TodayPlan";
 import TrainingHistoryChart from "./TrainingHistoryChart";
 import { WeeklyPlan } from "./WeeklyPlan";
 import styles from "./fitness.module.css";
+import { socialImage } from "@/lib/metadata";
 
 export const metadata: Metadata = {
   title: "fitness",
@@ -23,6 +24,13 @@ export const metadata: Metadata = {
     title: "fitness in progress",
     description: "Running, lifting, and training for whatever comes next.",
     url: "/fitness",
+    images: [socialImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "fitness in progress",
+    description: "Running, lifting, and training for whatever comes next.",
+    images: [socialImage],
   },
 };
 

@@ -68,6 +68,5 @@ export async function POST(req: NextRequest) {
   await setRunningDashboardKV(data);
   revalidatePath("/");
   revalidatePath("/fitness");
-  revalidatePath("/running");
   return NextResponse.json({ ok: true, updatedAt: data.generatedAt, dataThrough: data.dataThrough });
 }

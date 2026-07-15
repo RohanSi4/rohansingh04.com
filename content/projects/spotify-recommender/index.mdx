@@ -1,52 +1,48 @@
-The music I want changes with the moment. Sometimes I want more songs like one
-I already love. Sometimes I know the energy I want but not the song. I built
-Signal so either starting point could lead somewhere useful, and so the result
-would explain itself instead of feeling random.
+The best recommendations usually start with one song I cannot stop playing.
+Signal takes that song and gives me a few honest paths outward instead of
+another generic playlist.
 
-Pick a reference track or a mood and the app builds a target across nine audio
-features. It normalizes the different scales, applies documented weights, ranks
-the candidate catalog, and shows the two closest traits for every result.
+The [live app](https://signal-recommender.vercel.app) searches Spotify's real
+catalog. Pick any song and Signal pulls from that artist's releases, follows
+the collaborators it finds there, and brings back tracks with real artwork,
+album details, release dates, and direct Spotify links. Public search works
+without an account.
 
-The [Signal browser demo](https://signal-recommender.vercel.app) ports that same
-weighted nine-feature method to TypeScript. Choose any of 72 deterministic demo
-tracks or start from a mood, adjust the blend, and rank the catalog entirely in
-your browser. The interaction is real, nothing is sent to a server, and no
-Spotify login is required.
+![Signal building a real mix from Spotify releases and artist connections](/projects/spotify-signal.png)
 
-![Signal ranking tracks from its offline demo catalog](/projects/spotify-signal.png)
+## how the mix comes together
 
-## making it work without a perfect API setup
+Signal starts with the artists on the selected track and walks through their
+albums and singles. It looks for recurring collaborators, follows a few of
+those connections into their catalogs, removes duplicates and low-value
+versions, and keeps one album or artist from taking over the whole result.
 
-Spotify changed access to several of the endpoints this project originally
-used. New development apps often cannot read Audio Features or use Spotify's
-Recommendations endpoint at all. Instead of hiding that limitation, I split
-the ranking engine from the Spotify connection.
+Every card says why it appeared, such as more from the seed artist or connected
+through a featured artist. Those are real catalog relationships. The interface
+does not show a made-up similarity percentage or pretend Spotify exposes an
+audio match that the current API cannot provide.
 
-The default app now runs against a deterministic 72-track demo catalog. It
-needs no account, credentials, or network connection. Spotify OAuth is still
-there for library access and private playlist export when an app has the right
-permissions, but the actual recommendation work can be opened, tested, and
-understood by anyone.
+## a personal path for invited listeners
 
-The Python engine remains the reference implementation for Spotify experiments,
-the evaluator, and the test suite. The hosted TypeScript experience is the
-public proof layer. It uses made-up track names and feature profiles because
-Spotify's development rules do not allow republishing its catalog as an open
-portfolio dataset.
+Spotify login is optional. For an invited account, Signal reads the listener's
+medium-term top tracks, finds the artists that show up most, and looks past the
+obvious favorites for songs that are not already in that top rotation. The
+result is a deeper-cuts mix grounded in what that person actually plays.
 
-## what changed in the rebuild
+Spotify currently limits new development apps to five invited listeners, so
+that personal path is a small beta. The public song search and song-based mix
+still work for everyone.
 
-- fixed a ranking bug that excluded the entire user library instead of only the
-  selected seed tracks
-- moved the recommendation logic into a credential-free core
-- added an offline evaluator and a fixed synthetic regression set
-- made every result include its score and plain-language match reasons
-- replaced the older UI with one focused Streamlit flow
-- added nine tests around ranking order, exclusions, invalid data, pagination,
-  API restrictions, and evaluator determinism
+## building around the API that really exists
 
-The included fixture reaches 100% hit-rate@5 and 0.993 mean reciprocal rank,
-but those numbers are only regression checks on deliberately separated
-synthetic clusters. They are not a claim about real listeners. The result I
-care about is simpler: the project now works out of the box, and its claims can
-be reproduced from the repository.
+The current product is a Next.js and TypeScript app. Spotify credentials stay
+on the server behind route handlers, account sessions use encrypted cookies,
+OAuth state is checked on callback, expired access tokens can refresh, and
+public endpoints have basic rate limits. The browser only receives the track
+details it needs to render the experience.
+
+Signal began as a Python audio-feature ranking prototype. Spotify later removed
+access to several recommendation and analysis endpoints for most new apps, so I
+rebuilt the live product around catalog search, releases, top tracks, and real
+artist connections. The original Python work is still in the repository, but
+the Spotify-backed web app is now the project I want people to use.

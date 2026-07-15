@@ -75,7 +75,7 @@ function MusicVisual() {
         className="object-cover object-top"
       />
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-6 pb-5 pt-16 font-mono text-[10px] uppercase tracking-[0.16em] text-white/75">
-        the working offline demo
+        live Spotify music discovery
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getAllProjects, getFeaturedProjects } from "@/lib/content";
 import ProjectCard from "@/components/projects/ProjectCard";
 import ProjectFeatureCard from "@/components/projects/ProjectFeatureCard";
+import { socialImage } from "@/lib/metadata";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -12,11 +13,13 @@ export const metadata: Metadata = {
     title: "Projects | Rohan Singh",
     description: "Things I have built on my own and with good people.",
     url: "/projects",
+    images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
     title: "Projects | Rohan Singh",
     description: "Things I have built on my own and with good people.",
+    images: [socialImage],
   },
 };
 

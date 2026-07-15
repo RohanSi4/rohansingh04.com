@@ -9,7 +9,7 @@
   "startDate": "2025-04",
   "endDate": "2026-07",
   "status": "shipped",
-  "featured": true,
+  "featured": false,
   "githubUrl": "https://github.com/RohanSi4/Health-Tracker-IOS-App",
   "liveUrl": "https://health-recap.vercel.app",
   "subProjects": []

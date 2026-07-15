@@ -17,7 +17,7 @@ export default async function TravelPhotoAdminPage() {
   const places = await getPlaces();
 
   return (
-    <main className="site-container page-section">
+    <div className="site-container page-section">
       <Link href="/travel-list" className="text-sm text-muted hover:text-fg">
         ← back to travel
       </Link>
@@ -30,6 +30,6 @@ export default async function TravelPhotoAdminPage() {
         </p>
       </header>
       <TravelPhotoManager initialPlaces={places} />
-    </main>
+    </div>
   );
 }

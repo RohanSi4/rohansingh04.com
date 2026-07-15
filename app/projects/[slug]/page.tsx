@@ -7,6 +7,7 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import { getProjectMeta, getAllProjects } from "@/lib/content";
 import { formatDateRange } from "@/lib/dates";
 import { ProjectVisual } from "@/components/projects/ProjectFeatureCard";
+import { socialImage } from "@/lib/metadata";
 
 const statusLabel = {
   "in-progress": "still working on this",
@@ -37,11 +38,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${meta.title} | Rohan Singh`,
       description: meta.summary,
       url: `/projects/${meta.slug}`,
+      images: [socialImage],
     },
     twitter: {
       card: "summary_large_image",
       title: `${meta.title} | Rohan Singh`,
       description: meta.summary,
+      images: [socialImage],
     },
   };
 }

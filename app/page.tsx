@@ -6,6 +6,7 @@ import { formatDateRange } from "@/lib/dates";
 import { getRunningDashboard } from "@/lib/running";
 import ProjectFeatureCard from "@/components/projects/ProjectFeatureCard";
 import FitnessPreview from "@/components/fitness/FitnessPreview";
+import { socialImage } from "@/lib/metadata";
 
 export const metadata: Metadata = {
   title: { absolute: "Rohan Singh: projects, running, and more" },
@@ -16,11 +17,13 @@ export const metadata: Metadata = {
     title: "Rohan Singh: projects, running, and more",
     description: "A UVA student making things he actually wants to use.",
     url: "/",
+    images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
     title: "Rohan Singh: projects, running, and more",
     description: "A UVA student making things he actually wants to use.",
+    images: [socialImage],
   },
 };
 

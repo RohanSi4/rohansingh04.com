@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
 import { getHistory } from "@/lib/content";
 import { formatDateRange } from "@/lib/dates";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Experience",
   description: "Where Rohan Singh has worked, what he did there, and the results he is proud of.",
-  alternates: { canonical: "/history" },
-};
+  path: "/history",
+});
 
 const typeLabel: Record<string, string> = {
   work: "work",

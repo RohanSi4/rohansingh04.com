@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
 import { getHistory, getSiteConfig } from "@/lib/content";
 import { formatDateRange } from "@/lib/dates";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Résumé",
   description: "Rohan Singh's education, software engineering experience, and technical skills.",
-  alternates: { canonical: "/resume" },
-};
+  path: "/resume",
+});
 
 export default function ResumePage() {
   const history = getHistory();

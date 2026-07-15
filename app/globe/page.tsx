@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getPlaces } from "@/lib/content";
 import { isAdmin } from "@/lib/admin-auth";
+import { pageMetadata } from "@/lib/metadata";
 import GlobeLoader from "@/components/globe/GlobeLoader";
 import TravelNav from "@/components/globe/TravelNav";
 
-export const metadata: Metadata = {
-  title: "travel",
+export const metadata = pageMetadata({
+  title: "Travel globe",
   description: "Places Rohan has visited around the world.",
-  alternates: { canonical: "/globe" },
-};
+  path: "/globe",
+});
 
 export default async function GlobePage() {
   const [places, admin] = await Promise.all([getPlaces(), isAdmin()]);
