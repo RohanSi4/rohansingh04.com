@@ -68,15 +68,18 @@ export default async function ProjectPage({ params }: Props) {
     <article>
       <header className="site-container page-section pb-10 sm:pb-14">
         <Link href="/projects" className="inline-flex min-h-11 items-center text-sm text-muted transition-colors hover:text-fg">← all projects</Link>
-        <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_.75fr] lg:items-end">
-          <div>
+        <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(22rem,.75fr)] lg:items-start lg:gap-16">
+          <div className="lg:pt-2">
             <p className="eyebrow mb-4">{statusLabel[meta.status]} · {formatDateRange(meta.startDate, meta.endDate)}</p>
             <h1 className="page-title">{meta.title}</h1>
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{meta.summary}</p>
           </div>
-          <div>
+          <aside
+            aria-label="Project proof"
+            className="rounded-2xl border border-border bg-surface/45 p-5 sm:p-7"
+          >
             <p className="border-l-2 border-warm pl-4 text-sm font-medium leading-relaxed text-fg sm:text-base">{meta.outcome}</p>
-            <dl className="mt-6 border-y border-border py-5">
+            <dl className="mt-6 border-t border-border pt-5">
               <div>
                 <dt className="eyebrow">my role</dt>
                 <dd className="mt-2 text-sm leading-relaxed text-fg">{meta.role}</dd>
@@ -112,7 +115,7 @@ export default async function ProjectPage({ params }: Props) {
                 health, timestamp, and location data.
               </p>
             )}
-          </div>
+          </aside>
         </div>
       </header>
 
@@ -128,8 +131,8 @@ export default async function ProjectPage({ params }: Props) {
         />
       )}
 
-      <div className="content-container page-section">
-        <div className="text-[0.98rem] leading-7 text-muted [&_a]:font-medium [&_a]:text-accent-dim [&_a]:underline [&_a]:underline-offset-4 [&_code]:rounded [&_code]:bg-surface [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm [&_h2]:mb-4 [&_h2]:mt-14 [&_h2]:font-serif [&_h2]:text-3xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h2]:text-fg [&_h3]:mb-3 [&_h3]:mt-10 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-fg [&_img]:my-8 [&_img]:w-full [&_img]:rounded-xl [&_img]:border [&_img]:border-border [&_li]:mb-2 [&_p]:mb-5 [&_p]:leading-7 [&_pre]:mb-6 [&_pre]:overflow-x-auto [&_pre]:rounded-xl [&_pre]:bg-surface [&_pre]:p-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6">
+      <div className="content-container pb-16 pt-14 sm:pb-24 sm:pt-20">
+        <div className="text-[0.98rem] leading-7 text-muted [&>h2:first-child]:mt-0 [&_a]:font-medium [&_a]:text-accent-dim [&_a]:underline [&_a]:underline-offset-4 [&_code]:rounded [&_code]:bg-surface [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm [&_h2]:mb-4 [&_h2]:mt-14 [&_h2]:font-serif [&_h2]:text-3xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h2]:text-fg [&_h3]:mb-3 [&_h3]:mt-10 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-fg [&_img]:my-8 [&_img]:w-full [&_img]:rounded-xl [&_img]:border [&_img]:border-border [&_li]:mb-2 [&_p]:mb-5 [&_p]:leading-7 [&_pre]:mb-6 [&_pre]:overflow-x-auto [&_pre]:rounded-xl [&_pre]:bg-surface [&_pre]:p-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6">
           {content}
         </div>
       </div>

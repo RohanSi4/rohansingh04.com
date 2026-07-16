@@ -45,6 +45,20 @@ test("featured projects show current proof and working calls to action", async (
   await expect(page.locator("body")).not.toContainText(/72[- ]?(tracks?|songs?)/i);
 });
 
+for (const path of ["/projects/marathon-prep-bot", "/projects/spotify-recommender"]) {
+  test(`${path} keeps the project title aligned with its proof`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(path);
+
+    const title = await page.getByRole("heading", { level: 1 }).boundingBox();
+    const proof = await page.getByLabel("Project proof").boundingBox();
+
+    expect(title).not.toBeNull();
+    expect(proof).not.toBeNull();
+    expect(Math.abs((title?.y ?? 0) - (proof?.y ?? 0))).toBeLessThan(120);
+  });
+}
+
 test("web resume includes the selected project proof", async ({ page }) => {
   await page.goto("/resume");
   const projects = page.getByRole("heading", { level: 2, name: "selected projects" });
