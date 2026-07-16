@@ -1131,6 +1131,17 @@
   font-weight: 600;
 }
 
+/* Single-column variant of .pipeline for sections with an intro but no steps
+   list (the template CTA) — without this the grid reserves an empty 400px+
+   second column and squeezes the text into the left half. */
+.pipelineSingle {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.pipelineSingle .pipelineIntro p {
+  max-width: 62ch;
+}
+
 .pipelineSteps { counter-reset: pipeline; }
 
 .pipelineSteps li {

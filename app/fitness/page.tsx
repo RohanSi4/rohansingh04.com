@@ -281,7 +281,7 @@ export default async function FitnessPage() {
         </ol>
       </section>
 
-      <section className={styles.pipeline} aria-labelledby="template-title">
+      <section className={`${styles.pipeline} ${styles.pipelineSingle}`} aria-labelledby="template-title">
         <div className={styles.pipelineIntro}>
           <p>07 / try it yourself</p>
           <h2 id="template-title">Want an AI coach of your own?</h2>
