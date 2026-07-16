@@ -17,7 +17,7 @@ I built the full path from raw ratings to a site someone can use:
 
 ![Ranked movie recommendations with scores and reasons](/projects/movie-recommender-results.jpg)
 
-The system has three parts. Python ingests MovieLens data, adds TMDB metadata,
+The system has three parts. Python loads MovieLens data, adds TMDB metadata,
 builds features, and evaluates a LightGBM ranking model. A Go API handles the
 live recommendation path. Next.js turns those results into something easy to
 search and compare.
@@ -38,5 +38,5 @@ not serving yet.
 
 The [live app](https://movie-reccomender-system-red.vercel.app/) supports title
 search and user-based recommendations with posters, scores, and short reasons.
-The current Go path responds in about 17 milliseconds, and the repository keeps
-the offline evaluation separate so the quality claim stays reproducible.
+The current Go path responds in about 17 milliseconds. The offline evaluation
+stays separate so anyone can rerun it and check the quality claim.

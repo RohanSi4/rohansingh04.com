@@ -26,7 +26,7 @@ outdoor runs, and weather that can make the same pace feel completely different.
 
 Privacy was just as important. Raw files include workout timestamps and GPS
 coordinates. Notes can include health context. Those stay in the private archive.
-The site only receives fields from a strict allowlist, such as distance, time,
+The site only gets the specific fields I chose to share, such as distance, time,
 heart rate, training load, and broad workout type.
 
 That is also why the main repository is private. A public code link is not worth
@@ -44,12 +44,13 @@ run a little better.
 
 ## try it yourself
 
-The private repo stays private, but the machinery doesn't have to. I extracted
-the whole system — the coaching manual, the onboarding interview, the FIT data
-pipeline, the analysis toolkit — into a public template with none of my data in
-it: [marathon-coach-starter](https://github.com/RohanSi4/marathon-coach-starter).
+The private repo stays private, but I made the parts anyone can use public. I
+pulled the coaching guide, setup questions, workout import, and analysis tools
+into a template with none of my data in it:
+[marathon-coach-starter](https://github.com/RohanSi4/marathon-coach-starter).
 
 Open it in Claude Code and say "you're my running coach, onboard me," and it
-interviews you — what you're training for, your goals, your injury history, your
-shoes — then configures itself and writes your first week. There's also a
-standalone prompt version that works in any chatbot, no code required.
+will ask what you're training for, what your goals are, whether you have any
+injuries, and what shoes you run in. Then it sets itself up and writes your first
+week. There is also a standalone prompt that works in any chatbot, so you do not
+need to know how to code.

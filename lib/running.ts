@@ -48,7 +48,7 @@ export type PublicTrainingPlan = {
   days: PublicPlanDay[];
   // Off-watch work the coach logged manually (date → task keywords, e.g.
   // { "2026-07-15": ["circuit"] }). Ticks plan tasks that no recorded
-  // activity can prove — the circuit and similar unrecorded sessions.
+  // activity can prove, such as a circuit or another unrecorded session.
   completions?: Record<string, string[]> | null;
 };
 

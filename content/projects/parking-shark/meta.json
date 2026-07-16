@@ -4,7 +4,7 @@
   "tagline": "A marketplace for renting the parking spot someone else is not using",
   "summary": "Built with a four-person UVA team, Parking Shark lets renters find and reserve neighborhood parking while hosts manage listings, availability, bookings, and reviews.",
   "outcome": "We built the complete renter and host flow around a 13-table MySQL model, then added a hosted workflow demo, conflict-safe reservations, role checks, tests, and CI.",
-  "role": "Primary full-stack contributor on a four-person UVA team",
+  "role": "Full-stack builder on a four-person UVA team",
   "proofPoints": [
     "A complete renter and host lifecycle backed by 13 MySQL tables",
     "Conflict-safe reservations and role-aware route protection",

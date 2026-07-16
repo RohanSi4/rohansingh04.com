@@ -4,14 +4,13 @@ go, and is there anything useful I should carry into today?
 
 Health Recap reads sleep, steps, walking distance, and active energy on iPhone.
 It turns them into one daily score, a plain-language takeaway, and the details
-behind both. On Simulator it automatically loads the same deterministic sample
-day every time, so the whole experience is easy to open and review without my
-personal Health data.
+behind both. On Simulator it loads the same sample day every time, so anyone can
+open the app and see how it works without needing my personal Health data.
 
 The [interactive browser demo](https://health-recap.vercel.app) lets anyone
 switch between three sample days and inspect the score, sleep breakdown, and
-movement comparisons. It proves the complete presentation and sample-data
-flow. The original product is still the native SwiftUI app, and only that app
+movement comparisons. It shows what the app looks like and how the sample data
+moves through it. The original product is still the native SwiftUI app, and only that app
 can request read-only Apple Health access. The browser demo never connects to
 HealthKit or uploads health data.
 
@@ -43,7 +42,7 @@ schedule a recap after it sees a completed sleep session. Background HealthKit
 delivery is not built yet, so those reminders are best-effort rather than a
 guaranteed alarm.
 
-The current suite has 11 domain tests plus a deterministic UI flow covering the
+The current suite has 11 focused tests plus a repeatable UI test covering the
 sample recap's main sections. Real HealthKit queries still need a signed iPhone,
 but the interface, scoring rules, baselines, and failure states can all be
 reviewed in Simulator.

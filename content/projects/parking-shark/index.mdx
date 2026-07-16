@@ -31,11 +31,11 @@ actions crossed table boundaries.
 - a database-aware health check catches the difference between a running web
   server and a working app
 
-The hosted version is intentionally a portfolio demo, not a replacement for
-that database system. It runs the marketplace workflow against safe sample
-state because the original course database is not publicly available. The
+The hosted version is a way to try the project, not a replacement for the
+original database system. It runs the marketplace flow with safe sample data
+because the course database is not public. The original app still uses the
 Express routes, MySQL schema, stored procedure, overlap trigger, and local
-database bootstrap remain the source of truth for the original application.
+database setup.
 
 ![Host dashboard with listings, reservations, and reviews](/projects/parking-shark-hosting.png)
 
@@ -43,9 +43,9 @@ database bootstrap remain the source of truth for the original application.
 
 The first course version proved the idea, but it still had the kind of gaps
 that show up when a team is racing toward a deadline. I came back to it and
-tightened the boundaries: stricter validation, role-safe actions, same-origin
-request protection, rate limiting around login, security headers, a clean
-database bootstrap, automated tests, and CI.
+fixed the parts that felt rushed: stricter validation, checks that keep renters
+and hosts in the right places, request protection, login rate limits, security
+headers, a clean database setup, automated tests, and CI.
 
 That second pass made the project more useful to show because it is no longer
 just a set of screens. The renter and host paths now agree with the rules in the

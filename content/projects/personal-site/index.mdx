@@ -17,23 +17,20 @@ personal parts when they want to know who is behind the work.
 
 ## keeping the personal stuff personal
 
-My workout archive includes information that should stay private. The public
-fitness flow therefore publishes an explicit set of summary fields instead of
-copying raw activity files into the site. Mileage, duration, activity type, and
-aggregate progress can appear publicly; GPS coordinates, source filenames,
-health notes, and workout descriptions remain local.
+My workout archive includes information that should stay private, so the fitness
+page only gets the few summary fields it needs. Mileage, duration, activity type,
+and overall progress can appear publicly. GPS coordinates, source filenames,
+health notes, and workout descriptions stay on my laptop.
 
-This is a small design decision with a large effect: the dashboard can update
-from real training while the boundary between a useful public story and a
-private health archive remains clear.
+That lets the dashboard update from my real training without quietly putting my
+full health history on the internet.
 
 ## why I kept it simple
 
-I kept the content model deliberately lightweight. JSON and MDX are easier to
-review and version than a CMS for a site maintained by one person, while live
-APIs and data stores are reserved for features that actually benefit from them.
-The globe and maps are richer interactive surfaces, but most pages stay fast,
-readable, and server-rendered.
+I kept the site simple on purpose. JSON and MDX are easier to review than a CMS
+for a site maintained by one person, and I only reach for live APIs or databases
+when they actually add something. The globe and maps are fun to play with, but
+most pages stay fast and easy to read.
 
 The visual direction follows the same rule. Data and interaction are here when
 they add something; they should never make someone work to understand who I am

@@ -4,7 +4,7 @@
   "tagline": "Movie recommendations that go beyond another trending list",
   "summary": "I wanted better movie recommendations. I also wanted to turn the model into an app instead of leaving it in a notebook. Python does the learning, Go keeps it fast, and the site lets anyone try it.",
   "outcome": "The recommendations beat my baseline by 11.8%, and the app returns them in about 17 milliseconds.",
-  "role": "Solo builder across the ML pipeline, Go API, and web app",
+  "role": "Built the ML model, Go API, and web app myself",
   "proofPoints": [
     "11.8% lift over the baseline in offline ranking evaluation",
     "About 17 milliseconds for the current Go recommendation path",

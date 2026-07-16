@@ -41,7 +41,7 @@ describe("running dashboard snapshot", () => {
       "keyRuns",
       "latitude",
       "longitude",
-      "—",
+      "\u2014",
     ];
 
     for (const field of forbidden) {

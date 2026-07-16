@@ -284,12 +284,12 @@ export default async function FitnessPage() {
       <section className={`${styles.pipeline} ${styles.pipelineSingle}`} aria-labelledby="template-title">
         <div className={styles.pipelineIntro}>
           <p>07 / try it yourself</p>
-          <h2 id="template-title">Want an AI coach of your own?</h2>
+          <h2 id="template-title">Want to try the coach yourself?</h2>
           <p>
-            Everything behind this page — the coaching logic, the Apple Watch data
-            pipeline, the weekly plans — started as a template anyone can use. My
-            data stays home; the machinery is public. It interviews you about your
-            race, your goals, and your shoes, then starts coaching.
+            This page runs on the same setup I use for my own training. I made a
+            public version so anyone can use it without getting any of my personal
+            data. Tell it what you&apos;re training for, your goals, and the shoes you
+            run in. It&apos;ll build your first week and start coaching from there.
           </p>
           <a
             href="https://github.com/RohanSi4/marathon-coach-starter"
