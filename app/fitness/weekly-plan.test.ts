@@ -75,4 +75,40 @@ describe("weekly plan rows", () => {
       isExtra: false,
     });
   });
+
+  it("ticks off-watch work from coach-logged completions", () => {
+    const rows = buildWeekPlanRows([{
+      date: "2026-07-15",
+      dayLabel: "Wed 7/15",
+      text: "Recovery 3 miles at an easy effort + circuit",
+      isKeyDay: false,
+    }], [{
+      date: "2026-07-15",
+      sport: "Run",
+      name: "Outdoor run",
+      movingMins: 32,
+      distanceMi: 3.5,
+    }], "2026-07-16", { "2026-07-15": ["circuit"] });
+
+    expect(rows[0].otherTasks[0]).toEqual({
+      id: "2026-07-15:other:1",
+      text: "circuit",
+      actual: "done · coach-logged",
+      trackable: true,
+      isExtra: false,
+    });
+    // A recorded activity still wins over a manual tick.
+    expect(rows[0].runTasks[0].actual).toBe("3.5 mi · 32 min");
+  });
+
+  it("does not tick a completion for a different day or unmatched task", () => {
+    const rows = buildWeekPlanRows([{
+      date: "2026-07-16",
+      dayLabel: "Thu 7/16",
+      text: "Easy 6 miles at an easy effort + circuit",
+      isKeyDay: false,
+    }], [], "2026-07-16", { "2026-07-15": ["circuit"] });
+
+    expect(rows[0].otherTasks[0].actual).toBeNull();
+  });
 });

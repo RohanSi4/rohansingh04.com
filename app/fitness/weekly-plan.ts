@@ -86,22 +86,29 @@ export function buildWeekPlanRows(
   days: PublicPlanDay[],
   activities: HealthActivity[],
   today: string,
+  completions: Record<string, string[]> = {},
 ): WeekPlanRow[] {
   return days.map((day) => {
     const dayActivities = activities.filter((activity) => activity.date === day.date);
+    const dayCompletions = completions[day.date] ?? [];
     const usedSports = new Set<string>();
     const runTasks: WeekPlanTask[] = [];
     const otherTasks: WeekPlanTask[] = [];
 
     day.text.split(/\s+\+\s+/).map(cleanTask).filter(Boolean).forEach((text, index) => {
       const spec = taskSpec(text);
-      const actual = actualText(spec.sports, dayActivities);
+      let actual = actualText(spec.sports, dayActivities);
       if (actual) spec.sports.forEach((sport) => usedSports.add(sport));
+      // Coach-logged completion covers work no watch recording can prove
+      // (the corrective circuit done at home, etc.).
+      if (!actual && dayCompletions.some((k) => text.toLowerCase().includes(k.toLowerCase()))) {
+        actual = "done · coach-logged";
+      }
       const task = {
         id: `${day.date}:${spec.column}:${index}`,
         text,
         actual,
-        trackable: spec.sports.length > 0,
+        trackable: spec.sports.length > 0 || actual != null,
         isExtra: false,
       };
       (spec.column === "run" ? runTasks : otherTasks).push(task);

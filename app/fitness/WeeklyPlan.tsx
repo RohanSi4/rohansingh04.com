@@ -23,7 +23,7 @@ function planRange(plan: PublicTrainingPlan): string {
 
 export function WeeklyPlan({ today, plan, activities }: WeeklyPlanProps) {
   const days = plan ? getPlanWeekDays(plan) : [];
-  const rows = buildWeekPlanRows(days, activities, today);
+  const rows = buildWeekPlanRows(days, activities, today, plan?.completions ?? {});
 
   return (
     <section className={styles.weekPlanSection} aria-labelledby="week-plan-title">
