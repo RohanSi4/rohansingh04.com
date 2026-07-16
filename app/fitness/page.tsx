@@ -281,6 +281,26 @@ export default async function FitnessPage() {
         </ol>
       </section>
 
+      <section className={styles.pipeline} aria-labelledby="template-title">
+        <div className={styles.pipelineIntro}>
+          <p>07 / try it yourself</p>
+          <h2 id="template-title">Want an AI coach of your own?</h2>
+          <p>
+            Everything behind this page — the coaching logic, the Apple Watch data
+            pipeline, the weekly plans — started as a template anyone can use. My
+            data stays home; the machinery is public. It interviews you about your
+            race, your goals, and your shoes, then starts coaching.
+          </p>
+          <a
+            href="https://github.com/RohanSi4/marathon-coach-starter"
+            target="_blank"
+            rel="noreferrer"
+          >
+            get the template on GitHub →
+          </a>
+        </div>
+      </section>
+
       <footer className={styles.dataFooter}>
         <SyncStatus generatedAt={data.generatedAt} />
         <span>last activity {data.health.lastActivity ? formatRunDate(data.health.lastActivity.date, true) : "not available"}</span>
