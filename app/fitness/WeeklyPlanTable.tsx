@@ -1,4 +1,5 @@
 import { FitnessAutoRefresh } from "./FitnessAutoRefresh";
+import { ExpandedWeekPlan } from "./ExpandedWeekPlan";
 import type { WeekPlanRow, WeekPlanTask } from "./weekly-plan";
 import styles from "./fitness.module.css";
 
@@ -91,6 +92,7 @@ export function WeeklyPlanTable({
           ))}
         </tbody>
       </table>
+      <ExpandedWeekPlan rows={rows} />
     </div>
   );
 }

@@ -313,7 +313,10 @@ function validPlan(value) {
       && typeof day.date === "string"
       && typeof day.dayLabel === "string"
       && typeof day.text === "string"
-      && typeof day.isKeyDay === "boolean");
+      && typeof day.isKeyDay === "boolean"
+      && (day.details == null || (
+        Array.isArray(day.details) && day.details.every((detail) => typeof detail === "string")
+      )));
 }
 
 function planMilesLabel(value) {
@@ -367,12 +370,26 @@ function concisePlanDayText(value) {
   return [...new Set(tasks)].join(" + ") || "rest";
 }
 
+function safePlanDetails(value) {
+  if (!Array.isArray(value)) return [];
+  const forbidden = /(?:whole-body soreness|athlete reports|\bACWR\b|\bHRV\b|\bRHR\b|injury notes?|right-side asymmetry)/i;
+  return value
+    .filter((detail) => typeof detail === "string")
+    .map((detail) => detail.replace(/\*\*/g, "").replace(/\s+/g, " ").trim())
+    .filter((detail) => detail.length > 0 && detail.length <= 180 && !forbidden.test(detail))
+    .slice(0, 6);
+}
+
 function conciseTrainingPlan(plan) {
   const days = new Map();
   for (const day of plan.days) {
     if (plan.weekStart && day.date < plan.weekStart) continue;
     if (plan.weekEnd && day.date > plan.weekEnd) continue;
-    days.set(day.date, { ...day, text: concisePlanDayText(day.text) });
+    days.set(day.date, {
+      ...day,
+      text: concisePlanDayText(day.text),
+      details: safePlanDetails(day.details),
+    });
   }
   return {
     ...plan,

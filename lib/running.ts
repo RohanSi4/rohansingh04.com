@@ -39,6 +39,7 @@ export type PublicPlanDay = {
   dayLabel: string;
   text: string;
   isKeyDay: boolean;
+  details?: string[];
 };
 
 export type PublicTrainingPlan = {
@@ -58,9 +59,23 @@ export function getPlanWeekDays(plan: PublicTrainingPlan): PublicPlanDay[] {
   for (const day of plan.days) {
     if (plan.weekStart && day.date < plan.weekStart) continue;
     if (plan.weekEnd && day.date > plan.weekEnd) continue;
-    uniqueDays.set(day.date, { ...day, text: summarizePlanDayText(day.text) });
+    uniqueDays.set(day.date, {
+      ...day,
+      text: summarizePlanDayText(day.text),
+      details: sanitizePlanDetails(day.details),
+    });
   }
   return [...uniqueDays.values()].sort((a, b) => a.date.localeCompare(b.date));
+}
+
+export function sanitizePlanDetails(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const forbidden = /(?:whole-body soreness|athlete reports|\bACWR\b|\bHRV\b|\bRHR\b|injury notes?|right-side asymmetry)/i;
+  return value
+    .filter((detail): detail is string => typeof detail === "string")
+    .map((detail) => detail.replace(/\*\*/g, "").replace(/\s+/g, " ").trim())
+    .filter((detail) => detail.length > 0 && detail.length <= 180 && !forbidden.test(detail))
+    .slice(0, 6);
 }
 
 export function sanitizeTrainingPlan(plan: PublicTrainingPlan | null): PublicTrainingPlan | null {

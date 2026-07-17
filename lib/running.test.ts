@@ -8,6 +8,7 @@ import {
   getStaticRunningDashboard,
   mergeLiveHealth,
   mergeLiveRuns,
+  sanitizePlanDetails,
 } from "./running";
 
 describe("running dashboard snapshot", () => {
@@ -68,6 +69,19 @@ describe("running dashboard snapshot", () => {
       && (!plan.weekEnd || day.date <= plan.weekEnd)
     ))).toBe(true);
     expect(days.every((day) => !/(?:stride|gel|heart rate|valve|easy effort|water|≤)/i.test(day.text))).toBe(true);
+    expect(days.some((day) => (day.details?.length ?? 0) > 0)).toBe(true);
+    expect(days.every((day) => (day.details ?? []).every((detail) => detail.length <= 180))).toBe(true);
+  });
+
+  it("keeps useful plan instructions and drops private coaching context", () => {
+    expect(sanitizePlanDetails([
+      "**Bring cold water.**",
+      "Take gels around 35, 70, and 100 minutes.",
+      "Athlete reports whole-body soreness and low HRV.",
+    ])).toEqual([
+      "Bring cold water.",
+      "Take gels around 35, 70, and 100 minutes.",
+    ]);
   });
 
   it("merges a newer live run without double-counting the archive", () => {

@@ -8,6 +8,7 @@ describe("weekly plan rows", () => {
       dayLabel: "Mon 7/13",
       text: "Easy 5 miles at an easy effort + 4×20s strides (flat, relaxed, full walk recovery) + upper body lift",
       isKeyDay: false,
+      details: ["Keep the run easy.", "Complete upper body lift #1."],
     }], [{
       date: "2026-07-13",
       sport: "Run",
@@ -28,6 +29,7 @@ describe("weekly plan rows", () => {
     expect(rows[0].otherTasks).toEqual([
       { id: "2026-07-13:other:1", text: "upper body lift", actual: "62 min", trackable: true, isExtra: false },
     ]);
+    expect(rows[0].details).toEqual(["Keep the run easy.", "Complete upper body lift #1."]);
   });
 
   it("keeps rest in the run column and surfaces an unplanned activity", () => {

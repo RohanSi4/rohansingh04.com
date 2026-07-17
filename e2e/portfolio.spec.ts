@@ -108,3 +108,22 @@ test("mobile navigation opens and reaches the project page", async ({ page }) =>
   await navigation.getByRole("link", { name: "projects" }).click();
   await expect(page).toHaveURL(/\/projects$/);
 });
+
+test("fitness keeps the weekly plan compact until the expanded view is opened", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/fitness");
+
+  const expandedView = page.getByText("expanded view", { exact: true });
+  await expect(expandedView).toBeVisible();
+  await expect(page.getByText("full week", { exact: true })).toBeHidden();
+
+  await expandedView.click();
+  await expect(page.getByText("full week", { exact: true })).toBeVisible();
+  await expect(page.getByText("Bring cold water.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Take gels around 35, 70, and 100 minutes.", { exact: true })).toBeVisible();
+
+  const hasOverflow = await page.evaluate(
+    () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+  );
+  expect(hasOverflow).toBe(false);
+});

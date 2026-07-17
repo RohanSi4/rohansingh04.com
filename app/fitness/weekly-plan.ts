@@ -20,6 +20,7 @@ export type WeekPlanRow = {
   isKeyDay: boolean;
   runTasks: WeekPlanTask[];
   otherTasks: WeekPlanTask[];
+  details: string[];
 };
 
 type TaskSpec = {
@@ -141,6 +142,7 @@ export function buildWeekPlanRows(
       isKeyDay: day.isKeyDay,
       runTasks,
       otherTasks,
+      details: day.details ?? [],
     };
   });
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-17T18:42:10.211Z",
+  "generatedAt": "2026-07-17T19:02:37.740Z",
   "dataThrough": "2026-07-15",
   "race": {
     "name": "Richmond Marathon",
@@ -779,43 +779,75 @@
         "date": "2026-07-13",
         "dayLabel": "Mon 7/13",
         "text": "5 mile run + upper body lift",
-        "isKeyDay": false
+        "isKeyDay": false,
+        "details": [
+          "Keep the run easy and conversational, with heart rate at or below 150 bpm.",
+          "Do 4 x 20 second relaxed strides, on flat ground, around 7:00 to 7:15 per mile, with full walk recovery.",
+          "Complete upper body lift #1."
+        ]
       },
       {
         "date": "2026-07-14",
         "dayLabel": "Tue 7/14",
         "text": "5.5 mile run + lower body lift",
-        "isKeyDay": false
+        "isKeyDay": false,
+        "details": [
+          "Keep the run easy and conversational, with heart rate at or below 150 bpm.",
+          "Complete lower body lift #1 as the main lower session."
+        ]
       },
       {
         "date": "2026-07-15",
         "dayLabel": "Wed 7/15",
         "text": "3 mile run + circuit",
-        "isKeyDay": false
+        "isKeyDay": false,
+        "details": [
+          "Keep this recovery run very easy, with heart rate at or below 145 bpm.",
+          "Circuit: single-leg calf raises, balance, tibialis raises, banded side-steps, single-leg RDLs, and short-foot work.",
+          "If anything feels off or heart rate is unusually high, shorten the run or make it a rest day."
+        ]
       },
       {
         "date": "2026-07-16",
         "dayLabel": "Thu 7/16",
         "text": "rest",
-        "isKeyDay": false
+        "isKeyDay": false,
+        "details": [
+          "Recovery day. The planned run and lift were removed."
+        ]
       },
       {
         "date": "2026-07-17",
         "dayLabel": "Fri 7/17",
         "text": "4 mile run + upper body lift",
-        "isKeyDay": false
+        "isKeyDay": false,
+        "details": [
+          "Keep this shakeout flat and genuinely easy, with heart rate at or below 145 bpm.",
+          "Complete upper body lift #2."
+        ]
       },
       {
         "date": "2026-07-18",
         "dayLabel": "Sat 7/18",
         "text": "12 mile long run",
-        "isKeyDay": true
+        "isKeyDay": true,
+        "details": [
+          "Keep the long run conversational, with heart rate at or below 148 bpm.",
+          "Run outdoors in the morning.",
+          "Bring cold water.",
+          "Take gels around 35, 70, and 100 minutes.",
+          "If anything feels off or heart rate is unusually high, shorten the run or make it a rest day."
+        ]
       },
       {
         "date": "2026-07-19",
         "dayLabel": "Sun 7/19",
         "text": "rest + lower body lift + circuit",
-        "isKeyDay": false
+        "isKeyDay": false,
+        "details": [
+          "Complete lower body lift #2 as a lighter accessory session.",
+          "Circuit: single-leg calf raises, balance, tibialis raises, banded side-steps, single-leg RDLs, and short-foot work."
+        ]
       }
     ],
     "completions": {
@@ -825,7 +857,7 @@
     }
   },
   "health": {
-    "updatedAt": "2026-07-17T18:42:10.211Z",
+    "updatedAt": "2026-07-17T19:02:37.740Z",
     "today": {
       "exerciseMinutes": 0,
       "activeCalories": 0,

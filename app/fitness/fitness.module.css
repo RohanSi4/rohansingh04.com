@@ -720,6 +720,178 @@
   font-size: 0.72rem;
 }
 
+.expandedWeek {
+  border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 70%, var(--surface));
+}
+
+.expandedWeekToggle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 1.5rem;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.15rem 1.5rem;
+  cursor: pointer;
+  list-style: none;
+  transition: background 160ms ease;
+}
+
+.expandedWeekToggle::-webkit-details-marker {
+  display: none;
+}
+
+.expandedWeekToggle:hover,
+.expandedWeekToggle:focus-visible {
+  background: color-mix(in srgb, var(--run-orange) 7%, transparent);
+}
+
+.expandedWeekToggle:focus-visible {
+  outline: 2px solid var(--run-orange);
+  outline-offset: -3px;
+}
+
+.expandedWeekToggle small,
+.expandedWeekIntro > span,
+.expandedWeekDay time,
+.expandedWeekDay header span {
+  font-family: var(--font-jetbrains-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.expandedWeekToggle small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.52rem;
+}
+
+.expandedWeekToggle strong {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: var(--font-fraunces), serif;
+  font-size: 1.2rem;
+  font-weight: 540;
+  letter-spacing: -0.02em;
+}
+
+.expandedWeekHint {
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.expandedWeekChevron {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--run-orange);
+  font-size: 0.8rem;
+  transition: transform 180ms ease;
+}
+
+.expandedWeek[open] .expandedWeekChevron {
+  transform: rotate(180deg);
+}
+
+.expandedWeekBody {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.expandedWeekIntro {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.expandedWeekIntro > span {
+  color: var(--run-orange);
+  font-size: 0.55rem;
+}
+
+.expandedWeekIntro p {
+  max-width: 32rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.expandedWeekDays {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.expandedWeekDay {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: var(--surface);
+}
+
+.expandedWeekDay header > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.expandedWeekDay time {
+  color: var(--run-orange);
+  font-size: 0.56rem;
+}
+
+.expandedWeekDay header span {
+  padding: 0.18rem 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--run-orange) 40%, transparent);
+  border-radius: 999px;
+  color: var(--run-orange);
+  font-size: 0.45rem;
+}
+
+.expandedWeekDay header strong {
+  display: block;
+  margin-top: 0.55rem;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 0.9rem;
+  font-weight: 560;
+  line-height: 1.35;
+}
+
+.expandedWeekDay ul {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.8rem;
+}
+
+.expandedWeekDay li,
+.expandedWeekNoNotes {
+  position: relative;
+  padding-left: 0.9rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.expandedWeekDay li::before {
+  position: absolute;
+  top: 0.64em;
+  left: 0;
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 50%;
+  background: var(--run-orange);
+  content: "";
+}
+
+.expandedWeekNoNotes {
+  margin-top: 0.8rem;
+  padding-left: 0;
+}
+
 .weekPlanEmpty {
   padding: 2rem;
   border: 1px solid var(--border);
@@ -1232,6 +1404,11 @@
   }
   .weekPlanRowToday { box-shadow: inset 3px 0 0 var(--run-orange); }
   .weekPlanRowToday > th { box-shadow: none; }
+  .expandedWeekToggle { grid-template-columns: minmax(0, 1fr) 1.5rem; padding: 1rem; }
+  .expandedWeekHint { display: none; }
+  .expandedWeekBody { padding: 0 1rem 1rem; }
+  .expandedWeekIntro { align-items: flex-start; flex-direction: column; gap: 0.45rem; }
+  .expandedWeekDays { grid-template-columns: 1fr; }
   .milestones { overflow: hidden; padding-inline: 1.25rem; }
   .milestoneTrack { padding-bottom: 0.5rem; }
   .chartHeader { align-items: flex-start; flex-direction: column; gap: 1rem; }
