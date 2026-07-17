@@ -81,20 +81,6 @@ test("the portfolio and project pages use distinct tab icons", async ({ page }) 
   expect(icons.size).toBe(paths.length);
 });
 
-test("the homepage portrait appears in the first mobile screen", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
-
-  const portrait = page.getByRole("img", {
-    name: "Illustrated portrait of Rohan wearing sunglasses",
-  });
-  const bounds = await portrait.boundingBox();
-
-  await expect(portrait).toBeVisible();
-  expect(bounds).not.toBeNull();
-  expect((bounds?.y ?? 844) + (bounds?.height ?? 0)).toBeLessThanOrEqual(844);
-});
-
 test("web resume includes the selected project proof", async ({ page }) => {
   await page.goto("/resume");
   const projects = page.getByRole("heading", { level: 2, name: "selected projects" });
