@@ -9,6 +9,61 @@ export const metadata = pageMetadata({
   path: "/resume",
 });
 
+const skillGroups = [
+  {
+    label: "languages",
+    items: ["Python", "Java", "JavaScript", "TypeScript", "Go", "C++", "SQL"],
+  },
+  {
+    label: "frameworks & libraries",
+    items: [
+      "React",
+      "Next.js",
+      "Angular",
+      "Spring Boot",
+      "Flask",
+      "GraphQL",
+      "LightGBM",
+      "scikit-learn",
+      "SciPy",
+      "NetworkX",
+      "cuGraph",
+      "REST",
+      "Tailwind CSS",
+    ],
+  },
+  {
+    label: "cloud & devops",
+    items: [
+      "AWS",
+      "Azure",
+      "Docker",
+      "Jenkins",
+      "Gradle",
+      "Terraform",
+      "Git",
+      "Cypress",
+      "Playwright",
+      "Cucumber",
+    ],
+  },
+  {
+    label: "databases",
+    items: ["MongoDB", "PostgreSQL", "MySQL"],
+  },
+  {
+    label: "certifications",
+    items: [
+      "AWS Cloud Practitioner",
+      "Oracle Cloud Infrastructure Generative AI Professional",
+      "PCAP",
+    ],
+  },
+] as const;
+
+const uvaCoursework =
+  "Relevant coursework: Machine Learning, Software Engineering, Computer Architecture, Data Structures, Algorithms";
+
 export default function ResumePage() {
   const history = getHistory();
   const site = getSiteConfig();
@@ -29,13 +84,16 @@ export default function ResumePage() {
             <p className="eyebrow mb-4">résumé</p>
             <h1 className="page-title">Rohan Singh</h1>
           </div>
-          <a
-            href="/rohan-singh-resume.pdf"
-            download="Rohan-Singh-Resume.pdf"
-            className="button-primary w-fit shrink-0"
-          >
-            download PDF <span aria-hidden="true">↓</span>
-          </a>
+          <div className="flex shrink-0 flex-col gap-2 sm:items-end">
+            <a
+              href="/rohan-singh-resume.pdf"
+              download="Rohan-Singh-Resume.pdf"
+              className="button-primary w-fit"
+            >
+              download PDF <span aria-hidden="true">↓</span>
+            </a>
+            <p className="font-mono text-[10px] text-muted">PDF updated July 2026</p>
+          </div>
         </div>
 
         <p className="mt-5 text-base text-muted">
@@ -72,6 +130,9 @@ export default function ResumePage() {
               <div className="text-sm text-muted">{e.title}</div>
               {e.summary && (
                 <p className="text-sm text-muted mt-1">{e.summary}</p>
+              )}
+              {e.id === "uva-cs" && (
+                <p className="mt-1 text-sm leading-relaxed text-muted">{uvaCoursework}</p>
               )}
             </div>
           ))}
@@ -129,21 +190,42 @@ export default function ResumePage() {
                 </Link>
               </div>
               <p className="text-sm text-muted">{project.role}</p>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{project.proofPoints[0]}</p>
+              <ul className="mt-2 space-y-1.5">
+                {project.proofPoints.slice(0, 2).map((point) => (
+                  <li key={point} className="flex gap-2 text-sm leading-relaxed text-muted">
+                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-border px-2.5 py-1 font-mono text-[10px] text-muted"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </article>
           ))}
         </div>
       </section>
 
-      {/* skills note */}
+      {/* skills */}
       <section>
         <h2 className="eyebrow mb-5 border-b border-border pb-3">
           skills
         </h2>
-        <p className="text-sm leading-relaxed text-muted">
-          Python · Java · Go · TypeScript · React · Next.js · Spring Boot ·
-          GraphQL · AWS · MongoDB · Postgres
-        </p>
+        <dl className="space-y-4">
+          {skillGroups.map((group) => (
+            <div key={group.label} className="grid gap-1 sm:grid-cols-[11rem_1fr] sm:gap-4">
+              <dt className="eyebrow pt-0.5">{group.label}</dt>
+              <dd className="text-sm leading-relaxed text-muted">{group.items.join(" · ")}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
     </div>
   );
