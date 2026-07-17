@@ -42,30 +42,33 @@ export function ExpandedWeekPlan({ rows }: { rows: WeekPlanRow[] }) {
           <span>full week</span>
           <p>The useful details are here when I need them. The main plan stays clean.</p>
         </div>
-        <div className={styles.expandedWeekDays}>
+        <ol className={styles.expandedWeekDays}>
           {rows.map((row) => {
             const trackable = plannedTasks(row).filter((task) => task.trackable);
             const done = trackable.length > 0 && trackable.every((task) => task.actual != null);
             return (
-              <article className={styles.expandedWeekDay} key={row.date}>
-                <header>
-                  <div>
-                    <time dateTime={row.date}>{row.dayLabel}</time>
-                    {row.isToday ? <span>today</span> : done ? <span>done</span> : null}
-                  </div>
+              <li
+                className={`${styles.expandedWeekDay} ${row.isToday ? styles.expandedWeekDayToday : ""}`}
+                key={row.date}
+              >
+                <div className={styles.expandedWeekDayMeta}>
+                  <time dateTime={row.date}>{row.dayLabel}</time>
+                  {row.isToday ? <span>today</span> : done ? <span>done</span> : null}
+                </div>
+                <div className={styles.expandedWeekDayPlan}>
                   <strong>{planSummary(row)}</strong>
-                </header>
+                </div>
                 {row.details.length > 0 ? (
                   <ul>
                     {row.details.map((detail) => <li key={detail}>{detail}</li>)}
                   </ul>
                 ) : (
-                  <p className={styles.expandedWeekNoNotes}>Nothing extra to remember.</p>
+                  <p className={styles.expandedWeekNoNotes}>No extra notes.</p>
                 )}
-              </article>
+              </li>
             );
           })}
-        </div>
+        </ol>
       </div>
     </details>
   );
