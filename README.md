@@ -1,103 +1,110 @@
 # rohansingh04.com
 
-Personal portfolio and live-data playground. Built with Next.js 16, Tailwind 4,
-and React Three Fiber; hosted on Vercel.
+My personal site and the home for the projects I want people to actually see.
 
-## dev
+**Live site:** [rohansingh04.com](https://rohansingh04.com)
 
-```bash
+![Homepage preview](public/og.png)
+
+## What is here
+
+- Project case studies with consistent proof, role, outcome, demo, and code links
+- A live fitness dashboard fed by my Apple Watch and HealthFit pipeline
+- A travel globe and state map built from structured trip data
+- My work history, web résumé, and downloadable PDF résumé
+- Small live pieces such as Spotify listening data and current training context
+
+The site is personal on purpose. It is still a portfolio, but it also gives me a
+place to build things around running, travel, music, and whatever else I am into.
+
+## How it works
+
+Most of the site is versioned content rendered through the Next.js App Router.
+Project writeups live in MDX, while work history, travel, and site details live in
+JSON. The pieces that need to stay fresh, such as fitness and Spotify data, use
+server-side routes and privacy-safe schemas.
+
+~~~text
+Versioned JSON + MDX ─┐
+                      ├── Next.js App Router ── Vercel
+HealthFit pipeline ───┤
+Spotify API ──────────┘
+~~~
+
+## Stack
+
+- Next.js 16, React 19, and TypeScript
+- Tailwind CSS 4 with a small shared design system
+- React Three Fiber and Drei for the interactive globe
+- MDX for long-form project case studies
+- Vercel data storage for live dashboard snapshots
+- Vitest, Playwright, and Axe for unit, browser, and accessibility checks
+
+## Run it locally
+
+Requirements: Node.js 20+ and pnpm.
+
+~~~bash
+pnpm install
+cp .env.example .env.local
 pnpm dev
-```
+~~~
 
-open [http://localhost:3000](http://localhost:3000).
+Open [localhost:3000](http://localhost:3000). Most pages work without optional
+API credentials. See [`docs/deploy.md`](docs/deploy.md) for the complete
+environment-variable list.
 
-## stack
+## Useful commands
 
-- **next.js 16** -- app router, typescript
-- **tailwind 4** -- css-first config, css variables for theming
-- **fraunces** (serif headings) + **geist** (body) + **jetbrains mono** (code/data)
-- **react-three-fiber** + **drei** -- 3d globe on /globe
-- **next-mdx-remote** -- project writeups in /content/projects
-- **vercel kv** (upstash redis) -- health data from ios shortcut
-- **vercel analytics** -- free tier, enabled in dashboard
+| Command | What it does |
+|---|---|
+| `pnpm dev` | Start the local site |
+| `pnpm check` | Run TypeScript, unit tests, and the production build |
+| `pnpm test:e2e` | Run Playwright smoke and accessibility tests |
+| `pnpm check:live` | Check the important production routes and demos |
+| `pnpm sync:running` | Preview a fresh privacy-safe fitness snapshot locally |
+| `pnpm publish:running` | Publish a checked fitness snapshot to the live site |
 
-## structure
+## Project structure
 
-```
-app/           next.js app router pages + api routes
-components/    react components
-  layout/      header, footer, theme toggle
-  fitness/     fitness previews and dashboard components
-  widgets/     a small live music widget
-  globe/        r3f globe components
-  states/      us states svg map
-  projects/    project grid + cards
-  primitives/  shared ui primitives (modal, skeleton)
-content/       all structured data (json + mdx)
-lib/           shared utilities
-public/        static assets + textures
-docs/          deployment + setup guides
-scripts/       local data publishing utilities
-```
+~~~text
+app/           routes, pages, metadata, and API handlers
+components/    shared UI, fitness views, globe, maps, and widgets
+content/       projects, history, travel, and site configuration
+lib/           schemas, data loaders, formatting, and integrations
+public/        images, résumé, map textures, and static project assets
+docs/          setup and deployment notes
+scripts/       fitness publishing and live-site checks
+e2e/           Playwright and Axe coverage
+~~~
 
-## content
+## Content model
 
-all structured data lives in `/content`. edit json files directly.
+The important content stays easy to review and update:
 
-- `site-config.json` -- current role, location, focus (single source of truth)
-- `places.json` -- globe pins (lat/lng, visit date, notes)
-- `states.json` -- all 50 states + DC with visited status
-- `history.json` -- work, school, milestones for /history and /resume
-- `projects/*/meta.json` -- project metadata, `featured: true` surfaces on landing
-- `running-dashboard.json` -- deploy-safe fallback for `/fitness`
-- `public/rohan-singh-resume.pdf` -- downloadable recruiter-facing résumé
+- `content/site-config.json`: current role, location, and focus
+- `content/projects/*`: project metadata and MDX case studies
+- `content/history.json`: work, school, and milestones
+- `content/places.json` and `content/states.json`: travel data
+- `content/running-dashboard.json`: deploy-safe fitness fallback
+- `public/rohan-singh-resume.pdf`: downloadable résumé
 
-## fitness page
+## Fitness data and privacy
 
-the `/fitness` page is fed by the sibling `marathonPrepBot` repo. preview a
-fresh privacy-safe snapshot locally with:
+The fitness page is powered by the private `marathonPrepBot` repository. Apple
+Watch workouts move through HealthFit into a TypeScript pipeline that calculates
+training metrics and publishes a strict, privacy-safe dashboard snapshot.
 
-```bash
-pnpm sync:running
-```
+The public schema excludes GPS coordinates, source filenames, private notes,
+health notes, and workout descriptions. The committed JSON is only a fallback;
+fresh ingests update the live page without waiting for another site deployment.
 
-publish it to the live site immediately with:
+The reusable coaching machinery lives in the public
+[Marathon Coach Starter](https://github.com/RohanSi4/marathon-coach-starter)
+template.
 
-```bash
-pnpm publish:running
-```
+## Deployment
 
-by default the script reads `../marathonPrepBot`. set `MARATHON_REPO` to an
-absolute repo path if the folders live somewhere else. the generated snapshot
-uses an explicit field whitelist and excludes gps coordinates, source filenames,
-private notes, and workout descriptions. `publish:running` sends the same checked
-snapshot to an authenticated ingest endpoint backed by vercel kv. the committed
-snapshot remains a deploy-safe fallback. the marathon repo runs this publisher
-automatically after each successful `npm run import`, and both the homepage and
-`/fitness` render at request time so a fresh ingest does not require another site
-deployment. strava is an optional secondary source, not a freshness dependency.
-
-## theme
-
-light mode default. dark mode toggled by the button in the header, persisted to
-localstorage. system preference used on first visit. a blocking script in
-`app/layout.tsx` applies the correct class before first paint (no flash).
-
-css variables for all colors defined in `app/globals.css`. accent is sage green
-(#4f7c5a light / #6baa7a dark).
-
-## env vars
-
-see `docs/deploy.md` for the full list. for local dev, copy `.env.example` to
-`.env.local` and fill in the values you need (most are optional in dev).
-
-## notes
-
-- Project, experience, and current-focus content lives in versioned JSON/MDX.
-- Fitness data is ingested privately and exposed only through a strict,
-  privacy-safe dashboard schema.
-- The older Apple Health ingest remains available as a secondary source; see
-  `docs/ios-shortcut.md`.
-- `@vercel/kv` is deprecated upstream (moved to upstash redis). the api
-  is identical; just add the upstash integration in the vercel dashboard
-  and it will work with the same env vars
+Pushes to `main` deploy through Vercel. GitHub Actions runs TypeScript, unit
+tests, integrity checks, the production build, Playwright smoke tests, and Axe
+accessibility checks before changes are considered healthy.
