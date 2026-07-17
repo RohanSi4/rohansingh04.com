@@ -4,6 +4,7 @@ import {
   type PublicTrainingPlan,
   type RunningWeek,
 } from "@/lib/running";
+import { summarizePlanDayText } from "@/lib/plan-summary";
 import styles from "./fitness.module.css";
 
 type TodayPlanProps = {
@@ -49,6 +50,8 @@ export function todayPlanDisplay(text: string | null): {
   if (!text) {
     return { title: "Nothing specific is planned today.", details: [] };
   }
+
+  text = summarizePlanDayText(text);
 
   const chunks = text
     .split(/\s+\+\s+|(?<=[.!?])\s+/)

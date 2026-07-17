@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-15T00:04:01.283Z",
-  "dataThrough": "2026-07-13",
+  "generatedAt": "2026-07-17T18:42:10.211Z",
+  "dataThrough": "2026-07-15",
   "race": {
     "name": "Richmond Marathon",
     "date": "2026-11-14",
@@ -11,28 +11,28 @@
     "trainingStart": "2026-06-22"
   },
   "totals": {
-    "runMiles": 256.4,
-    "totalRuns": 51,
-    "runDays": 46,
+    "runMiles": 265.4,
+    "totalRuns": 53,
+    "runDays": 48,
     "activeWeeks": 30,
     "trackedSince": "2022-11-29",
     "longestRunMiles": 13.1,
     "longestRunDate": "2026-04-26",
     "peakWeekMiles": 28.1,
     "peakWeekStart": "2026-07-06",
-    "totalActivities": 1353
+    "totalActivities": 1359
   },
   "currentWeek": {
     "weekStart": "2026-07-13",
-    "runMiles": 6.3,
-    "runDays": 1,
-    "longRunMiles": 4.3,
-    "liftDays": 1,
-    "qualityRuns": 0,
-    "averageHeartRate": 135,
-    "trainingLoad": 106
+    "runMiles": 15.4,
+    "runDays": 3,
+    "longRunMiles": 5.5,
+    "liftDays": 2,
+    "qualityRuns": 1,
+    "averageHeartRate": 140,
+    "trainingLoad": 378
   },
-  "recentFourWeekMiles": 82.5,
+  "recentFourWeekMiles": 91.6,
   "weeks": [
     {
       "weekStart": "2026-01-26",
@@ -276,13 +276,13 @@
     },
     {
       "weekStart": "2026-07-13",
-      "runMiles": 6.3,
-      "runDays": 1,
-      "longRunMiles": 4.3,
-      "liftDays": 1,
-      "qualityRuns": 0,
-      "averageHeartRate": 135,
-      "trainingLoad": 106
+      "runMiles": 15.4,
+      "runDays": 3,
+      "longRunMiles": 5.5,
+      "liftDays": 2,
+      "qualityRuns": 1,
+      "averageHeartRate": 140,
+      "trainingLoad": 378
     }
   ],
   "monthlyHistory": [
@@ -552,8 +552,8 @@
     },
     {
       "month": "2026-07",
-      "runMiles": 51.6,
-      "runs": 11,
+      "runMiles": 60.6,
+      "runs": 13,
       "longestRunMiles": 10.7
     }
   ],
@@ -592,14 +592,42 @@
     },
     {
       "year": "2026",
-      "runMiles": 156.8,
-      "runs": 31,
-      "runDays": 27,
+      "runMiles": 165.8,
+      "runs": 33,
+      "runDays": 29,
       "longestRunMiles": 13.1,
-      "activities": 304
+      "activities": 310
     }
   ],
   "recentRuns": [
+    {
+      "id": "run-596b3c7673f7",
+      "date": "2026-07-15",
+      "surface": "outdoor",
+      "distanceMi": 3.54,
+      "movingMinutes": 32,
+      "paceSecondsPerMile": 535,
+      "averageHeartRate": 148,
+      "elevationFeet": 223,
+      "temperatureF": 70,
+      "trainingLoad": 48,
+      "aerobicDecouplingPct": null,
+      "easyZonePct": 58
+    },
+    {
+      "id": "run-a032b7b07da9",
+      "date": "2026-07-14",
+      "surface": "treadmill",
+      "distanceMi": 5.5,
+      "movingMinutes": 51,
+      "paceSecondsPerMile": 559,
+      "averageHeartRate": 141,
+      "elevationFeet": 0,
+      "temperatureF": 73,
+      "trainingLoad": 65,
+      "aerobicDecouplingPct": 4.1,
+      "easyZonePct": 100
+    },
     {
       "id": "run-c2521316f846",
       "date": "2026-07-13",
@@ -739,94 +767,65 @@
       "trainingLoad": 56,
       "aerobicDecouplingPct": 8.9,
       "easyZonePct": 86
-    },
-    {
-      "id": "run-367717410e53",
-      "date": "2026-07-01",
-      "surface": "treadmill",
-      "distanceMi": 4,
-      "movingMinutes": 37,
-      "paceSecondsPerMile": 560,
-      "averageHeartRate": 144,
-      "elevationFeet": 0,
-      "temperatureF": 75,
-      "trainingLoad": 49,
-      "aerobicDecouplingPct": null,
-      "easyZonePct": 99
-    },
-    {
-      "id": "run-2dd61fac0e14",
-      "date": "2026-06-30",
-      "surface": "treadmill",
-      "distanceMi": 4.01,
-      "movingMinutes": 38,
-      "paceSecondsPerMile": 563,
-      "averageHeartRate": 137,
-      "elevationFeet": 0,
-      "temperatureF": 63,
-      "trainingLoad": 42,
-      "aerobicDecouplingPct": null,
-      "easyZonePct": 100
     }
   ],
   "trainingPlan": {
-    "heading": "Week of Jul 13–19, 2026, Phase 1 (Base), ~18 weeks out. San Jose. FIRST 30+ WEEK",
+    "heading": "Weekly fitness plan",
     "weekStart": "2026-07-13",
     "weekEnd": "2026-07-19",
-    "prescribedMiles": 32,
+    "prescribedMiles": 31.4,
     "days": [
-      {
-        "date": "2026-07-12",
-        "dayLabel": "Sun 7/12",
-        "text": "Rest from running + lower body lift (light/accessory, legs taxed from long run) + circuit",
-        "isKeyDay": false
-      },
       {
         "date": "2026-07-13",
         "dayLabel": "Mon 7/13",
-        "text": "Easy 5 miles at an easy effort + 4×20s strides (flat, relaxed ~7:00-7:15 feel, full walk recovery) + upper body lift",
+        "text": "5 mile run + upper body lift",
         "isKeyDay": false
       },
       {
         "date": "2026-07-14",
         "dayLabel": "Tue 7/14",
-        "text": "Easy 5.5 miles at an easy effort + lower body lift",
+        "text": "5.5 mile run + lower body lift",
         "isKeyDay": false
       },
       {
         "date": "2026-07-15",
         "dayLabel": "Wed 7/15",
-        "text": "Recovery 4 miles at an easy effort + circuit. If anything feels off, make it a rest day.",
+        "text": "3 mile run + circuit",
         "isKeyDay": false
       },
       {
         "date": "2026-07-16",
         "dayLabel": "Thu 7/16",
-        "text": "Easy 6 miles at an easy effort + 4×20s strides + upper body lift",
+        "text": "rest",
         "isKeyDay": false
       },
       {
         "date": "2026-07-17",
         "dayLabel": "Fri 7/17",
-        "text": "Rest + optional walk/golf",
+        "text": "4 mile run + upper body lift",
         "isKeyDay": false
       },
       {
         "date": "2026-07-18",
         "dayLabel": "Sat 7/18",
-        "text": "long run 11.5 miles easy, outdoors, morning. Keep it conversational. Bring water and take gels around 40 and 75 minutes.",
+        "text": "12 mile long run",
         "isKeyDay": true
       },
       {
         "date": "2026-07-19",
         "dayLabel": "Sun 7/19",
-        "text": "Rest + lower body lift + circuit",
+        "text": "rest + lower body lift + circuit",
         "isKeyDay": false
       }
-    ]
+    ],
+    "completions": {
+      "2026-07-15": [
+        "circuit"
+      ]
+    }
   },
   "health": {
-    "updatedAt": "2026-07-15T00:04:01.283Z",
+    "updatedAt": "2026-07-17T18:42:10.211Z",
     "today": {
       "exerciseMinutes": 0,
       "activeCalories": 0,
@@ -834,37 +833,91 @@
       "sport": null
     },
     "lastActivity": {
-      "date": "2026-07-13",
-      "sport": "WeightTraining",
-      "name": "Strength training",
-      "movingMins": 89,
-      "distanceMi": 0
+      "date": "2026-07-16",
+      "sport": "Workout",
+      "name": "Workout",
+      "movingMins": 57,
+      "distanceMi": 1.35
     },
     "streak": {
-      "currentDays": 3,
+      "currentDays": 6,
       "bestDays": 24
     },
     "thisMonth": {
-      "activeDays": 12,
-      "activeDaysDeltaVsLastMonth": -7,
-      "distanceMi": 65.2,
-      "activeCalories": 12688,
+      "activeDays": 15,
+      "activeDaysDeltaVsLastMonth": -4,
+      "distanceMi": 79,
+      "activeCalories": 15833,
       "weeklyMinutes": [
         974,
-        507,
-        0,
+        670,
+        182,
         0
       ]
     },
     "thisYear": {
-      "distanceMi": 439.6,
-      "activeDays": 134
+      "distanceMi": 453.5,
+      "activeDays": 137
     },
     "allTime": {
-      "activeDays": 742,
+      "activeDays": 745,
       "sinceDate": "2022-11-22"
     },
     "recentActivities": [
+      {
+        "date": "2026-07-16",
+        "sport": "Workout",
+        "name": "Workout",
+        "movingMins": 57,
+        "distanceMi": 1.35,
+        "calories": 511,
+        "averageHeartRate": 119
+      },
+      {
+        "date": "2026-07-16",
+        "sport": "Basketball",
+        "name": "Basketball",
+        "movingMins": 33,
+        "distanceMi": 0.89,
+        "calories": 332,
+        "averageHeartRate": 123
+      },
+      {
+        "date": "2026-07-15",
+        "sport": "Run",
+        "name": "Outdoor run",
+        "movingMins": 32,
+        "distanceMi": 3.54,
+        "calories": 451,
+        "averageHeartRate": 148
+      },
+      {
+        "date": "2026-07-15",
+        "sport": "Walk",
+        "name": "Walk",
+        "movingMins": 60,
+        "distanceMi": 2.6,
+        "calories": 499,
+        "averageHeartRate": 116
+      },
+      {
+        "date": "2026-07-14",
+        "sport": "WeightTraining",
+        "name": "Strength training",
+        "movingMins": 112,
+        "distanceMi": 0,
+        "calories": 648,
+        "averageHeartRate": 104
+      },
+      {
+        "date": "2026-07-14",
+        "sport": "Run",
+        "name": "Treadmill run",
+        "movingMins": 51,
+        "distanceMi": 5.5,
+        "calories": 704,
+        "averageHeartRate": 141
+      },
       {
         "date": "2026-07-13",
         "sport": "WeightTraining",
@@ -945,84 +998,9 @@
         "distanceMi": 5.13,
         "calories": 643,
         "averageHeartRate": 141
-      },
-      {
-        "date": "2026-07-08",
-        "sport": "Run",
-        "name": "Outdoor run",
-        "movingMins": 24,
-        "distanceMi": 2.8,
-        "calories": 348,
-        "averageHeartRate": 144
-      },
-      {
-        "date": "2026-07-07",
-        "sport": "WeightTraining",
-        "name": "Strength training",
-        "movingMins": 78,
-        "distanceMi": 0,
-        "calories": 420,
-        "averageHeartRate": 101
-      },
-      {
-        "date": "2026-07-07",
-        "sport": "Run",
-        "name": "Treadmill run",
-        "movingMins": 19,
-        "distanceMi": 2,
-        "calories": 252,
-        "averageHeartRate": 139
-      },
-      {
-        "date": "2026-07-07",
-        "sport": "Run",
-        "name": "Treadmill run",
-        "movingMins": 36,
-        "distanceMi": 3.68,
-        "calories": 506,
-        "averageHeartRate": 143
-      },
-      {
-        "date": "2026-07-06",
-        "sport": "WeightTraining",
-        "name": "Strength training",
-        "movingMins": 49,
-        "distanceMi": 0,
-        "calories": 233,
-        "averageHeartRate": 98
-      },
-      {
-        "date": "2026-07-06",
-        "sport": "Run",
-        "name": "Treadmill run",
-        "movingMins": 38,
-        "distanceMi": 3.84,
-        "calories": 492,
-        "averageHeartRate": 138
       }
     ],
     "heatmap": [
-      {
-        "date": "2025-07-15",
-        "intensity": 4,
-        "exerciseMinutes": 69,
-        "sport": "Walk",
-        "distanceMi": 1.6
-      },
-      {
-        "date": "2025-07-16",
-        "intensity": 3,
-        "exerciseMinutes": 52,
-        "sport": "WeightTraining",
-        "distanceMi": 0
-      },
-      {
-        "date": "2025-07-17",
-        "intensity": 0,
-        "exerciseMinutes": 0,
-        "sport": null,
-        "distanceMi": 0
-      },
       {
         "date": "2025-07-18",
         "intensity": 1,
@@ -3552,6 +3530,27 @@
       },
       {
         "date": "2026-07-14",
+        "intensity": 4,
+        "exerciseMinutes": 163,
+        "sport": "Run",
+        "distanceMi": 5.5
+      },
+      {
+        "date": "2026-07-15",
+        "intensity": 4,
+        "exerciseMinutes": 92,
+        "sport": "Walk",
+        "distanceMi": 6.1
+      },
+      {
+        "date": "2026-07-16",
+        "intensity": 4,
+        "exerciseMinutes": 90,
+        "sport": "Basketball",
+        "distanceMi": 2.2
+      },
+      {
+        "date": "2026-07-17",
         "intensity": 0,
         "exerciseMinutes": 0,
         "sport": null,

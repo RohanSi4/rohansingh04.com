@@ -60,12 +60,14 @@ describe("running dashboard snapshot", () => {
     if (!plan) return;
 
     const days = getPlanWeekDays(plan);
+    expect(plan.heading).toBe("Weekly fitness plan");
     expect(days[0]?.date).toBe(plan.weekStart);
     expect(days.at(-1)?.date).toBe(plan.weekEnd);
     expect(days.every((day) => (
       (!plan.weekStart || day.date >= plan.weekStart)
       && (!plan.weekEnd || day.date <= plan.weekEnd)
     ))).toBe(true);
+    expect(days.every((day) => !/(?:stride|gel|heart rate|valve|easy effort|water|≤)/i.test(day.text))).toBe(true);
   });
 
   it("merges a newer live run without double-counting the archive", () => {

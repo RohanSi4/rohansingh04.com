@@ -6,6 +6,7 @@ import {
   type StravaActivity,
 } from "./strava";
 import type { HealthSummary } from "./types";
+import { summarizePlanDayText } from "./plan-summary";
 
 export type RunningWeek = {
   weekStart: string;
@@ -57,9 +58,13 @@ export function getPlanWeekDays(plan: PublicTrainingPlan): PublicPlanDay[] {
   for (const day of plan.days) {
     if (plan.weekStart && day.date < plan.weekStart) continue;
     if (plan.weekEnd && day.date > plan.weekEnd) continue;
-    uniqueDays.set(day.date, day);
+    uniqueDays.set(day.date, { ...day, text: summarizePlanDayText(day.text) });
   }
   return [...uniqueDays.values()].sort((a, b) => a.date.localeCompare(b.date));
+}
+
+export function sanitizeTrainingPlan(plan: PublicTrainingPlan | null): PublicTrainingPlan | null {
+  return plan ? { ...plan, heading: "Weekly fitness plan", days: getPlanWeekDays(plan) } : null;
 }
 
 export type RunningMonth = {
@@ -113,7 +118,8 @@ export type RunningDashboard = {
 };
 
 export function getStaticRunningDashboard(): RunningDashboard {
-  return snapshot as unknown as RunningDashboard;
+  const dashboard = snapshot as unknown as RunningDashboard;
+  return { ...dashboard, trainingPlan: sanitizeTrainingPlan(dashboard.trainingPlan) };
 }
 
 function sanitizeHealthActivityNames(summary: HealthSummary): HealthSummary {
@@ -327,7 +333,11 @@ export async function getRunningDashboard(): Promise<RunningDashboard> {
   ]);
   const stored = storedResult.status === "fulfilled" ? storedResult.value : null;
   const source = stored?.schemaVersion === 2 ? stored : fallback;
-  const base = { ...source, health: sanitizeHealthActivityNames(source.health) };
+  const base = {
+    ...source,
+    trainingPlan: sanitizeTrainingPlan(source.trainingPlan),
+    health: sanitizeHealthActivityNames(source.health),
+  };
   const health = healthResult.status === "fulfilled" ? healthResult.value : null;
   const withHealth = health && health.updatedAt > base.health.updatedAt
     ? { ...base, health: mergeLiveHealth(base.health, health) }

@@ -1,4 +1,5 @@
 import type { PublicPlanDay } from "@/lib/running";
+import { summarizePlanDayText } from "@/lib/plan-summary";
 import type { HealthSummary } from "@/lib/types";
 
 type HealthActivity = HealthSummary["recentActivities"][number];
@@ -95,7 +96,7 @@ export function buildWeekPlanRows(
     const runTasks: WeekPlanTask[] = [];
     const otherTasks: WeekPlanTask[] = [];
 
-    day.text.split(/\s+\+\s+/).map(cleanTask).filter(Boolean).forEach((text, index) => {
+    summarizePlanDayText(day.text).split(/\s+\+\s+/).map(cleanTask).filter(Boolean).forEach((text, index) => {
       const spec = taskSpec(text);
       let actual = actualText(spec.sports, dayActivities);
       if (actual) spec.sports.forEach((sport) => usedSports.add(sport));

@@ -316,18 +316,83 @@ function validPlan(value) {
       && typeof day.isKeyDay === "boolean");
 }
 
+function planMilesLabel(value) {
+  const miles = Number(value);
+  return Number.isFinite(miles) ? String(miles) : value;
+}
+
+function planIncludesSkippedTask(text, task) {
+  return text.split(/[.;]/).some((part) => task.test(part) && /\bskipped\b/i.test(part));
+}
+
+function concisePlanDayText(value) {
+  const text = value
+    .replace(/\*\*/g, "")
+    .replace(/[\u2013\u2014]/g, ",")
+    .replace(/\s+/g, " ")
+    .trim();
+  const supportText = text.replace(/\([^)]*\)/g, "");
+  const tasks = [];
+  const runWasSkipped = planIncludesSkippedTask(text, /\b(?:run|running)\b/i);
+  const longRun = text.match(/\b(?:LR|long run)\s*(\d+(?:\.\d+)?)\s*(?:mi|miles?)\b/i)
+    ?? text.match(/\b(\d+(?:\.\d+)?)\s*(?:mi|miles?)\b[^+.;]{0,24}\blong run\b/i);
+  const run = text.match(/\b(\d+(?:\.\d+)?)\s*(?:mi|miles?)\b/i);
+
+  if (!runWasSkipped && longRun) {
+    tasks.push(`${planMilesLabel(longRun[1])} mile long run`);
+  } else if (!runWasSkipped && run) {
+    const optional = /\boptional\b/i.test(text.slice(0, run.index ?? 0));
+    tasks.push(`${optional ? "optional " : ""}${planMilesLabel(run[1])} mile run`);
+  } else if (/\brest\b/i.test(text) || runWasSkipped) {
+    tasks.push("rest");
+  }
+
+  const upper = /\b(?:UPPER\s*#[12]|upper body lift)\b/i;
+  const lower = /\b(?:LOWER\s*#[12]|lower body lift)\b/i;
+  if (upper.test(supportText) && !planIncludesSkippedTask(supportText, upper)) tasks.push("upper body lift");
+  if (lower.test(supportText) && !planIncludesSkippedTask(supportText, lower)) tasks.push("lower body lift");
+  if (/\bcircuit\b/i.test(supportText) && !planIncludesSkippedTask(supportText, /\bcircuit\b/i)) tasks.push("circuit");
+
+  if (!runWasSkipped) {
+    const hasWalk = /\bwalk(?:ing)?\b/i.test(supportText);
+    const hasGolf = /\bgolf\b/i.test(supportText);
+    if (hasWalk || hasGolf) {
+      const activity = hasWalk && hasGolf ? "walk or golf" : hasWalk ? "walk" : "golf";
+      tasks.push(`${/\boptional\b/i.test(supportText) ? "optional " : ""}${activity}`);
+    }
+    if (/\b(?:basketball|hoops)\b/i.test(supportText)) tasks.push("basketball");
+    if (/\bpickleball\b/i.test(supportText)) tasks.push("pickleball");
+  }
+
+  return [...new Set(tasks)].join(" + ") || "rest";
+}
+
+function conciseTrainingPlan(plan) {
+  const days = new Map();
+  for (const day of plan.days) {
+    if (plan.weekStart && day.date < plan.weekStart) continue;
+    if (plan.weekEnd && day.date > plan.weekEnd) continue;
+    days.set(day.date, { ...day, text: concisePlanDayText(day.text) });
+  }
+  return {
+    ...plan,
+    heading: "Weekly fitness plan",
+    days: [...days.values()].sort((a, b) => a.date.localeCompare(b.date)),
+  };
+}
+
 async function runningPlan() {
   if (process.env.RUNNING_DASHBOARD_PLAN) {
     try {
       const plan = JSON.parse(process.env.RUNNING_DASHBOARD_PLAN);
-      return validPlan(plan) ? plan : null;
+      return validPlan(plan) ? conciseTrainingPlan(plan) : null;
     } catch {
       return null;
     }
   }
   try {
     const previous = JSON.parse(await readFile(outputPath, "utf8"));
-    return validPlan(previous.trainingPlan) ? previous.trainingPlan : null;
+    return validPlan(previous.trainingPlan) ? conciseTrainingPlan(previous.trainingPlan) : null;
   } catch {
     return null;
   }

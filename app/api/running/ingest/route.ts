@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
-import { getRunningDashboard } from "@/lib/running";
+import { getRunningDashboard, sanitizeTrainingPlan } from "@/lib/running";
 import { setRunningDashboardKV } from "@/lib/kv-data";
 import type { RunningDashboard } from "@/lib/running";
 
@@ -65,7 +65,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "invalid dashboard schema" }, { status: 400 });
   }
 
-  await setRunningDashboardKV(data);
+  const safeData = {
+    ...data,
+    trainingPlan: sanitizeTrainingPlan(data.trainingPlan),
+  };
+  await setRunningDashboardKV(safeData);
   revalidatePath("/");
   revalidatePath("/fitness");
   return NextResponse.json({ ok: true, updatedAt: data.generatedAt, dataThrough: data.dataThrough });
