@@ -65,7 +65,7 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema).replace(/</g, "\\u003c") }}
       />
-      <section className="site-container grid gap-12 py-16 sm:py-24 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)] lg:items-center lg:gap-16 lg:py-24">
+      <section className="site-container grid gap-10 py-16 sm:py-24 lg:grid-cols-[minmax(0,1fr)_15rem] lg:items-center lg:gap-14 lg:py-24">
         <div>
           <p className="eyebrow mb-5">hey, i&apos;m rohan</p>
           <h1 className="page-title max-w-[16ch]">
@@ -82,50 +82,39 @@ export default async function HomePage() {
             <a href="mailto:rohan.singh04@outlook.com" className="button-secondary">say hey</a>
           </div>
 
-          <div className="mt-10">
-            <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
-              <span className="size-1.5 rounded-full bg-warm ring-4 ring-warm/15" />
-              right now
-            </p>
-            <dl className="mt-4 grid overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3 sm:gap-px">
-              <div className="bg-bg p-4">
-                <dt className="text-xs text-muted">in</dt>
-                <dd className="mt-1 text-sm font-medium text-fg">{site.currentLocation}</dd>
-              </div>
-              <div className="border-t border-border bg-bg p-4 sm:border-t-0">
-                <dt className="text-xs text-muted">this summer</dt>
-                <dd className="mt-1 text-sm font-medium text-fg">ML at {site.currentRole.org}</dd>
-              </div>
-              <div className="border-t border-border bg-bg p-4 sm:border-t-0">
-                <dt className="text-xs text-muted">training for</dt>
-                <dd className="mt-1 text-sm font-medium leading-relaxed text-fg">my first {running.race.name}</dd>
-              </div>
-            </dl>
-          </div>
         </div>
 
-        <figure className="relative mx-auto aspect-[3/4] w-full max-w-md overflow-hidden rounded-2xl border border-border bg-surface shadow-sm lg:mx-0">
+        <figure className="relative mx-auto aspect-[3/4] w-full max-w-52 overflow-hidden rounded-[1.75rem] border border-border bg-surface shadow-lg shadow-accent/5 sm:max-w-56 lg:col-start-2 lg:row-span-2 lg:mx-0 lg:max-w-60 lg:justify-self-end lg:self-center">
           <Image
-            src="/images/rohan-iceland-waterfall.jpg"
-            alt="Rohan standing behind a waterfall in Iceland"
+            src="/images/rohan-cartoon-portrait.webp"
+            alt="Illustrated portrait of Rohan wearing sunglasses"
             fill
             preload
-            sizes="(max-width: 1023px) min(100vw - 2rem, 28rem), 24rem"
+            sizes="(max-width: 639px) 13rem, (max-width: 1023px) 14rem, 15rem"
             className="object-cover"
           />
-          <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/85 via-black/35 to-transparent"
-            aria-hidden="true"
-          />
-          <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-white">
-            <span className="max-w-52 text-sm font-medium leading-snug">
-              somewhere along Iceland&apos;s Ring Road
-            </span>
-            <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.12em] text-white/70">
-              May 2026
-            </span>
-          </figcaption>
         </figure>
+
+        <div className="lg:col-start-1">
+          <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+            <span className="size-1.5 rounded-full bg-warm ring-4 ring-warm/15" />
+            right now
+          </p>
+          <dl className="mt-4 grid overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3 sm:gap-px">
+            <div className="bg-bg p-4">
+              <dt className="text-xs text-muted">in</dt>
+              <dd className="mt-1 text-sm font-medium text-fg">{site.currentLocation}</dd>
+            </div>
+            <div className="border-t border-border bg-bg p-4 sm:border-t-0">
+              <dt className="text-xs text-muted">this summer</dt>
+              <dd className="mt-1 text-sm font-medium text-fg">ML at {site.currentRole.org}</dd>
+            </div>
+            <div className="border-t border-border bg-bg p-4 sm:border-t-0">
+              <dt className="text-xs text-muted">training for</dt>
+              <dd className="mt-1 text-sm font-medium leading-relaxed text-fg">my first {running.race.name}</dd>
+            </div>
+          </dl>
+        </div>
       </section>
 
       <section className="border-y border-border bg-surface/40">
