@@ -30,7 +30,10 @@ export const metadata: Metadata = {
   description:
     "I'm Rohan, a UVA computer science student who likes making things I can actually use. This is where I keep my projects, running progress, travel, and whatever I'm working on now.",
   metadataBase: new URL("https://rohansingh04.com"),
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": "/feed.xml" },
+  },
   authors: [{ name: "Rohan Singh", url: "https://rohansingh04.com" }],
   creator: "Rohan Singh",
   keywords: [
@@ -87,6 +90,13 @@ export default function RootLayout({
       <head>
         {/* blocking script -- must run before body paint */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* page metadata overrides `alternates` per page, so declare RSS discovery directly */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Rohan Singh · notes"
+          href="/feed.xml"
+        />
       </head>
       <body className="bg-bg text-fg antialiased min-h-screen flex flex-col">
         <a

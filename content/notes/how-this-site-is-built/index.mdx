@@ -1,0 +1,77 @@
+---
+title: "How this site is built, and who builds it"
+description: "The stack, the design rules, the test suite that guards the truth, and the honest role AI agents play in maintaining it."
+date: "2026-07-17"
+tags: ["next.js", "typescript", "testing", "ai"]
+---
+
+This site is a project like the [others](/projects): it has a stack, opinions,
+a test suite, and a few scars. This note is the colophon, plus an honest
+answer to a question people have started asking: how much of this did AI
+build?
+
+## the stack
+
+Next.js 16 with the App Router, TypeScript throughout, Tailwind 4 with a
+CSS-first config. Type is Fraunces for headings, Geist for body, JetBrains
+Mono for data and labels. The globe on the [travel page](/globe) is React
+Three Fiber. Hosting is Vercel.
+
+The live parts pull from real sources through 15 API routes: Spotify for what
+I am playing, GitHub for what I am shipping, Apple Health data posted by an
+iOS Shortcut into Vercel KV, and a training payload published by my
+[marathon pipeline](/projects/marathon-prep-bot). Everything else is flat
+files in the repo, JSON and MDX, because for a site maintained by one person,
+content in git beats a database.
+
+## the design rules
+
+Content first. Data and interaction only where they add something. Lowercase
+labels, generous whitespace, one accent color, dark mode that gets the same
+attention as light. If a page makes someone work to understand who I am or
+what I made, the page is wrong.
+
+## the tests guard the truth
+
+The part I actually recommend copying: the test suite protects facts, not
+just code.
+
+Unit tests cover the data and parsing layers, 61 at last count. Content
+integrity tests fail the build if a screenshot goes missing, an internal
+route breaks, or a project's proof points drift from what the repos can back
+up. Playwright drives the real built site and runs axe accessibility checks
+against WCAG A and AA on every core page. A live-check script hits production
+after deploys and fails loudly if a demo is down or if copy that should not
+exist creeps back in. Security headers are set explicitly, admin routes sit
+behind cookie auth, and the fitness data goes through a field whitelist so
+GPS and raw health detail never deploy.
+
+The résumé here also exists for machines: structured data for the pages, a
+generated social image per project, and an llms.txt index for whatever reads
+sites now.
+
+## who builds it
+
+I design and decide. AI agents do an increasing share of the typing, and I
+think being specific about that arrangement is more interesting than hiding
+it.
+
+The repo carries instructions for agents, including a warning that this
+Next.js version is newer than their training data and that they must read
+the bundled docs before writing code. The test suite is the leash. An agent
+can propose anything, but the accessibility checks, the content integrity
+tests, and the truthful strings asserted in end-to-end tests decide what
+ships. When an agent rewrote parts of this site, the tests are what kept
+every number and claim honest.
+
+That arrangement, judgment stays with me, verification lives in code, labor
+is shared, is the same one my marathon coach runs on. It seems to be the
+shape I keep arriving at. I wrote about the deeper version of it in
+[my marathon coach is a chat window](/notes/llm-marathon-coach).
+
+## still changing
+
+The site keeps growing sideways: the fitness page turned into a live
+dashboard, travel turned into a globe, and now writing has its own corner.
+That is the fun of it. It can keep changing as long as the tests keep
+passing.

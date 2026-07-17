@@ -6,6 +6,7 @@ const corePages = [
   { path: "/projects", heading: "Things I've built on my own and with good people." },
   { path: "/projects/marathon-prep-bot", heading: "Marathon Prep Bot" },
   { path: "/projects/spotify-recommender", heading: "Signal" },
+  { path: "/notes", heading: "Things worth writing down." },
   { path: "/resume", heading: "Rohan Singh" },
 ] as const;
 
@@ -79,6 +80,14 @@ test("the portfolio and project pages use distinct tab icons", async ({ page }) 
   }
 
   expect(icons.size).toBe(paths.length);
+});
+
+test("notes render the essay and the way back", async ({ page }) => {
+  await page.goto("/notes/llm-marathon-coach");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "My marathon coach is a chat window" }),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "← all notes" }).first()).toBeVisible();
 });
 
 test("web resume includes the selected project proof", async ({ page }) => {

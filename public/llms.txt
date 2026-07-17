@@ -11,6 +11,11 @@
 - [Parking Shark](https://rohansingh04.com/projects/parking-shark): peer-to-peer parking marketplace built on a 13-table MySQL model with conflict-safe reservations.
 - [Personal Site](https://rohansingh04.com/projects/personal-site): this site, built with Next.js 16 and TypeScript, pulling live Spotify, GitHub, and fitness data.
 
+## Notes
+
+- [My marathon coach is a chat window](https://rohansingh04.com/notes/llm-marathon-coach): how he built a training system where an LLM writes the plans, a pipeline computes the numbers, and code keeps everyone honest.
+- [How this site is built, and who builds it](https://rohansingh04.com/notes/how-this-site-is-built): the stack, the design rules, the test suite that guards the truth, and the honest role AI agents play in maintaining it.
+
 ## Pages
 
 - [Resume](https://rohansingh04.com/resume): education, work experience, selected projects, and a downloadable PDF resume.

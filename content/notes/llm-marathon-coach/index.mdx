@@ -1,0 +1,112 @@
+---
+title: "My marathon coach is a chat window"
+description: "How I built a training system where an LLM writes the plans, a pipeline computes the numbers, and code keeps everyone honest."
+date: "2026-07-17"
+tags: ["llm", "typescript", "running", "data"]
+---
+
+Every week I open a chat window, and my coach reads my training week. Every run
+with per-mile splits, heart rate against my own measured zones, training load,
+how well I slept, whether my easy days were actually easy. Then it writes next
+week's plan, explains every choice, and publishes the plan to the [fitness
+page](/fitness) on this site. The coach is a large language model. The honesty
+is enforced by everything around it.
+
+## what I wanted
+
+I signed up for the Richmond Marathon in November 2026, my first. Training
+plans from apps felt generic, and none of them knew my history: three years off
+after cross country, a knee I watch carefully, summers that move me across the
+country. I wanted a coach that remembered all of it, put each workout in
+context, and could tell me whether I was actually improving.
+
+I also did not want an autonomous agent quietly running my training. I wanted
+judgment I could interrogate, in a conversation, with receipts.
+
+## the shape of it
+
+The system has a strict split. A TypeScript pipeline owns every number. The
+model owns the judgment. The repo is the memory.
+
+My Apple Watch and a chest strap record each workout. HealthFit exports the
+raw FIT file to iCloud, and an import command decodes it with Garmin's FIT SDK,
+checksum-gated so corrupt files cannot sneak in. From the per-second streams
+the pipeline computes splits, heart-rate zones against bands measured from my
+own runs, Banister TRIMP training load, aerobic decoupling, and normalized
+power. It dedupes near-identical recordings, enriches outdoor runs with the
+temperature at that hour from Open-Meteo, and commits one JSON file per
+workout. The archive is over 1,300 activities going back to 2022, and the
+archive is the repo.
+
+When it is time to coach, one command prints the full context: this week's
+enriched runs, the multi-week history, a live fitness estimate, workload
+ratios, and recovery detail from HRV, resting heart rate, and sleep. The model
+reads that, reads the coaching log from previous weeks, and writes the plan.
+
+## why not just use the Strava API
+
+I started there. Then Strava moved API access behind a subscription in July
+2026, which settled an argument I was already having with myself. The watch is
+the source of truth anyway. Going direct to FIT files is richer, since I get
+per-second streams and can compute my own zones and load instead of taking
+whatever an API exposes. And nobody can revoke my access to my own files.
+
+## the part I care about most
+
+A language model will happily tell you a confident story about numbers it has
+never seen. So the system is built so it never has to be trusted.
+
+Every number the coach quotes is computed deterministically by the pipeline,
+never recalled from the model. The science it cites is named and checkable:
+Daniels' VDOT for fitness, Swain's regression for effort from heart rate,
+Banister's fitness-fatigue model for load, Seiler's intensity distribution for
+the easy-hard split. The workload ratio is treated as an advisory signal, not
+an injury oracle, because that is what the evidence supports.
+
+Publishing has a gate. A command validates the plan, all seven days plus the
+mileage total, pushes it to the live site, then reads production back and
+confirms the same seven days came home. A plan is not finished until it is
+verified live. The coaching log's day lines are the single source of truth,
+and the website renders them verbatim, so the plan I follow and the plan that
+was written cannot drift apart.
+
+And there is a privacy line. The public dashboard is fed through a strict
+field whitelist. Mileage and paces go out. GPS coordinates, filenames, and
+health notes never leave my machine.
+
+## what the model is actually good for
+
+Synthesis with memory. It reads a week of enriched data and tells me things a
+template never could: that my easy runs crept into the grey zone again, at
+which exact heart rates, and why that steals from the hard days. That my
+aerobic threshold, measured from my own decoupling data rather than a formula,
+sits around 150 bpm. That this week earned a push, or did not, based on named
+signals: completion, soreness notes, whether easy-pace heart rate is drifting
+down. The calendar bends to the signals, never the reverse.
+
+It is also good at being wrong out loud. The limits are part of the operating
+manual: this is one athlete, max heart rate is estimated, population
+regressions will miss on me, and a real race always beats a model. When a
+benchmark lands, every estimate defers to it.
+
+## the failures that shaped it
+
+One of the biggest weeks in my training history turned out to be fake. A
+27-mile week contained a half marathon counted twice, one recording echoed
+through two sources, and the near-duplicate guard that now exists came
+directly from that discovery. My watch sometimes gets stopped mid-run at a water fountain, so the
+pipeline stitches recordings that start within minutes of each other into one
+session instead of calling them two runs. My home network silently blocks
+outbound SMTP, which killed emailed plans until delivery moved to an HTTPS
+API. None of this was in the design. All of it is in the tests now.
+
+## where it stands
+
+Mileage is building week over week toward race day, the grey zone problem is
+measurably fixed, and the long run is stretching out. Richmond is November 14.
+The goal is sub-3:45. The [fitness page](/fitness) updates as I train, and
+after the race I will write down what the model got right and what it did not.
+
+The point was never that an LLM can write a training plan. It is that memory,
+verified data, and a publish gate turn a chat window into something worth
+trusting with a goal I care about.

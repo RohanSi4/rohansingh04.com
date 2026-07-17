@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllProjects } from "@/lib/content";
+import { getAllNotes } from "@/lib/notes";
 
 const base = "https://rohansingh04.com";
 
@@ -9,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: base, lastModified: contentUpdated, changeFrequency: "weekly", priority: 1 },
     { url: `${base}/fitness`, lastModified: contentUpdated, changeFrequency: "daily", priority: 0.9 },
     { url: `${base}/projects`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${base}/notes`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/history`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/resume`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/now`, lastModified: contentUpdated, changeFrequency: "monthly", priority: 0.7 },
@@ -24,5 +26,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: project.featured ? 0.8 : 0.6,
   }));
 
-  return [...staticRoutes, ...projectRoutes];
+  const noteRoutes: MetadataRoute.Sitemap = getAllNotes().map((note) => ({
+    url: `${base}/notes/${note.slug}`,
+    lastModified: new Date(note.date),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...projectRoutes, ...noteRoutes];
 }
