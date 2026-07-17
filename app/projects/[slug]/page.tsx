@@ -9,7 +9,6 @@ import { formatDateRange } from "@/lib/dates";
 import { getStaticRunningDashboard } from "@/lib/running";
 import { ProjectVisual } from "@/components/projects/ProjectFeatureCard";
 import MarathonArchitecture from "@/components/projects/MarathonArchitecture";
-import { socialImage } from "@/lib/metadata";
 
 const statusLabel = {
   "in-progress": "still working on this",
@@ -32,6 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const meta = getProjectMeta(slug);
   if (!meta) return { title: "not found" };
+  // og/twitter images intentionally omitted: the colocated opengraph-image.tsx
+  // file convention has higher priority and supplies a per-project image
   return {
     title: meta.title,
     description: meta.summary,
@@ -40,13 +41,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${meta.title} | Rohan Singh`,
       description: meta.summary,
       url: `/projects/${meta.slug}`,
-      images: [socialImage],
     },
     twitter: {
       card: "summary_large_image",
       title: `${meta.title} | Rohan Singh`,
       description: meta.summary,
-      images: [socialImage],
     },
   };
 }
@@ -64,8 +63,28 @@ export default async function ProjectPage({ params }: Props) {
   const { content } = await compileMDX({ source, options: { parseFrontmatter: true } });
   const running = meta.slug === "marathon-prep-bot" ? getStaticRunningDashboard() : null;
 
+  const projectSchema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    name: meta.title,
+    description: meta.summary,
+    url: `https://rohansingh04.com/projects/${meta.slug}`,
+    author: {
+      "@type": "Person",
+      name: "Rohan Singh",
+      url: "https://rohansingh04.com",
+    },
+  };
+  if (meta.githubUrl) {
+    projectSchema.codeRepository = meta.githubUrl;
+  }
+
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema).replace(/</g, "\\u003c") }}
+      />
       <header className="site-container page-section pb-10 sm:pb-14">
         <Link href="/projects" className="inline-flex min-h-11 items-center text-sm text-muted transition-colors hover:text-fg">← all projects</Link>
         <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(22rem,.75fr)] lg:items-start lg:gap-16">

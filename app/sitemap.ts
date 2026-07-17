@@ -4,7 +4,7 @@ import { getAllProjects } from "@/lib/content";
 const base = "https://rohansingh04.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const contentUpdated = new Date("2026-07-14");
+  const contentUpdated = new Date("2026-07-17");
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: base, lastModified: contentUpdated, changeFrequency: "weekly", priority: 1 },
     { url: `${base}/fitness`, lastModified: contentUpdated, changeFrequency: "daily", priority: 0.9 },
