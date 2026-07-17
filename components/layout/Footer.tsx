@@ -47,6 +47,14 @@ export default function Footer() {
             <Link href="/resume" className="inline-flex min-h-11 items-center transition-colors hover:text-fg">
               resume
             </Link>
+            <a
+              href="https://github.com/RohanSi4/rohansingh04.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center transition-colors hover:text-fg"
+            >
+              source <span aria-hidden="true">↗</span>
+            </a>
           </nav>
         </div>
       </div>

@@ -124,5 +124,6 @@ export type SiteConfig = {
   currentRole: { title: string; org: string };
   currentLocation: string;
   currentFocus: string;
+  currentChapter: string; // short season label, e.g. "summer 2026"
   graduationDate: string; // YYYY-MM
 };

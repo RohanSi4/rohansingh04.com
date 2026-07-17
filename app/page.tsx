@@ -52,7 +52,12 @@ export default async function HomePage() {
       "https://github.com/RohanSi4",
       "https://linkedin.com/in/rohansingh4",
     ],
-    alumniOf: {
+    jobTitle: "Machine Learning Engineer Intern",
+    worksFor: {
+      "@type": "Organization",
+      name: "Expedia Group",
+    },
+    affiliation: {
       "@type": "CollegeOrUniversity",
       name: "University of Virginia",
     },
@@ -93,7 +98,7 @@ export default async function HomePage() {
                 <dd className="mt-1 text-sm font-medium text-fg">{site.currentLocation}</dd>
               </div>
               <div className="border-t border-border bg-bg p-4 sm:border-t-0">
-                <dt className="text-xs text-muted">this summer</dt>
+                <dt className="text-xs text-muted">{site.currentChapter}</dt>
                 <dd className="mt-1 text-sm font-medium text-fg">ML at {site.currentRole.org}</dd>
               </div>
               <div className="border-t border-border bg-bg p-4 sm:border-t-0">
@@ -194,7 +199,7 @@ export default async function HomePage() {
               <h3 className="mt-4 font-serif text-3xl font-semibold tracking-tight">{site.currentLocation}</h3>
               <p className="mt-3 text-sm leading-relaxed text-muted">What I&apos;m doing, what I&apos;m training for, and whatever has my attention lately.</p>
               <div className="mt-auto flex items-end justify-between border-t border-border pt-4">
-                <span className="font-mono text-xs text-muted">summer 2026</span><span className="text-sm text-accent-dim transition-transform group-hover:translate-x-1">read more →</span>
+                <span className="font-mono text-xs text-muted">{site.currentChapter}</span><span className="text-sm text-accent-dim transition-transform group-hover:translate-x-1">read more →</span>
               </div>
             </Link>
           </div>
