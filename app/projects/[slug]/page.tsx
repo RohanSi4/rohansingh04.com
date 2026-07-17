@@ -7,6 +7,7 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import { getProjectMeta, getAllProjects } from "@/lib/content";
 import { formatDateRange } from "@/lib/dates";
 import { getStaticRunningDashboard } from "@/lib/running";
+import { getDemoStatus, normalizeDemoUrl, relativeCheckTime } from "@/lib/status";
 import { ProjectVisual } from "@/components/projects/ProjectFeatureCard";
 import MarathonArchitecture from "@/components/projects/MarathonArchitecture";
 
@@ -62,6 +63,12 @@ export default async function ProjectPage({ params }: Props) {
   const source = fs.readFileSync(mdxPath, "utf-8");
   const { content } = await compileMDX({ source, options: { parseFrontmatter: true } });
   const running = meta.slug === "marathon-prep-bot" ? getStaticRunningDashboard() : null;
+
+  const isExternalDemo = Boolean(meta.liveUrl?.startsWith("http"));
+  const demoStatus = isExternalDemo ? await getDemoStatus() : null;
+  const demoEntry = isExternalDemo && meta.liveUrl
+    ? demoStatus?.get(normalizeDemoUrl(meta.liveUrl))
+    : undefined;
 
   const projectSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -128,6 +135,12 @@ export default async function ProjectPage({ params }: Props) {
               ))}
               {meta.githubUrl && <a href={meta.githubUrl} target="_blank" rel="noopener noreferrer" className="button-secondary">see the code <span aria-hidden="true">↗</span></a>}
             </div>
+            {demoEntry?.ok && (
+              <p className="mt-3 flex items-center gap-2 font-mono text-[10px] text-muted">
+                <span className="size-1.5 rounded-full bg-accent" aria-hidden="true" />
+                demo up · checked {relativeCheckTime(demoEntry.generatedAt)}
+              </p>
+            )}
             {meta.slug === "marathon-prep-bot" && (
               <p className="mt-4 text-xs leading-relaxed text-muted">
                 The working code stays private because the repository contains raw

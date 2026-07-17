@@ -1,5 +1,6 @@
 const site = "https://rohansingh04.com";
 const forbiddenCopy = /72[- ]?(tracks?|songs?)|demo catalog|offline demo|synthetic demo/i;
+const jsonMode = process.argv.includes("--json");
 
 const checks = [
   { url: `${site}/`, includes: ["Signal", "music worth playing next"] },
@@ -29,6 +30,7 @@ async function fetchWithRetry(url, attempts = 3) {
       });
       if (response.ok) return response;
       lastError = new Error(`${url} returned ${response.status}`);
+      lastError.liveCheckStatus = response.status;
     } catch (error) {
       lastError = error;
     }
@@ -39,7 +41,7 @@ async function fetchWithRetry(url, attempts = 3) {
   throw lastError;
 }
 
-for (const check of checks) {
+async function runCheck(check) {
   const response = await fetchWithRetry(check.url);
   const contentType = response.headers.get("content-type") ?? "";
   const isText = contentType.includes("text") || contentType.includes("json");
@@ -47,13 +49,37 @@ for (const check of checks) {
 
   for (const expected of check.includes ?? []) {
     if (!body.includes(expected)) {
-      throw new Error(`${check.url} is missing expected copy: ${expected}`);
+      const error = new Error(`${check.url} is missing expected copy: ${expected}`);
+      error.liveCheckStatus = response.status;
+      throw error;
     }
   }
   if (check.url.startsWith(site) && isText && forbiddenCopy.test(body)) {
-    throw new Error(`${check.url} contains stale Signal wording`);
+    const error = new Error(`${check.url} contains stale Signal wording`);
+    error.liveCheckStatus = response.status;
+    throw error;
   }
-  console.log(`ok ${response.status} ${check.url}`);
+  return response;
 }
 
-console.log(`live check passed for ${checks.length} URLs`);
+if (jsonMode) {
+  const results = [];
+  for (const check of checks) {
+    try {
+      const response = await runCheck(check);
+      results.push({ url: check.url, ok: true, status: response.status });
+    } catch (error) {
+      const status = typeof error?.liveCheckStatus === "number" ? error.liveCheckStatus : null;
+      results.push({ url: check.url, ok: false, status });
+      console.error(`fail ${check.url}: ${error?.message ?? error}`);
+    }
+  }
+  console.log(JSON.stringify({ generatedAt: new Date().toISOString(), results }, null, 2));
+  process.exitCode = results.every((result) => result.ok) ? 0 : 1;
+} else {
+  for (const check of checks) {
+    const response = await runCheck(check);
+    console.log(`ok ${response.status} ${check.url}`);
+  }
+  console.log(`live check passed for ${checks.length} URLs`);
+}

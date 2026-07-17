@@ -1,0 +1,53 @@
+name: demo status
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: demo-status
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run live checks
+        id: checks
+        run: |
+          set +e
+          node scripts/check-live.mjs --json > /tmp/status.json
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          cat /tmp/status.json
+
+      - name: Publish status branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('/tmp/status.json', 'utf8'))"
+          mkdir /tmp/status-branch
+          cp /tmp/status.json /tmp/status-branch/status.json
+          cd /tmp/status-branch
+          git init -b status
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add status.json
+          git commit -m "status: $(date -u +%FT%TZ)"
+          git push --force "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:status
+
+      - name: Fail on downtime
+        if: steps.checks.outputs.exit_code != '0'
+        run: |
+          echo "one or more live checks failed; see the Run live checks step"
+          exit 1
