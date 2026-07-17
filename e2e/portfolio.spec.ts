@@ -59,6 +59,28 @@ for (const path of ["/projects/marathon-prep-bot", "/projects/spotify-recommende
   });
 }
 
+test("the portfolio and project pages use distinct tab icons", async ({ page }) => {
+  const paths = [
+    "/",
+    "/projects/marathon-prep-bot",
+    "/projects/movie-recommender",
+    "/projects/spotify-recommender",
+    "/projects/parking-shark",
+    "/projects/personal-site",
+    "/projects/health-tracker-ios",
+  ];
+  const icons = new Set<string>();
+
+  for (const path of paths) {
+    await page.goto(path);
+    const href = await page.locator('link[rel="icon"]').getAttribute("href");
+    expect(href).toBeTruthy();
+    icons.add(href ?? "");
+  }
+
+  expect(icons.size).toBe(paths.length);
+});
+
 test("web resume includes the selected project proof", async ({ page }) => {
   await page.goto("/resume");
   const projects = page.getByRole("heading", { level: 2, name: "selected projects" });
