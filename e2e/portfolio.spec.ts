@@ -95,7 +95,7 @@ test("web resume includes the selected project proof", async ({ page }) => {
   const projects = page.getByRole("heading", { level: 2, name: "selected projects" });
   await expect(projects).toBeVisible();
   await expect(page.getByRole("heading", { level: 3, name: "Marathon Prep Bot" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 3, name: "Movie Recommender" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "Shortlist" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 3, name: "Signal" })).toBeVisible();
 });
 

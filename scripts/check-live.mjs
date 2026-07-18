@@ -4,7 +4,7 @@ const jsonMode = process.argv.includes("--json");
 
 const checks = [
   { url: `${site}/`, includes: ["Signal", "music worth playing next"] },
-  { url: `${site}/projects`, includes: ["Marathon Prep Bot", "Movie Recommender", "Signal"] },
+  { url: `${site}/projects`, includes: ["Marathon Prep Bot", "Shortlist", "Signal"] },
   { url: `${site}/projects/marathon-prep-bot`, includes: ["More than 1,300 workouts", "From a workout to a useful week"] },
   { url: `${site}/projects/spotify-recommender`, includes: ["Spotify's real catalog", "five invited listeners"] },
   { url: `${site}/resume`, includes: ["selected projects", "Marathon Prep Bot"] },
