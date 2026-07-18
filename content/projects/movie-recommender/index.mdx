@@ -11,7 +11,7 @@ The live app starts by asking for one to five favorites. It blends what the mode
 learned about those movies into a temporary taste profile, then searches the
 full catalog for the closest matches. No account or personal data is needed.
 
-- a two-tower model that learns 64-dimensional viewer and movie embeddings
+- a two-tower model that learns stored viewers and the live one-to-five favorite flow together
 - exact retrieval across 87,585 movies in the Go API
 - search, similar movies, fresh batches, details, and locally saved shortlists
 - TMDB posters and metadata so the results feel like movies, not rows in a dataset
@@ -35,7 +35,12 @@ Go retrieval API
 Next.js app
 ```
 
-Python handles training and evaluation. The exported serving bundle contains
+Python handles training and evaluation. One training objective learns stored
+viewer profiles. A second mixes one to five movies someone liked and learns to
+find another movie they liked. That second objective uses the same taste profile
+the live app builds.
+
+The exported serving bundle contains
 compact movie and viewer vectors, the movies each viewer already saw, and
 checksums so the API never quietly loads mismatched files. Go scans the learned
 movie space, filters seen or dismissed titles, and returns the best matches.
@@ -43,10 +48,24 @@ Next.js turns those results into something easy to explore.
 
 ## what was difficult
 
-Getting a good offline score was only one part of the job. The bigger challenge
-was making sure the live API served the same logic I evaluated in Python. I had
-to define a reliable cross-language data contract, filter a viewer's history,
-support new visitors with no account, and keep each fresh batch genuinely fresh.
+The original 0.229 Recall@100 result measured stored viewer profiles, but the
+public app asks a different question: what can the model learn from a handful of
+favorite movies? That was a useful model result, but it was not the right main
+claim for the product.
+
+I added a separate test that follows the real visitor flow. It freezes the data
+at one point in time, finds people with no earlier history, uses their earliest
+one, three, or five favorites as the input, and treats the movies they liked
+later as the answer. Validation and test users are split before model selection,
+so the final 7,060-user test stays untouched until the model is chosen.
+
+Training needed work too. User-balanced batches stop the most active viewers
+from taking over, repeated target movies are collapsed inside each batch, and a
+second loss directly trains the favorite-movie mix used by the app. The bigger
+challenge was still making sure the live Go API served the same logic I evaluated
+in Python. I had to define a reliable cross-language data contract, filter a
+viewer's history, support new visitors with no account, and keep each fresh batch
+genuinely fresh.
 
 That work also caught a serving bug that parsed decimal rating counts as zero.
 Fixing it changed fallback quality and search ordering, including putting the
@@ -55,14 +74,17 @@ last mile can undo a strong model if the data contract is wrong.
 
 ## proof it works
 
-- 0.229 recall@100, compared with 0.127 for the popularity baseline
-- 0.482 recall@500, compared with 0.300 for popularity
+- 84.1% HitRate@10 on the untouched five-favorite test, compared with 73.8% for popularity
+- 0.331 Recall@100, compared with 0.228 for popularity, a 45% relative lift
+- 14.5% catalog coverage at 100 results, compared with 0.12% for popularity
+- 0.237 Recall@100 for stored viewers, compared with 0.127 for popularity
 - 87,585 movies and 186,458 learned viewer profiles in the serving bundle
-- 4.3 ms median and 5.8 ms p95 locally for known-viewer requests
+- 4.0 ms median and 5.6 ms p95 locally for known-viewer requests
 - 28.8 million seen viewer-movie pairs available for history filtering
 
-Those measurements are committed with the code, and CI reruns the model export,
-Go tests, frontend build, browser flows, mobile checks, and accessibility checks.
+Those measurements and their exact test protocol are committed with the code.
+CI runs the ML and export tests, Go tests, frontend build, browser flows, mobile
+checks, and accessibility checks.
 The earlier LightGBM ranker still has its own 11.8% offline lift, but the public
 app now serves the learned two-tower retrieval path directly.
 

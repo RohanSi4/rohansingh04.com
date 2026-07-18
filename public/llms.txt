@@ -6,7 +6,7 @@
 
 - [Marathon Prep Bot](https://rohansingh04.com/projects/marathon-prep-bot): TypeScript pipeline that turns more than 1,300 workouts into a private coaching system and a privacy-safe public dashboard.
 - [Signal](https://rohansingh04.com/projects/spotify-recommender): music discovery over the real Spotify catalog with explained picks and no login required.
-- [Shortlist](https://rohansingh04.com/projects/movie-recommender): pick up to five favorite movies and get a personal shortlist from a two-tower retriever over 87,585 titles, served by Go through a live Next.js app.
+- [Shortlist](https://rohansingh04.com/projects/movie-recommender): pick up to five favorite movies and get a personal shortlist from a two-tower retriever over 87,585 titles. Its five-favorite flow reached 84.1% HitRate@10 and 0.331 Recall@100 on an untouched 7,060-user test.
 - [Health Recap](https://rohansingh04.com/projects/health-tracker-ios): native SwiftUI morning recap of sleep and movement with overlap-safe sleep math and 11 domain tests.
 - [Parking Shark](https://rohansingh04.com/projects/parking-shark): peer-to-peer parking marketplace built on a 13-table MySQL model with conflict-safe reservations.
 - [Personal Site](https://rohansingh04.com/projects/personal-site): this site, built with Next.js 16 and TypeScript, pulling live Spotify, GitHub, and fitness data.
