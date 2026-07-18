@@ -16,7 +16,7 @@
   "endDate": "2026-01",
   "status": "shipped",
   "featured": true,
-  "githubUrl": "https://github.com/RohanSi4/Shortlist",
+  "githubUrl": "https://github.com/RohanSi4/movie-recommender-shortlist",
   "liveUrl": "https://movie-reccomender-system-red.vercel.app/",
   "subProjects": []
 }
