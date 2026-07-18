@@ -23,6 +23,7 @@ const skillGroups = [
       "Spring Boot",
       "Flask",
       "GraphQL",
+      "PyTorch",
       "LightGBM",
       "scikit-learn",
       "SciPy",

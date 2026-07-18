@@ -1,19 +1,19 @@
 {
   "slug": "movie-recommender",
   "title": "Shortlist",
-  "tagline": "Movie recommendations that go beyond another trending list",
-  "summary": "I wanted better movie recommendations. I also wanted to turn the model into an app instead of leaving it in a notebook. Python does the learning, Go keeps it fast, and the site lets anyone try it.",
-  "outcome": "The recommendations beat my baseline by 11.8%, and the app returns them in about 17 milliseconds.",
-  "role": "Built the ML model, Go API, and web app myself",
+  "tagline": "Pick a few favorites and get a movie mix built around your taste",
+  "summary": "Pick one to five movies you already love and Shortlist builds a fresh set of recommendations from the overlap in your taste. I trained the retrieval model, built the Go API, and shipped the full product.",
+  "outcome": "The retriever reached 0.229 recall@100 against 0.127 for popularity while searching a catalog of 87,585 movies.",
+  "role": "Built the retrieval model, Go serving system, and web app myself",
   "proofPoints": [
-    "11.8% lift over the baseline in offline ranking evaluation",
-    "About 17 milliseconds for the current Go recommendation path",
-    "A live search and recommendation flow backed by MovieLens and TMDB"
+    "0.229 recall@100 versus 0.127 for popularity on the same held-out data",
+    "Exact retrieval across 87,585 movies with a 4.3 ms local median for known viewers",
+    "A live taste builder that blends up to five favorites without requiring an account"
   ],
   "visual": "ranking",
-  "tags": ["ml", "go", "python", "next.js"],
+  "tags": ["ml", "go", "pytorch", "next.js"],
   "startDate": "2025-12",
-  "endDate": "2026-01",
+  "endDate": "2026-07",
   "status": "shipped",
   "featured": true,
   "githubUrl": "https://github.com/RohanSi4/movie-recommender-shortlist",

@@ -1,42 +1,76 @@
 ## what I wanted
 
-I like recommendation systems, but I did not want this project to end as another
-model trapped in a notebook. I wanted to search for a movie, get picks that made
-sense, and understand why each title showed up.
+Most movie sites hand everyone the same trending list. I wanted to choose a few
+movies I already love and get a shortlist that actually feels connected to my
+taste. I also wanted the model to become a real product, not another notebook I
+ran once and forgot about.
 
 ## what I built
 
-I built the full path from raw ratings to a site someone can use:
+The live app starts by asking for one to five favorites. It blends what the model
+learned about those movies into a temporary taste profile, then searches the
+full catalog for the closest matches. No account or personal data is needed.
 
-- recommendations for a MovieLens user based on historical ratings
-- title search that finds similar movies from a selected starting point
-- TMDB metadata for genres, release year, runtime, popularity, and posters
-- a Next.js interface backed by a low-latency Go service
+- a two-tower model that learns 64-dimensional viewer and movie embeddings
+- exact retrieval across 87,585 movies in the Go API
+- search, similar movies, fresh batches, details, and locally saved shortlists
+- TMDB posters and metadata so the results feel like movies, not rows in a dataset
+- a responsive Next.js app that works without a login
 
-![Searching for movies in the recommender interface](/projects/movie-recommender-ui.jpg)
+![Choosing favorite movies to build a personal taste profile](/projects/movie-recommender-ui.jpg)
 
-![Ranked movie recommendations with scores and reasons](/projects/movie-recommender-results.jpg)
+![A personal shortlist with movie details and clear reasons](/projects/movie-recommender-results.jpg)
 
-The system has three parts. Python loads MovieLens data, adds TMDB metadata,
-builds features, and evaluates a LightGBM ranking model. A Go API handles the
-live recommendation path. Next.js turns those results into something easy to
-search and compare.
+Here is the path from ratings to the page:
+
+```text
+MovieLens ratings + TMDB metadata
+              ↓
+Python training and evaluation
+              ↓
+Checked movie and viewer embeddings
+              ↓
+Go retrieval API
+              ↓
+Next.js app
+```
+
+Python handles training and evaluation. The exported serving bundle contains
+compact movie and viewer vectors, the movies each viewer already saw, and
+checksums so the API never quietly loads mismatched files. Go scans the learned
+movie space, filters seen or dismissed titles, and returns the best matches.
+Next.js turns those results into something easy to explore.
 
 ## what was difficult
 
-Model quality was only half the problem. I also had to decide how training data,
-exported features, ranking endpoints, and the interface should fit together so a
-recommendation could arrive quickly and still have a useful explanation.
+Getting a good offline score was only one part of the job. The bigger challenge
+was making sure the live API served the same logic I evaluated in Python. I had
+to define a reliable cross-language data contract, filter a viewer's history,
+support new visitors with no account, and keep each fresh batch genuinely fresh.
 
-The offline LightGBM model beat the baseline by 11.8%. The current Go service
-uses a lighter heuristic over the exported features, which keeps the public demo
-fast while full online model inference remains the next serving step. I would
-rather make that tradeoff clear than pretend the demo is serving a model it is
-not serving yet.
+That work also caught a serving bug that parsed decimal rating counts as zero.
+Fixing it changed fallback quality and search ordering, including putting the
+actual *Arrival* ahead of unrelated matches. It was a good reminder that the
+last mile can undo a strong model if the data contract is wrong.
+
+## proof it works
+
+- 0.229 recall@100, compared with 0.127 for the popularity baseline
+- 0.482 recall@500, compared with 0.300 for popularity
+- 87,585 movies and 186,458 learned viewer profiles in the serving bundle
+- 4.3 ms median and 5.8 ms p95 locally for known-viewer requests
+- 28.8 million seen viewer-movie pairs available for history filtering
+
+Those measurements are committed with the code, and CI reruns the model export,
+Go tests, frontend build, browser flows, mobile checks, and accessibility checks.
+The earlier LightGBM ranker still has its own 11.8% offline lift, but the public
+app now serves the learned two-tower retrieval path directly.
 
 ## what works now
 
-The [live app](https://movie-reccomender-system-red.vercel.app/) supports title
-search and user-based recommendations with posters, scores, and short reasons.
-The current Go path responds in about 17 milliseconds. The offline evaluation
-stays separate so anyone can rerun it and check the quality claim.
+The [live app](https://movie-reccomender-system-red.vercel.app/) lets anyone build
+a taste profile, get a personal shortlist, save good picks, dismiss misses, ask
+for more movies like one result, and pull a fresh batch. Existing MovieLens
+viewers can also try recommendations from their historical ratings. The
+[repository](https://github.com/RohanSi4/movie-recommender-shortlist) includes
+the training, evaluation, serving, and product code behind the full flow.
