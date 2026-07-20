@@ -7,12 +7,14 @@
     "startDate": "2026-06",
     "endDate": null,
     "location": "San Jose, CA",
-    "summary": "Incentive decisioning and uplift modeling for the OneKey loyalty program on the Membership & Engagement team.",
+    "summary": "Real-time incentive decisioning, causal measurement, and ML serving for the OneKey loyalty program on the Membership & Engagement team.",
     "bullets": [
-      "Built a real-time incentive decisioning service with FastAPI for the 98.6M-member OneKey loyalty program",
-      "Proved a +0.58pp causal booking lift from a $15 incentive via randomized holdout analysis of 1M+ members",
-      "Showed 94% of incentivized bookers were windfall using T-learner CATE, making the case for uplift targeting",
-      "Distilled 112 features to 27 servable for a two-tower reward recommender via a train/serve feature contract"
+      "Built a FastAPI prototype for OneKey, a 100M+ member rewards program, with live profiles and safe fallbacks",
+      "Proved a +0.95pp booking lift in a placebo-clean study of 321k members, then replicated the dollar-lift result",
+      "Designed a typed reward API adopted by two sibling services, isolating clients from model changes",
+      "Defined a 27-field train/serve contract from 112 model features and verified live intent-data backfill",
+      "Replay-tested 500k records across a 100-test suite, catching eligibility, timeout, and schema failures before demo",
+      "Queried 12.9M daily Trino rows to validate assignment and derive leakage-safe booking and redemption features"
     ]
   },
   {
