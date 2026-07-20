@@ -88,7 +88,7 @@ export default function ResumePage() {
           <div className="flex shrink-0 flex-col gap-2 sm:items-end">
             <a
               href="/rohan-singh-resume.pdf"
-              download="Rohan-Singh-Resume.pdf"
+              download="Rohan_Singh_Resume.pdf"
               className="button-primary w-fit"
             >
               download PDF <span aria-hidden="true">↓</span>
