@@ -103,7 +103,11 @@ describe("project portfolio content", () => {
 
   it("keeps the featured section to the intended three-project layout", () => {
     const featured = projectDirectories.filter((directory) => projectMeta(directory).featured);
-    expect(featured).toHaveLength(3);
+    expect(featured).toEqual([
+      "health-tracker-ios",
+      "marathon-prep-bot",
+      "movie-recommender",
+    ]);
   });
 
   it("keeps private Marathon data out of public project content", () => {

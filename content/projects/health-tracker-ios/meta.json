@@ -2,20 +2,20 @@
   "slug": "health-tracker-ios",
   "title": "Today",
   "tagline": "The private iPhone companion I use for weight, workouts, and the day's plan",
-  "summary": "I wanted morning weight and gym tracking to take a few taps, not another spreadsheet. Today combines a simple daily plan, fast set logging, strength history, and useful progress views.",
-  "outcome": "Today now works offline, saves protected local backups, writes weight to HealthKit, and sends an end-to-end encrypted snapshot into my private coaching system.",
-  "role": "Designed and built the native iPhone app and its secure sync",
+  "summary": "Today is the iPhone app I use for quick morning weight, gym logging, and the day's coach plan. It stays useful offline, remembers my last sets, and feeds the right level of detail into the rest of my fitness system.",
+  "outcome": "A signed iPhone app now links HealthKit, WorkoutKit, encrypted coach sync, and the live fitness dashboard without creating a second workout record.",
+  "role": "Designed and built the native app, encrypted sync, and public/private data contract",
   "proofPoints": [
-    "Fast set logging, detailed muscle mapping, flexible splits, and WorkoutKit plans sent to Apple Watch",
-    "Local-first storage, HealthKit writes, Keychain secrets, AES-256-GCM sync, and consent-controlled public data",
-    "38 native tests covering workout, weight, recovery, persistence, Watch plans, and security boundaries"
+    "700+ exercise catalog, prior-set defaults, flexible splits, and detailed muscle mapping",
+    "AES-256-GCM coach sync, Keychain credentials, protected recovery, and consent-scoped public stats",
+    "HealthKit, WorkoutKit, App Intents, and 38 tests across persistence, security, plans, and UI"
   ],
   "visual": "health",
-  "tags": ["swift", "swiftui", "healthkit", "security"],
+  "tags": ["swiftui", "healthkit", "workoutkit", "security"],
   "startDate": "2025-04",
   "endDate": null,
   "status": "in-progress",
-  "featured": false,
+  "featured": true,
   "githubUrl": "https://github.com/RohanSi4/today-fitness-ios",
   "liveUrl": "/fitness",
   "subProjects": []

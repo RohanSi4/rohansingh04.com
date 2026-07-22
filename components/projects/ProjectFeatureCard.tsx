@@ -82,17 +82,37 @@ function MusicVisual() {
 }
 
 function HealthVisual() {
+  const facts = [
+    ["700+", "exercises"],
+    ["AES-256", "encrypted sync"],
+    ["38", "native tests"],
+  ];
   return (
-    <div className="absolute inset-0" aria-hidden="true">
-      <Image
-        src="/projects/health-recap-card.jpg"
-        alt=""
-        fill
-        sizes="(min-width: 1024px) 50vw, 100vw"
-        className="object-cover object-center"
-      />
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#222852]/90 to-transparent px-6 pb-5 pt-16 font-mono text-[10px] uppercase tracking-[0.16em] text-white/80">
-        the working simulator recap
+    <div className="absolute inset-0 overflow-hidden bg-[#11291e]" aria-hidden="true">
+      <div className="absolute -left-20 -top-24 size-72 rounded-full border border-white/10" />
+      <div className="absolute -left-8 -top-10 size-48 rounded-full border border-white/[0.07]" />
+      <div className="relative flex h-full items-center gap-5 p-5 sm:gap-8 sm:p-7">
+        <div className="relative h-52 w-24 shrink-0 overflow-hidden rounded-[1.15rem] border border-white/20 bg-white shadow-2xl sm:h-64 sm:w-[7.4rem]">
+          <Image
+            src="/projects/today-home.png"
+            alt=""
+            fill
+            sizes="8rem"
+            className="object-cover object-top"
+          />
+        </div>
+        <div className="min-w-0 flex-1 text-white">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Today on iPhone</p>
+          <p className="mt-2 max-w-48 font-serif text-xl font-semibold leading-tight sm:text-2xl">The plan, the lift, and the useful data after.</p>
+          <dl className="mt-5 space-y-2.5 border-t border-white/15 pt-4">
+            {facts.map(([value, label]) => (
+              <div key={label} className="flex items-baseline justify-between gap-3">
+                <dt className="text-[11px] text-white/60">{label}</dt>
+                <dd className="font-mono text-sm font-medium text-[#8dd4a0]">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </div>
     </div>
   );

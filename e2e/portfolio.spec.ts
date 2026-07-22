@@ -5,6 +5,7 @@ const corePages = [
   { path: "/", heading: "I like making things I actually want to use." },
   { path: "/projects", heading: "Things I've built on my own and with good people." },
   { path: "/projects/marathon-prep-bot", heading: "Marathon Prep Bot" },
+  { path: "/projects/health-tracker-ios", heading: "Today" },
   { path: "/projects/spotify-recommender", heading: "Signal" },
   { path: "/notes", heading: "Things worth writing down." },
   { path: "/resume", heading: "Rohan Singh" },
@@ -37,16 +38,17 @@ test("featured projects show current proof and working calls to action", async (
   await expect(page.getByRole("link", { name: /try it/i })).toHaveAttribute("href", "/fitness");
   await expect(page.getByText(/working code stays private/i)).toBeVisible();
 
-  await page.goto("/projects/spotify-recommender");
-  await expect(page.getByText(/Searches Spotify's real catalog/)).toBeVisible();
-  await expect(page.getByRole("link", { name: /open the demo/i })).toHaveAttribute(
+  await page.goto("/projects/health-tracker-ios");
+  await expect(page.getByText(/native app, encrypted sync, and public\/private data contract/)).toBeVisible();
+  await expect(page.getByText(/700\+ exercise catalog/)).toBeVisible();
+  await expect(page.getByRole("link", { name: /try it/i })).toHaveAttribute("href", "/fitness");
+  await expect(page.getByRole("link", { name: /see the code/i })).toHaveAttribute(
     "href",
-    "https://signal-recommender.vercel.app",
+    "https://github.com/RohanSi4/today-fitness-ios",
   );
-  await expect(page.locator("body")).not.toContainText(/72[- ]?(tracks?|songs?)/i);
 });
 
-for (const path of ["/projects/marathon-prep-bot", "/projects/spotify-recommender"]) {
+for (const path of ["/projects/marathon-prep-bot", "/projects/health-tracker-ios"]) {
   test(`${path} keeps the project title aligned with its proof`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(path);
@@ -96,7 +98,7 @@ test("web resume includes the selected project proof", async ({ page }) => {
   await expect(projects).toBeVisible();
   await expect(page.getByRole("heading", { level: 3, name: "Marathon Prep Bot" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 3, name: "Shortlist" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 3, name: "Signal" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "Today" })).toBeVisible();
 });
 
 test("keyboard users can skip the header", async ({ page }) => {

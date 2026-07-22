@@ -15,7 +15,7 @@
   "startDate": "2025-05",
   "endDate": "2026-07",
   "status": "shipped",
-  "featured": true,
+  "featured": false,
   "githubUrl": "https://github.com/RohanSi4/spotify-recommender-signal",
   "liveUrl": "https://signal-recommender.vercel.app",
   "subProjects": []
