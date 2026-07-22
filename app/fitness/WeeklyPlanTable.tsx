@@ -27,7 +27,7 @@ function PlanTasks({ tasks }: { tasks: WeekPlanTask[] }) {
             <span className={styles.weekPlanTaskCopy}>
               <span>{task.text}</span>
               {task.actual ? (
-                <small>{task.actual} · HealthFit</small>
+                <small>{task.actual} · synced automatically</small>
               ) : null}
             </span>
           </li>
@@ -63,7 +63,7 @@ export function WeeklyPlanTable({
           <div className={styles.weekPlanProgressTrack} aria-hidden="true">
             <span style={{ width: `${percent}%` }} />
           </div>
-          <small>Completed workouts fill in from HealthFit automatically.</small>
+          <small>Completed workouts fill in from Today and HealthFit.</small>
         </div>
       </div>
 

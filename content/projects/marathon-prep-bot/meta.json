@@ -3,15 +3,15 @@
   "title": "Marathon Prep Bot",
   "tagline": "The training dashboard I wanted while getting ready for a marathon",
   "summary": "I wanted one place that could remember my training, put each workout in context, and help me tell whether I was actually improving. So I built it around my own workout history.",
-  "outcome": "More than 1,300 workouts now feed a private coaching system and a public dashboard that stays useful without sharing the sensitive parts of my health data.",
+  "outcome": "More than 1,300 workouts plus live iPhone strength logs now feed one coaching system, with encrypted private sync and a safe public dashboard.",
   "role": "Solo builder and the runner using it every week",
   "proofPoints": [
     "More than 1,300 workouts processed across history going back to 2022",
-    "HealthFit exports become privacy-safe dashboard updates automatically",
-    "Every seven-day plan is checked before it reaches the site"
+    "AES-256-GCM sync joins private iPhone logs with HealthFit without giving the website the decryption key",
+    "236 tests plus live plan validation protect the data and every seven-day publish"
   ],
   "visual": "fitness",
-  "tags": ["typescript", "data", "fitness"],
+  "tags": ["typescript", "data", "security", "fitness"],
   "startDate": "2026-06",
   "endDate": null,
   "status": "in-progress",

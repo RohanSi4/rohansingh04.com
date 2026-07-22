@@ -14,6 +14,9 @@ import TrainingHistoryChart from "./TrainingHistoryChart";
 import { WeeklyPlan } from "./WeeklyPlan";
 import styles from "./fitness.module.css";
 import { socialImage } from "@/lib/metadata";
+import { getPublicStrengthKV } from "@/lib/kv-data";
+import { strengthWeekSummary } from "@/lib/fitness-sync";
+import { StrengthSnapshot } from "./StrengthSnapshot";
 
 export const metadata: Metadata = {
   title: "fitness",
@@ -50,7 +53,7 @@ function daysBetween(start: string, end: string): number {
 }
 
 export default async function FitnessPage() {
-  const data = await getRunningDashboard();
+  const [data, strength] = await Promise.all([getRunningDashboard(), getPublicStrengthKV()]);
   const latestRun = data.recentRuns[0];
   const featuredRun = data.recentRuns.find(
     (run) => run.distanceMi >= Math.max(8, data.currentWeek.longRunMiles - 0.25),
@@ -67,6 +70,26 @@ export default async function FitnessPage() {
   const progress = Math.max(0, Math.min(100, Math.round(((blockLength - daysToRace) / blockLength) * 100)));
   const circumference = 2 * Math.PI * 46;
   const ringOffset = circumference * (1 - progress / 100);
+  const strengthWeek = strengthWeekSummary(strength, data.currentWeek.weekStart);
+  const liftDays = Math.max(data.currentWeek.liftDays, strengthWeek.days);
+  const healthFitStrengthDates = new Set(
+    data.health.recentActivities
+      .filter((activity) => activity.sport === "WeightTraining")
+      .map((activity) => activity.date),
+  );
+  const todayStrengthActivities = strength
+    .filter((session) => !healthFitStrengthDates.has(session.date))
+    .map((session) => ({
+      date: session.date,
+      sport: "WeightTraining",
+      name: `${session.kind} strength training`,
+      movingMins: session.durationMinutes,
+      distanceMi: 0,
+      averageHeartRate: null,
+    }));
+  const combinedActivities = [...data.health.recentActivities, ...todayStrengthActivities]
+    .sort((a, b) => b.date.localeCompare(a.date));
+  const healthWithToday = { ...data.health, recentActivities: combinedActivities };
 
   return (
     <div className={styles.page}>
@@ -150,8 +173,8 @@ export default async function FitnessPage() {
         />
         <FitnessMetric
           label="lifting this week"
-          value={`${data.currentWeek.liftDays} days`}
-          detail="keeping strength in the mix"
+          value={`${liftDays} days`}
+          detail={strengthWeek.workingSets > 0 ? `${strengthWeek.workingSets} working sets logged` : "keeping strength in the mix"}
         />
         <FitnessMetric
           label="active this year"
@@ -160,18 +183,20 @@ export default async function FitnessPage() {
         />
       </section>
 
-      <TodayPlan today={today} health={data.health} week={data.currentWeek} plan={data.trainingPlan} />
+      <TodayPlan today={today} health={healthWithToday} week={{ ...data.currentWeek, liftDays }} plan={data.trainingPlan} />
 
       <WeeklyPlan
         today={today}
         plan={data.trainingPlan}
-        activities={data.health.recentActivities}
+        activities={combinedActivities}
       />
+
+      <StrengthSnapshot sessions={strength} weekStart={data.currentWeek.weekStart} today={today} />
 
       <section className={styles.section} aria-labelledby="progress-title">
         <div className={styles.sectionHeading}>
           <div>
-            <p>03 / the build</p>
+            <p>04 / the build</p>
             <h2 id="progress-title">Training for Richmond.</h2>
           </div>
           <p className={styles.sectionNote}>
@@ -193,7 +218,7 @@ export default async function FitnessPage() {
 
       <section className={styles.aerobicSection} aria-labelledby="latest-title">
         <div className={styles.aerobicCopy}>
-          <p>04 / latest long run</p>
+          <p>05 / latest long run</p>
           <h2 id="latest-title">My latest long run.</h2>
           <p>
             This is the latest long run in the data. I&apos;m watching distance, pace,
@@ -233,7 +258,7 @@ export default async function FitnessPage() {
       <section className={styles.section} aria-labelledby="activity-title">
         <div className={styles.sectionHeading}>
           <div>
-            <p>05 / recent activity</p>
+            <p>06 / recent activity</p>
             <h2 id="activity-title">What I&apos;ve been doing.</h2>
           </div>
           <p className={styles.sectionNote}>
@@ -266,7 +291,7 @@ export default async function FitnessPage() {
 
       <section className={styles.pipeline} aria-labelledby="bigger-goal-title">
         <div className={styles.pipelineIntro}>
-          <p>06 / the bigger goal</p>
+          <p>07 / the bigger goal</p>
           <h2 id="bigger-goal-title">The marathon isn&apos;t the whole point.</h2>
           <p>
             I&apos;m focused on Richmond right now, but I don&apos;t want fitness to become

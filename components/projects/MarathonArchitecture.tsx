@@ -12,6 +12,12 @@ const steps = [
     scope: "private",
   },
   {
+    label: "log",
+    title: "Today on iPhone",
+    text: "Captures weight, exercises, sets, reps, and load without slowing down the workout.",
+    scope: "private",
+  },
+  {
     label: "export",
     title: "HealthFit",
     text: "Moves each workout into a FIT file in iCloud.",
@@ -20,7 +26,7 @@ const steps = [
   {
     label: "understand",
     title: "TypeScript pipeline",
-    text: "Cleans duplicates and adds useful training context.",
+    text: "Decrypts Today, cleans HealthFit duplicates, and joins the two histories.",
     scope: "private",
   },
   {
@@ -57,12 +63,12 @@ export default function MarathonArchitecture({
             </h2>
           </div>
           <p className="text-sm leading-relaxed text-muted sm:text-base">
-            The detailed data stays private. The public page gets a smaller,
-            deliberately safe version of the story.
+            Today encrypts its private snapshot before upload. The public page gets a
+            smaller version with the progress I actually want to share.
           </p>
         </header>
 
-        <ol className="grid gap-px bg-border md:grid-cols-5" aria-label="Marathon Prep Bot data flow">
+        <ol className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-6" aria-label="Marathon Prep Bot data flow">
           {steps.map((step, index) => (
             <li key={step.title} className="relative bg-bg p-5 sm:p-6">
               <div className="flex items-center justify-between gap-3">
@@ -112,8 +118,8 @@ export default function MarathonArchitecture({
           <aside className="bg-[#173c2b] p-6 text-white sm:p-8">
             <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/65">the privacy line</p>
             <p className="mt-3 text-sm leading-relaxed text-white/80">
-              GPS coordinates, raw timestamps, source files, and health notes never
-              cross into the public snapshot.
+              AES-256-GCM protects weight and lifting detail in transit and storage.
+              GPS coordinates, source files, and health notes never reach the public snapshot.
             </p>
           </aside>
         </div>

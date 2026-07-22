@@ -1264,6 +1264,157 @@
   border-radius: 1rem;
 }
 
+.strengthSection {
+  margin-top: clamp(5rem, 11vw, 9rem);
+}
+
+.strengthGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+  gap: 1rem;
+}
+
+.strengthLeadCard,
+.strengthWeekCard,
+.securityCard {
+  border: 1px solid var(--border);
+  border-radius: 1.1rem;
+}
+
+.strengthLeadCard {
+  min-height: 390px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  background:
+    radial-gradient(circle at 92% 8%, color-mix(in srgb, var(--run-orange) 18%, transparent), transparent 28%),
+    var(--run-ink);
+  color: var(--run-cream);
+}
+
+.strengthCardTop,
+.strengthWeekCard > span,
+.securityCard > span {
+  display: flex;
+  justify-content: space-between;
+  color: color-mix(in srgb, var(--run-cream) 58%, transparent);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.61rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+}
+
+.strengthLeadCard h3 {
+  max-width: 8ch;
+  margin-top: 3.5rem;
+  color: var(--run-orange);
+  font-family: var(--font-fraunces), serif;
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 550;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+}
+
+.strengthNumbers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--run-cream) 15%, transparent);
+}
+
+.strengthNumbers div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.strengthNumbers strong {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+.strengthNumbers span {
+  color: color-mix(in srgb, var(--run-cream) 55%, transparent);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.musclePills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1.5rem;
+}
+
+.musclePills span {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--run-cream) 18%, transparent);
+  border-radius: 999px;
+  color: color-mix(in srgb, var(--run-cream) 72%, transparent);
+  font-size: 0.67rem;
+}
+
+.strengthEmpty p {
+  max-width: 28rem;
+  margin-top: 1rem;
+  color: color-mix(in srgb, var(--run-cream) 65%, transparent);
+}
+
+.strengthSide {
+  display: grid;
+  grid-template-rows: 0.85fr 1.15fr;
+  gap: 1rem;
+}
+
+.strengthWeekCard,
+.securityCard {
+  padding: 1.5rem;
+  background: var(--surface);
+}
+
+.strengthWeekCard > span,
+.securityCard > span { color: var(--muted); }
+
+.strengthWeekCard > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 1.1rem;
+}
+
+.strengthWeekCard strong {
+  color: var(--accent);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.strengthWeekCard small,
+.securityCard small { color: var(--muted); }
+.strengthWeekCard p { margin-top: 1rem; color: var(--muted); font-size: 0.75rem; }
+
+.securityCard ol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-top: 1rem;
+}
+
+.securityCard li {
+  display: grid;
+  gap: 0.18rem;
+  padding: 0.85rem;
+  border: 1px solid var(--border);
+}
+
+.securityCard li:nth-child(2n) { border-left: 0; }
+.securityCard li:nth-child(n + 3) { border-top: 0; }
+.securityCard b { color: var(--run-orange); font-family: var(--font-jetbrains-mono), monospace; font-size: 0.55rem; }
+.securityCard strong { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.securityCard small { font-size: 0.65rem; }
+
 .runTable thead,
 .runTable tbody { display: block; }
 
@@ -1368,6 +1519,7 @@
     grid-template-columns: repeat(6, minmax(76px, 1fr));
     overflow-x: auto;
   }
+  .strengthGrid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
@@ -1377,6 +1529,9 @@
   .goalStrip { grid-template-columns: 1fr 1fr; }
   .goalStrip div:last-child { grid-column: 1 / -1; }
   .metrics { grid-template-columns: 1fr; }
+  .strengthLeadCard { min-height: 360px; }
+  .strengthNumbers { grid-template-columns: 1fr 1fr; }
+  .strengthNumbers div:last-child { grid-column: 1 / -1; }
   .metric > span { white-space: normal; }
   .todayHeading, .sectionHeading { gap: 1rem; }
   .todayGrid { grid-template-columns: 1fr; }

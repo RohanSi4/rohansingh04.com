@@ -1,6 +1,41 @@
-Apple Health had the numbers, but checking a collection of charts every morning
-was not how I wanted to use them. I wanted one quick answer: how did yesterday
-go, and is there anything useful I should carry into today?
+Apple Health had plenty of numbers, but it did not solve the parts I kept avoiding.
+I wanted morning weight to take seconds, the day&apos;s plan to be waiting at the gym,
+and working sets to start with what I did last time.
+
+Today is the iPhone app I built around that routine. The front screen shows the
+current coaching plan, a quick morning weight prompt, and one button to start any
+workout. During a lift it remembers the last weight and reps, lets me adjust either
+without fighting a form, and keeps the full exercise history for later.
+
+## one fitness system, three clear jobs
+
+The phone owns capture. My private Marathon Prep Bot owns coaching and analysis.
+The public [fitness page](/fitness) owns the smaller story I actually want to share.
+
+When I save a weight or finish a lift, Today saves locally first. It then seals the
+full snapshot with AES-256-GCM and sends it through a token-protected endpoint. The
+website never receives the decryption key. The coach pulls and opens the snapshot,
+joins it with Apple Watch data from HealthFit, and uses the result when it writes the
+next week.
+
+The public half is deliberately smaller: workout split, time, working sets, and
+broad muscles trained. That is enough to keep the dashboard live without turning
+the site into a copy of my gym notebook.
+
+## made for the actual gym
+
+Upper and lower templates start with the exercises I usually do. Push, pull, legs,
+chest, back, and an empty workout are available when I want something different.
+Each movement understands total load, per-hand load, bodyweight, or added weight.
+The finish screen shows front and back muscle maps with details such as upper chest,
+lats, biceps heads, triceps heads, quads, hamstrings, calves, and abs.
+
+Everything keeps working offline. Protected local storage is the source of truth,
+the previous good file becomes a recovery backup, and failed uploads wait for the
+next connection instead of blocking a workout. Pairing credentials live in Keychain,
+and the app makes the sync state visible instead of pretending the network always works.
+
+## where it started
 
 Health Recap reads sleep, steps, walking distance, and active energy on iPhone.
 It turns them into one daily score, a plain-language takeaway, and the details
@@ -42,7 +77,7 @@ schedule a recap after it sees a completed sleep session. Background HealthKit
 delivery is not built yet, so those reminders are best-effort rather than a
 guaranteed alarm.
 
-The current suite has 11 focused tests plus a repeatable UI test covering the
-sample recap's main sections. Real HealthKit queries still need a signed iPhone,
-but the interface, scoring rules, baselines, and failure states can all be
-reviewed in Simulator.
+That original recap now lives inside Today&apos;s Insights tab. The native suite has 31
+tests across weight logging, workout persistence, muscle scoring, recovery math,
+and HealthKit boundaries. Real HealthKit queries still need a signed iPhone, but
+the rest of the app can be reviewed in Simulator.

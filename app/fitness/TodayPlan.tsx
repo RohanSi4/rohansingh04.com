@@ -103,6 +103,8 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
   const movedToday = health.today.exerciseMinutes > 0;
   const activity = summarizeDayActivities(health.recentActivities, today);
   const ranToday = activity.runCount > 0;
+  const liftedToday = activity.strengthMinutes > 0;
+  const completedToday = ranToday || liftedToday;
   const display = todayPlanDisplay(planned?.text ?? null);
 
   return (
@@ -110,11 +112,11 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
       <div className={styles.todayHeading}>
         <div>
           <p>01 / today</p>
-          <h2 id="today-title">{ranToday ? "The run is in." : "What today looks like."}</h2>
+          <h2 id="today-title">{ranToday ? "The run is in." : liftedToday ? "The lift is in." : "What today looks like."}</h2>
         </div>
         <p>
-          {ranToday
-            ? "Today’s run is done, so tomorrow’s plan moves up next."
+          {completedToday
+            ? ranToday ? "Today’s run is done, so tomorrow’s plan moves up next." : "Today’s lift is logged straight from the gym."
             : "The quick answer for when I just need to know what I’m doing today."}
         </p>
       </div>
@@ -122,19 +124,21 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
       <div className={styles.todayGrid}>
         <article className={styles.todayPlanCard}>
           <div className={styles.todayCardLabel}>
-            <span>{ranToday ? "done today" : "on the plan"}</span>
-            {ranToday ? <strong>HealthFit</strong> : planned?.isKeyDay ? <strong>key day</strong> : null}
+            <span>{completedToday ? "done today" : "on the plan"}</span>
+            {ranToday ? <strong>HealthFit</strong> : liftedToday ? <strong>Today</strong> : planned?.isKeyDay ? <strong>key day</strong> : null}
           </div>
           <div className={styles.todayPlanBody}>
-            <h3>{ranToday ? `${activity.runDistanceMi.toFixed(1)} miles done.` : display.title}</h3>
-            {ranToday ? (
+            <h3>{ranToday ? `${activity.runDistanceMi.toFixed(1)} miles done.` : liftedToday ? `${activity.strengthMinutes} minutes lifting.` : display.title}</h3>
+            {completedToday ? (
               <ul className={styles.todayPlanDetails}>
-                <li>
-                  <div>
-                    <span>{activity.runMinutes} min running</span>
-                    {activity.runCount > 1 ? <small>{activity.runCount} activities combined</small> : null}
-                  </div>
-                </li>
+                {ranToday ? (
+                  <li>
+                    <div>
+                      <span>{activity.runMinutes} min running</span>
+                      {activity.runCount > 1 ? <small>{activity.runCount} activities combined</small> : null}
+                    </div>
+                  </li>
+                ) : null}
                 {activity.strengthMinutes > 0 ? (
                   <li>
                     <div><span>{activity.strengthMinutes} min strength training</span></div>
@@ -155,8 +159,8 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
             ) : null}
           </div>
           <p className={styles.todayPlanDate}>
-            {ranToday
-              ? `${planned?.dayLabel ?? today} · synced from HealthFit`
+            {completedToday
+              ? `${planned?.dayLabel ?? today} · synced from ${ranToday ? "HealthFit" : "Today"}`
               : planned
                 ? planned.dayLabel
                 : "A free day to move however feels good."}
@@ -165,7 +169,7 @@ export function TodayPlan({ today, health, week, plan }: TodayPlanProps) {
 
         <div className={styles.todaySideCards}>
           <article className={styles.todaySmallCard}>
-            {ranToday ? (
+            {completedToday ? (
               <>
                 <span>up next</span>
                 <strong>{upNext?.dayLabel ?? "plan coming soon"}</strong>

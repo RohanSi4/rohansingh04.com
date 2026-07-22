@@ -1,22 +1,22 @@
 {
   "slug": "health-tracker-ios",
-  "title": "Health Recap",
-  "tagline": "One calm morning recap for sleep, movement, and recovery",
-  "summary": "Apple Health had the numbers I cared about, but I wanted a faster way to understand them each morning. Health Recap turns sleep and movement into one score, one useful takeaway, and a clean daily view.",
-  "outcome": "The native SwiftUI app now has correct overlap-safe sleep math, seven-day baselines, 11 focused domain tests, and an interactive browser demo anyone can review.",
-  "role": "Designed and built the iPhone app myself",
+  "title": "Today",
+  "tagline": "The private iPhone companion I use for weight, workouts, and the day's plan",
+  "summary": "I wanted morning weight and gym tracking to take a few taps, not another spreadsheet. Today combines a simple daily plan, fast set logging, strength history, and useful progress views.",
+  "outcome": "Today now works offline, saves protected local backups, writes weight to HealthKit, and sends an end-to-end encrypted snapshot into my private coaching system.",
+  "role": "Designed and built the native iPhone app and its secure sync",
   "proofPoints": [
-    "Overlap-safe sleep math and rolling seven-day baselines",
-    "11 focused tests around the health scoring rules",
-    "An interactive browser demo that mirrors the native recap"
+    "Fast set logging with remembered loads, detailed muscle mapping, and flexible workout splits",
+    "Local-first storage, HealthKit weight writes, Keychain secrets, and AES-256-GCM sync",
+    "31 native tests covering workout, weight, recovery, and persistence behavior"
   ],
   "visual": "health",
-  "tags": ["swift", "swiftui", "healthkit"],
+  "tags": ["swift", "swiftui", "healthkit", "security"],
   "startDate": "2025-04",
-  "endDate": "2026-07",
-  "status": "shipped",
+  "endDate": null,
+  "status": "in-progress",
   "featured": false,
   "githubUrl": "https://github.com/RohanSi4/Health-Tracker-IOS-App",
-  "liveUrl": "https://health-recap.vercel.app",
+  "liveUrl": "/fitness",
   "subProjects": []
 }

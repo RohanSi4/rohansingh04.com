@@ -4,8 +4,16 @@ import type { RunningDashboard } from "./running";
 import placesJson from "../content/places.json";
 import statesJson from "../content/states.json";
 import { addSeedPhotos } from "./travel";
+import {
+  normalizePublicStrengthSessions,
+  shouldAcceptFitnessBatch,
+  type EncryptedFitnessBatch,
+  type PublicStrengthSession,
+} from "./fitness-sync";
 
 const PLACE_PHOTO_SEED_KEY = "places:photo-seed:v1";
+const PRIVATE_FITNESS_BATCH_KEY = "fitness:private:latest:v1";
+const PUBLIC_STRENGTH_KEY = "fitness:public:strength:v1";
 
 export async function getPlacesKV(): Promise<Place[]> {
   const seed = placesJson as Place[];
@@ -73,4 +81,30 @@ export async function getBestStreakKV(): Promise<number> {
 
 export async function setBestStreakKV(n: number): Promise<void> {
   await kv.set("health:bestStreak", n);
+}
+
+export async function setPrivateFitnessBatchIfNewer(
+  batch: EncryptedFitnessBatch,
+): Promise<boolean> {
+  const current = await kv.get<EncryptedFitnessBatch>(PRIVATE_FITNESS_BATCH_KEY);
+  if (!shouldAcceptFitnessBatch(batch, current)) return false;
+  await kv.set(PRIVATE_FITNESS_BATCH_KEY, batch);
+  return true;
+}
+
+export async function getPrivateFitnessBatches(_limit = 1): Promise<EncryptedFitnessBatch[]> {
+  const latest = await kv.get<EncryptedFitnessBatch>(PRIVATE_FITNESS_BATCH_KEY);
+  return latest ? [latest] : [];
+}
+
+export async function getPublicStrengthKV(): Promise<PublicStrengthSession[]> {
+  try {
+    return (await kv.get<PublicStrengthSession[]>(PUBLIC_STRENGTH_KEY)) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export async function setPublicStrengthKV(sessions: PublicStrengthSession[]): Promise<void> {
+  await kv.set(PUBLIC_STRENGTH_KEY, normalizePublicStrengthSessions(sessions));
 }

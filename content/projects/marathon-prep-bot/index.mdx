@@ -13,9 +13,16 @@ HealthFit exports workout files from my Apple Watch and Polar H10. A TypeScript
 pipeline cleans and deduplicates them, then works out heart-rate zones, TRIMP
 training load, aerobic decoupling, weekly volume, and long-run progression.
 
-The coach gets the full private history when it helps write the next week. The
+I also built an iPhone app called Today for the information a watch cannot capture
+well. It logs morning weight plus each lift&apos;s exercises, working sets, reps, and
+load. Today encrypts the full snapshot with AES-256-GCM before sending it through
+the website. The website stores an opaque payload, and only the private coach has
+the key that can open it. Separate read and write tokens limit what the phone and
+coach are allowed to do.
+
+The coach joins both private histories when it helps write the next week. The
 public [fitness page](/fitness) gets a much smaller version with the progress,
-recent workouts, and plan. New files are picked up automatically, and a written
+recent workouts, strength trends, and plan. New files are picked up automatically, and a written
 plan has to contain seven valid days before it can be published.
 
 ## what was difficult
@@ -27,7 +34,12 @@ outdoor runs, and weather that can make the same pace feel completely different.
 Privacy was just as important. Raw files include workout timestamps and GPS
 coordinates. Notes can include health context. Those stay in the private archive.
 The site only gets the specific fields I chose to share, such as distance, time,
-heart rate, training load, and broad workout type.
+heart rate, training load, working-set count, and broad muscle groups.
+
+The phone is still the source of truth if the network disappears. It saves first,
+marks the snapshot as waiting, retries later, and never blocks a workout because
+the server is down. The sync uses a versioned contract so the Swift and TypeScript
+sides can change without quietly corrupting old data.
 
 That is also why the main repository is private. A public code link is not worth
 turning years of health and location data into a public dataset.
@@ -37,6 +49,11 @@ turning years of health and location data into a public dataset.
 The archive holds more than 1,300 workouts going back to 2022. A background sync
 can move a new HealthFit export all the way to the site, while the plan publisher
 checks the week and confirms that production received the same seven days.
+
+Today now closes the loop in the other direction. A finished lift can check off the
+public plan within seconds, while the encrypted detail gives the coach strength
+freshness, muscle exposure, exercise history, and a body-weight trend before the
+next plan is written.
 
 My favorite part is that the project grows with the training. Every run gives it
 more context, and every improvement to the system helps me understand the next
