@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   normalizePublicStrengthSessions,
+  isFitnessBatchFresh,
   parseEncryptedFitnessBatch,
   shouldAcceptFitnessBatch,
   strengthWeekSummary,
@@ -28,6 +29,14 @@ const batch: EncryptedFitnessBatch = {
     muscleGroups: ["upper chest", "lats", "side delts"],
     updatedAt: "2026-07-21T18:00:00.000Z",
   }],
+  publicWeight: {
+    asOf: "2026-07-21",
+    currentPounds: 184.4,
+    goalPounds: 175,
+    sevenDayAverage: 184.8,
+    change28Days: -2.3,
+    daysLogged28: 24,
+  },
 };
 
 describe("private fitness sync contract", () => {
@@ -39,6 +48,13 @@ describe("private fitness sync contract", () => {
     const unsafe = structuredClone(batch) as unknown as Record<string, unknown>;
     const summaries = unsafe.publicStrength as Array<Record<string, unknown>>;
     summaries[0].weight = 184.4;
+    expect(parseEncryptedFitnessBatch(unsafe)).toBeNull();
+  });
+
+  it("accepts only a bounded opt-in weight summary", () => {
+    const unsafe = structuredClone(batch) as unknown as Record<string, unknown>;
+    const weight = unsafe.publicWeight as Record<string, unknown>;
+    weight.rawEntries = [{ date: "2026-07-21", pounds: 184.4 }];
     expect(parseEncryptedFitnessBatch(unsafe)).toBeNull();
   });
 
@@ -81,5 +97,11 @@ describe("shouldAcceptFitnessBatch", () => {
     expect(shouldAcceptFitnessBatch(batch("batch_older001", "2026-07-21T17:59:59.000Z"), current)).toBe(false);
     expect(shouldAcceptFitnessBatch(current, current)).toBe(false);
     expect(shouldAcceptFitnessBatch(current, null)).toBe(true);
+  });
+
+  it("rejects timestamps that could pin the latest snapshot in the future", () => {
+    const now = Date.parse("2026-07-21T18:00:00.000Z");
+    expect(isFitnessBatchFresh(batch("batch_fresh001", "2026-07-21T18:09:59.000Z"), now)).toBe(true);
+    expect(isFitnessBatchFresh(batch("batch_future01", "2026-07-21T19:00:00.000Z"), now)).toBe(false);
   });
 });

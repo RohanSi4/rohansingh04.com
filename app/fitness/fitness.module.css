@@ -1276,6 +1276,7 @@
 
 .strengthLeadCard,
 .strengthWeekCard,
+.weightTrendCard,
 .securityCard {
   border: 1px solid var(--border);
   border-radius: 1.1rem;
@@ -1292,6 +1293,7 @@
 
 .strengthCardTop,
 .strengthWeekCard > span,
+.weightTrendCard > span,
 .securityCard > span {
   display: flex;
   justify-content: space-between;
@@ -1364,18 +1366,66 @@
 
 .strengthSide {
   display: grid;
-  grid-template-rows: 0.85fr 1.15fr;
+  grid-auto-rows: minmax(min-content, auto);
   gap: 1rem;
 }
 
 .strengthWeekCard,
+.weightTrendCard,
 .securityCard {
   padding: 1.5rem;
   background: var(--surface);
 }
 
 .strengthWeekCard > span,
+.weightTrendCard > span,
 .securityCard > span { color: var(--muted); }
+
+.weightTrendCard > span small {
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+
+.weightTrendHeadline {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  margin-top: 1.15rem;
+}
+
+.weightTrendHeadline strong {
+  color: var(--accent);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 2.35rem;
+  font-weight: 500;
+}
+
+.weightTrendHeadline small { color: var(--muted); }
+
+.weightTrendCard dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.weightTrendCard dl > div {
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border);
+}
+
+.weightTrendCard dt {
+  color: var(--muted);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.weightTrendCard dd {
+  margin-top: 0.25rem;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.78rem;
+}
 
 .strengthWeekCard > div {
   display: flex;

@@ -14,7 +14,7 @@ import TrainingHistoryChart from "./TrainingHistoryChart";
 import { WeeklyPlan } from "./WeeklyPlan";
 import styles from "./fitness.module.css";
 import { socialImage } from "@/lib/metadata";
-import { getPublicStrengthKV } from "@/lib/kv-data";
+import { getPublicStrengthKV, getPublicWeightKV } from "@/lib/kv-data";
 import { strengthWeekSummary } from "@/lib/fitness-sync";
 import { StrengthSnapshot } from "./StrengthSnapshot";
 
@@ -53,7 +53,11 @@ function daysBetween(start: string, end: string): number {
 }
 
 export default async function FitnessPage() {
-  const [data, strength] = await Promise.all([getRunningDashboard(), getPublicStrengthKV()]);
+  const [data, strength, weight] = await Promise.all([
+    getRunningDashboard(),
+    getPublicStrengthKV(),
+    getPublicWeightKV(),
+  ]);
   const latestRun = data.recentRuns[0];
   const featuredRun = data.recentRuns.find(
     (run) => run.distanceMi >= Math.max(8, data.currentWeek.longRunMiles - 0.25),
@@ -191,7 +195,12 @@ export default async function FitnessPage() {
         activities={combinedActivities}
       />
 
-      <StrengthSnapshot sessions={strength} weekStart={data.currentWeek.weekStart} today={today} />
+      <StrengthSnapshot
+        sessions={strength}
+        weight={weight}
+        weekStart={data.currentWeek.weekStart}
+        today={today}
+      />
 
       <section className={styles.section} aria-labelledby="progress-title">
         <div className={styles.sectionHeading}>

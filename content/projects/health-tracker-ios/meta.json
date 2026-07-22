@@ -6,9 +6,9 @@
   "outcome": "Today now works offline, saves protected local backups, writes weight to HealthKit, and sends an end-to-end encrypted snapshot into my private coaching system.",
   "role": "Designed and built the native iPhone app and its secure sync",
   "proofPoints": [
-    "Fast set logging with remembered loads, detailed muscle mapping, and flexible workout splits",
-    "Local-first storage, HealthKit weight writes, Keychain secrets, and AES-256-GCM sync",
-    "31 native tests covering workout, weight, recovery, and persistence behavior"
+    "Fast set logging, detailed muscle mapping, flexible splits, and WorkoutKit plans sent to Apple Watch",
+    "Local-first storage, HealthKit writes, Keychain secrets, AES-256-GCM sync, and consent-controlled public data",
+    "38 native tests covering workout, weight, recovery, persistence, Watch plans, and security boundaries"
   ],
   "visual": "health",
   "tags": ["swift", "swiftui", "healthkit", "security"],

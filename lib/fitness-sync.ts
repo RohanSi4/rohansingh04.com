@@ -23,6 +23,15 @@ export type PublicStrengthSession = {
   updatedAt: string;
 };
 
+export type PublicWeightTrend = {
+  asOf: string;
+  currentPounds: number;
+  goalPounds: number;
+  sevenDayAverage: number;
+  change28Days: number | null;
+  daysLogged28: number;
+};
+
 export type EncryptedFitnessBatch = {
   schemaVersion: typeof FITNESS_SYNC_SCHEMA_VERSION;
   batchId: string;
@@ -36,6 +45,7 @@ export type EncryptedFitnessBatch = {
     tag: string;
   };
   publicStrength: PublicStrengthSession[];
+  publicWeight?: PublicWeightTrend | null;
 };
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
@@ -101,6 +111,38 @@ function isPublicStrengthSession(value: unknown): value is PublicStrengthSession
     );
 }
 
+function isPublicWeightTrend(value: unknown): value is PublicWeightTrend {
+  if (!isRecord(value)) return false;
+  return hasOnlyKeys(value, [
+    "asOf",
+    "currentPounds",
+    "goalPounds",
+    "sevenDayAverage",
+    "change28Days",
+    "daysLogged28",
+  ])
+    && typeof value.asOf === "string"
+    && DATE_PATTERN.test(value.asOf)
+    && typeof value.currentPounds === "number"
+    && value.currentPounds >= 50
+    && value.currentPounds <= 500
+    && typeof value.goalPounds === "number"
+    && value.goalPounds >= 50
+    && value.goalPounds <= 500
+    && typeof value.sevenDayAverage === "number"
+    && value.sevenDayAverage >= 50
+    && value.sevenDayAverage <= 500
+    && (value.change28Days === null || (
+      typeof value.change28Days === "number"
+      && value.change28Days >= -100
+      && value.change28Days <= 100
+    ))
+    && typeof value.daysLogged28 === "number"
+    && Number.isInteger(value.daysLogged28)
+    && value.daysLogged28 >= 1
+    && value.daysLogged28 <= 28;
+}
+
 export function parseEncryptedFitnessBatch(value: unknown): EncryptedFitnessBatch | null {
   if (!isRecord(value) || value.schemaVersion !== FITNESS_SYNC_SCHEMA_VERSION) return null;
   if (!hasOnlyKeys(value, [
@@ -110,6 +152,7 @@ export function parseEncryptedFitnessBatch(value: unknown): EncryptedFitnessBatc
     "createdAt",
     "encryption",
     "publicStrength",
+    "publicWeight",
   ])) return null;
   if (!isIdentifier(value.batchId) || !isIdentifier(value.deviceId) || !isISODateTime(value.createdAt)) {
     return null;
@@ -132,6 +175,11 @@ export function parseEncryptedFitnessBatch(value: unknown): EncryptedFitnessBatc
   ) {
     return null;
   }
+  if (
+    value.publicWeight !== undefined
+    && value.publicWeight !== null
+    && !isPublicWeightTrend(value.publicWeight)
+  ) return null;
   return value as EncryptedFitnessBatch;
 }
 
@@ -156,6 +204,14 @@ export function shouldAcceptFitnessBatch(
   if (!current) return true;
   if (incoming.batchId === current.batchId) return false;
   return Date.parse(incoming.createdAt) > Date.parse(current.createdAt);
+}
+
+export function isFitnessBatchFresh(
+  batch: EncryptedFitnessBatch,
+  nowMs = Date.now(),
+  maximumClockSkewMs = 10 * 60 * 1000,
+): boolean {
+  return Math.abs(nowMs - Date.parse(batch.createdAt)) <= maximumClockSkewMs;
 }
 
 export function strengthWeekSummary(

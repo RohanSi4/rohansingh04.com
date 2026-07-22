@@ -9,11 +9,13 @@ import {
   shouldAcceptFitnessBatch,
   type EncryptedFitnessBatch,
   type PublicStrengthSession,
+  type PublicWeightTrend,
 } from "./fitness-sync";
 
 const PLACE_PHOTO_SEED_KEY = "places:photo-seed:v1";
 const PRIVATE_FITNESS_BATCH_KEY = "fitness:private:latest:v1";
 const PUBLIC_STRENGTH_KEY = "fitness:public:strength:v1";
+const PUBLIC_WEIGHT_KEY = "fitness:public:weight:v1";
 
 export async function getPlacesKV(): Promise<Place[]> {
   const seed = placesJson as Place[];
@@ -107,4 +109,17 @@ export async function getPublicStrengthKV(): Promise<PublicStrengthSession[]> {
 
 export async function setPublicStrengthKV(sessions: PublicStrengthSession[]): Promise<void> {
   await kv.set(PUBLIC_STRENGTH_KEY, normalizePublicStrengthSessions(sessions));
+}
+
+export async function getPublicWeightKV(): Promise<PublicWeightTrend | null> {
+  try {
+    return await kv.get<PublicWeightTrend>(PUBLIC_WEIGHT_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export async function setPublicWeightKV(trend: PublicWeightTrend | null): Promise<void> {
+  if (trend) await kv.set(PUBLIC_WEIGHT_KEY, trend);
+  else await kv.del(PUBLIC_WEIGHT_KEY);
 }

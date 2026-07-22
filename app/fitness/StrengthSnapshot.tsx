@@ -2,11 +2,13 @@ import { formatRunDate } from "@/lib/running";
 import {
   strengthWeekSummary,
   type PublicStrengthSession,
+  type PublicWeightTrend,
 } from "@/lib/fitness-sync";
 import styles from "./fitness.module.css";
 
 type StrengthSnapshotProps = {
   sessions: PublicStrengthSession[];
+  weight: PublicWeightTrend | null;
   weekStart: string;
   today: string;
 };
@@ -15,7 +17,7 @@ function kindLabel(kind: PublicStrengthSession["kind"]): string {
   return kind === "other" ? "open workout" : `${kind} day`;
 }
 
-export function StrengthSnapshot({ sessions, weekStart, today }: StrengthSnapshotProps) {
+export function StrengthSnapshot({ sessions, weight, weekStart, today }: StrengthSnapshotProps) {
   const week = strengthWeekSummary(sessions, weekStart);
   const cutoff = new Date(`${today}T12:00:00Z`);
   cutoff.setUTCDate(cutoff.getUTCDate() - 27);
@@ -62,6 +64,7 @@ export function StrengthSnapshot({ sessions, weekStart, today }: StrengthSnapsho
         </article>
 
         <div className={styles.strengthSide}>
+          {weight ? <WeightTrendCard trend={weight} /> : null}
           <article className={styles.strengthWeekCard}>
             <span>this week</span>
             <div><strong>{week.days}</strong><small>lift days</small></div>
@@ -81,5 +84,27 @@ export function StrengthSnapshot({ sessions, weekStart, today }: StrengthSnapsho
         </div>
       </div>
     </section>
+  );
+}
+
+function WeightTrendCard({ trend }: { trend: PublicWeightTrend }) {
+  const change = trend.change28Days == null
+    ? "collecting"
+    : `${trend.change28Days > 0 ? "+" : ""}${trend.change28Days.toFixed(1)} lb`;
+
+  return (
+    <article className={styles.weightTrendCard}>
+      <span>weight progress <small>shared from Today</small></span>
+      <div className={styles.weightTrendHeadline}>
+        <strong>{trend.currentPounds.toFixed(1)}</strong>
+        <small>lb now</small>
+      </div>
+      <dl>
+        <div><dt>7-day average</dt><dd>{trend.sevenDayAverage.toFixed(1)} lb</dd></div>
+        <div><dt>28-day change</dt><dd>{change}</dd></div>
+        <div><dt>mornings logged</dt><dd>{trend.daysLogged28} / 28</dd></div>
+        <div><dt>open goal</dt><dd>{trend.goalPounds.toFixed(0)} lb</dd></div>
+      </dl>
+    </article>
   );
 }

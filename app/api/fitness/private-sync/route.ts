@@ -1,11 +1,12 @@
 import { timingSafeEqual } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
-import { parseEncryptedFitnessBatch } from "@/lib/fitness-sync";
+import { isFitnessBatchFresh, parseEncryptedFitnessBatch } from "@/lib/fitness-sync";
 import {
   getPrivateFitnessBatches,
   setPrivateFitnessBatchIfNewer,
   setPublicStrengthKV,
+  setPublicWeightKV,
 } from "@/lib/kv-data";
 
 export const runtime = "nodejs";
@@ -50,10 +51,14 @@ export async function POST(req: NextRequest) {
 
   const batch = parseEncryptedFitnessBatch(parsed);
   if (!batch) return noStore({ error: "invalid fitness sync schema" }, { status: 400 });
+  if (!isFitnessBatchFresh(batch)) {
+    return noStore({ error: "fitness sync timestamp outside allowed window" }, { status: 400 });
+  }
 
   const accepted = await setPrivateFitnessBatchIfNewer(batch);
   if (accepted) {
     await setPublicStrengthKV(batch.publicStrength);
+    await setPublicWeightKV(batch.publicWeight ?? null);
     revalidatePath("/fitness");
   }
   return noStore({

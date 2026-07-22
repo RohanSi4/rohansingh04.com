@@ -19,8 +19,9 @@ joins it with Apple Watch data from HealthFit, and uses the result when it write
 next week.
 
 The public half is deliberately smaller: workout split, time, working sets, and
-broad muscles trained. That is enough to keep the dashboard live without turning
-the site into a copy of my gym notebook.
+broad muscles trained. Weight progress is a separate choice. If I turn it on, the
+site gets one summary with the current number, 7-day average, 28-day change, goal,
+and logging consistency. It never gets the daily weight history.
 
 ## made for the actual gym
 
@@ -34,6 +35,28 @@ Everything keeps working offline. Protected local storage is the source of truth
 the previous good file becomes a recovery backup, and failed uploads wait for the
 next connection instead of blocking a workout. Pairing credentials live in Keychain,
 and the app makes the sync state visible instead of pretending the network always works.
+
+I also tightened the boundary around the connection itself. Pairing only accepts the
+production HTTPS endpoint, downloaded payloads have strict size and shape limits,
+simulator test stores cannot inherit the real coach connection, and the server rejects
+timestamps that could pin an old or future snapshot as the latest one.
+
+## why the Watch stays simple for now
+
+The Apple Watch already records heart rate, duration, and the Strength Training workout
+that HealthFit exports. Today records the detail that the Watch misses, and I already
+have my phone in hand between sets. Starting a second workout session from Today would
+create duplicate ownership without making the gym flow faster.
+
+For running, Today now uses WorkoutKit to send the coach&apos;s distance goal into Apple&apos;s
+own Workout app. It validates the date and mileage, uses a stable plan ID so another tap
+replaces instead of duplicates, and leaves the completed workout in the same HealthKit
+and HealthFit flow I already trust.
+
+The app also exposes weight, plan, and workout actions through App Shortcuts. They work
+with Siri, Spotlight, Shortcuts, and an Action Button. If another wrist surface earns its
+place later, it will be a read-only Smart Stack glance for today&apos;s run and lift, not
+another set logger.
 
 ## where it started
 
@@ -77,7 +100,7 @@ schedule a recap after it sees a completed sleep session. Background HealthKit
 delivery is not built yet, so those reminders are best-effort rather than a
 guaranteed alarm.
 
-That original recap now lives inside Today&apos;s Insights tab. The native suite has 31
+That original recap now lives inside Today&apos;s Insights tab. The native suite has 38
 tests across weight logging, workout persistence, muscle scoring, recovery math,
-and HealthKit boundaries. Real HealthKit queries still need a signed iPhone, but
+HealthKit boundaries, sync isolation, and endpoint validation. Real HealthKit queries still need a signed iPhone, but
 the rest of the app can be reviewed in Simulator.
