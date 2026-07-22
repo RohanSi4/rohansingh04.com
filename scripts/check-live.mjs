@@ -3,12 +3,14 @@ const forbiddenCopy = /72[- ]?(tracks?|songs?)|demo catalog|offline demo|synthet
 const jsonMode = process.argv.includes("--json");
 
 const checks = [
-  { url: `${site}/`, includes: ["Signal", "music worth playing next"] },
-  { url: `${site}/projects`, includes: ["Marathon Prep Bot", "Shortlist", "Signal"] },
+  { url: `${site}/`, includes: ["Today", "quick morning weight"] },
+  { url: `${site}/projects`, includes: ["Marathon Prep Bot", "Shortlist", "Today"] },
   { url: `${site}/projects/marathon-prep-bot`, includes: ["More than 1,300 workouts", "From a workout to a useful week"] },
+  { url: `${site}/projects/health-tracker-ios`, includes: ["700+ exercise catalog", "what becomes live on the site"] },
   { url: `${site}/projects/spotify-recommender`, includes: ["Spotify's real catalog", "five invited listeners"] },
-  { url: `${site}/resume`, includes: ["selected projects", "Marathon Prep Bot"] },
+  { url: `${site}/resume`, includes: ["selected projects", "Marathon Prep Bot", "Today"] },
   { url: `${site}/fitness`, includes: ["fitness"] },
+  { url: `${site}/projects/today-home.png` },
   { url: `${site}/projects/spotify-signal.png` },
   { url: `${site}/projects/parking-shark-home.png` },
   { url: `${site}/api/spotify` },
