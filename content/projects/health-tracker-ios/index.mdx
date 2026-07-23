@@ -50,6 +50,15 @@ the previous good file becomes a recovery backup, and failed uploads wait for th
 next connection instead of blocking a workout. Pairing credentials live in Keychain,
 and the app makes the sync state visible instead of pretending the network always works.
 
+## a mobility routine that travels with the plan
+
+The plan is mostly running, so I added the part I always forget. Today keeps my
+pre-run dynamic warm-up and post-run static routine as tappable cards, split into
+those two phases, each with a short cue and a simple illustration. It means the
+right drills are waiting at the track instead of living in my head.
+
+![Today's stretch routine, dynamic warm-up drills shown as tappable cards](/projects/today-stretches.png)
+
 I also tightened the boundary around the connection itself. Pairing only accepts the
 production HTTPS endpoint, downloaded payloads have strict size and shape limits,
 simulator test stores cannot inherit the real coach connection, and the server rejects
@@ -114,10 +123,11 @@ schedule a recap after it sees a completed sleep session. Background HealthKit
 delivery is not built yet, so those reminders are best-effort rather than a
 guaranteed alarm.
 
-That original recap now lives inside Today&apos;s Insights tab. The native suite has 38
-tests across weight logging, workout persistence, muscle scoring, recovery math,
-HealthKit boundaries, sync isolation, and endpoint validation. Real HealthKit queries still need a signed iPhone, but
-the rest of the app can be reviewed in Simulator.
+That original recap now lives inside Today&apos;s Insights tab. The native suite has 52
+tests across weight logging, workout persistence, muscle scoring, the guided stretch
+routine, recovery math, HealthKit boundaries, sync isolation, and endpoint validation.
+Real HealthKit queries still need a signed iPhone, but the rest of the app can be
+reviewed in Simulator.
 
 ## what I would add next
 
