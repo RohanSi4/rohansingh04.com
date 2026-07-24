@@ -91,7 +91,7 @@ The important content stays easy to review and update:
 
 ## Fitness data and privacy
 
-The fitness page is powered by the private `marathonPrepBot` repository. Apple
+The fitness page is powered by the private `marathon-prep-bot` repository. Apple
 Watch workouts move through HealthFit into a TypeScript pipeline that calculates
 training metrics and publishes a strict, privacy-safe dashboard snapshot.
 

@@ -21,7 +21,7 @@ const RACE = {
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(scriptDir, "..");
 const marathonRoot = path.resolve(
-  process.env.MARATHON_REPO ?? path.join(siteRoot, "..", "marathonPrepBot"),
+  process.env.MARATHON_REPO ?? path.join(siteRoot, "..", "marathon-prep-bot"),
 );
 const outputPath = path.join(siteRoot, "content", "running-dashboard.json");
 
