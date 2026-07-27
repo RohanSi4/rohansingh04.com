@@ -27,7 +27,12 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = "force-dynamic";
+// The homepage reads KV three times (fitness, places, states). Rendering it per
+// request put all of that on the recruiter's first paint for data that changes a
+// few times a day. Cache it instead: `/api/running/ingest` already calls
+// revalidatePath("/") after a publish, so a new workout still lands immediately,
+// and anything that misses that hook self-heals within the window.
+export const revalidate = 300;
 
 export default async function HomePage() {
   const site = getSiteConfig();

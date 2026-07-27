@@ -1,13 +1,20 @@
+import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { getValidAccessToken, fetchRecentActivities, setStravaActivitiesKV } from "@/lib/strava";
 import { computeHealthSummary } from "@/lib/health-compute";
 import { setHealthKV, getBestStreakKV, setBestStreakKV } from "@/lib/kv-data";
 
+function matchesBearer(received: string, token: string): boolean {
+  const left = Buffer.from(received, "utf8");
+  const right = Buffer.from(`Bearer ${token}`, "utf8");
+  return left.length === right.length && timingSafeEqual(left, right);
+}
+
 function authorized(req: NextRequest): boolean {
   const auth = req.headers.get("authorization") ?? "";
   return [process.env.HEALTH_INGEST_TOKEN, process.env.CRON_SECRET]
     .filter((token): token is string => Boolean(token))
-    .some((token) => auth === `Bearer ${token}`);
+    .some((token) => matchesBearer(auth, token));
 }
 
 async function sync(req: NextRequest) {
@@ -35,6 +42,18 @@ async function sync(req: NextRequest) {
   return NextResponse.json({ ok: true, activities: activities.length, updatedAt: summary.updatedAt });
 }
 
+// Strava can be unconfigured, disconnected, rate limited, or simply down. Any of
+// those threw an unhandled 500 before, which made scheduled runs opaque. Fail
+// with a clear status and keep the upstream detail in the server log only.
+async function handler(req: NextRequest) {
+  try {
+    return await sync(req);
+  } catch (error) {
+    console.error("strava sync failed:", error);
+    return NextResponse.json({ error: "strava sync failed" }, { status: 503 });
+  }
+}
+
 // Vercel Cron invokes routes with GET. Keep POST for manual/automation callers.
-export const GET = sync;
-export const POST = sync;
+export const GET = handler;
+export const POST = handler;

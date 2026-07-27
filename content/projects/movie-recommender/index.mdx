@@ -12,7 +12,7 @@ learned about those movies into a temporary taste profile, then searches the
 full catalog for the closest matches. No account or personal data is needed.
 
 - a two-tower model that learns stored viewers and the live one-to-five favorite flow together
-- exact retrieval across 87,585 movies in the Go API
+- exact retrieval across 89,585 movies in the Go API
 - search, similar movies, fresh batches, details, and locally saved shortlists
 - TMDB posters and metadata so the results feel like movies, not rows in a dataset
 - a responsive Next.js app that works without a login
@@ -78,7 +78,7 @@ last mile can undo a strong model if the data contract is wrong.
 - 0.331 Recall@100, compared with 0.228 for popularity, a 45% relative lift
 - 14.5% catalog coverage at 100 results, compared with 0.12% for popularity
 - 0.237 Recall@100 for stored viewers, compared with 0.127 for popularity
-- 87,585 movies and 186,458 learned viewer profiles in the serving bundle
+- 89,585 movies and 199,378 taste profiles in the serving bundle today, grown from the 87,585-movie bundle every result above was measured against
 - 4.0 ms median and 5.6 ms p95 locally for known-viewer requests
 - 28.8 million seen viewer-movie pairs available for history filtering
 

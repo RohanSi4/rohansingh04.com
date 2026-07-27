@@ -40,8 +40,12 @@ export default function ProjectsPage() {
         </p>
       </header>
 
-      <section className="border-y border-border bg-surface/40">
+      <section className="border-y border-border bg-surface/40" aria-labelledby="featured-projects-heading">
         <div className="site-container page-section">
+          {/* The cards below are h3. Without this the page jumped h1 to h3, so
+              the heading outline is named for screen readers without changing
+              the visual design. */}
+          <h2 id="featured-projects-heading" className="sr-only">Featured projects</h2>
           <div className="grid gap-5 lg:grid-cols-2">
             {featured.map((project, index) => (
               <div key={project.slug} className={index === 0 ? "lg:col-span-2" : ""}>

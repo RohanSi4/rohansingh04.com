@@ -8,7 +8,7 @@
   "proofPoints": [
     "84.1% HitRate@10 on an untouched 7,060-user five-favorite test",
     "0.331 Recall@100 versus 0.228 for popularity, about 45% higher",
-    "Exact retrieval across 87,585 movies with a 4.0 ms local median"
+    "Exact retrieval across 89,585 movies with a 4.0 ms local median"
   ],
   "visual": "ranking",
   "tags": ["ml", "go", "pytorch", "next.js"],
