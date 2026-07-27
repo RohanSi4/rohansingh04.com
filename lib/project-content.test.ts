@@ -17,10 +17,24 @@ function projectMeta(directory: string): ProjectMeta {
   ) as ProjectMeta;
 }
 
+// Content collections are served by a dynamic segment (app/notes/[slug]), so
+// there is no app/notes/cold-seeds/page.tsx on disk to stat. Checking only for a
+// literal directory would call every valid link into a note or a project broken.
+// This never surfaced before because no project page had linked to a note.
+const collectionRoutes: Record<string, string> = {
+  notes: path.join(root, "content", "notes"),
+  projects: path.join(root, "content", "projects"),
+};
+
 function internalRouteExists(url: string): boolean {
   const route = url.split(/[?#]/, 1)[0];
   if (route === "/") return fs.existsSync(path.join(root, "app", "page.tsx"));
   const segments = route.replace(/^\//, "").split("/").filter(Boolean);
+
+  const [collection, slug, ...rest] = segments;
+  if (rest.length === 0 && slug && collection in collectionRoutes) {
+    return fs.existsSync(path.join(collectionRoutes[collection], slug, "index.mdx"));
+  }
   return fs.existsSync(path.join(root, "app", ...segments, "page.tsx"));
 }
 

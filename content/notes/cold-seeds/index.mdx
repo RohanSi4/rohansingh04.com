@@ -1,0 +1,150 @@
+---
+title: "My recommender scored 84% and still gave bad answers"
+description: "A two-tower model that looked good on every offline metric fell apart on the exact query real visitors typed. What the evaluation missed, and what it cost to fix."
+date: "2026-07-27"
+tags: ["ml", "recommenders", "evaluation", "go"]
+---
+
+I built [Shortlist](/projects/movie-recommender) so you can name a few movies you
+love and get back a list worth watching. A two-tower model learns embeddings for
+users and movies in the same 64-dimensional space, a Go service scans all 89,585
+titles, and the whole thing answers in single-digit milliseconds.
+
+On the held-out test cohort it hits 84.1% HitRate@10. Then I typed in
+Oppenheimer, which I had just watched, and got back a list of obscure films I had
+never heard of and would not have liked. The metric was real. The recommendations
+were bad. Both of those things were true at the same time, and the gap between
+them is the most useful thing this project taught me.
+
+## the number was never as good as it looked
+
+Start with the honest reading of the results, because the first mistake was mine
+for being pleased with them.
+
+| seeds | HitRate@10 | popularity | Recall@100 | popularity | catalog reach | popularity |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 82.1% | 81.9% | 0.282 | 0.250 | 27.0% | 0.12% |
+| 3 | 84.7% | 77.2% | 0.319 | 0.237 | 19.1% | 0.12% |
+| 5 | 84.1% | 73.8% | 0.331 | 0.228 | 14.5% | 0.12% |
+
+The "popularity" columns are the dumbest possible baseline: rank every movie by
+how many people rated it highly, ignore the person entirely, return the top of
+that list. It clears HitRate@10 **73.8% of the time**. At a single seed it is
+statistically tied with my model, 81.9 against 82.1.
+
+That is not because popularity is clever. It is because HitRate@10 is a soft
+question on this data. To be eligible for the cohort a user needs at least six
+future positive ratings, and in practice the median user has about 50. Landing
+any one of 50 movies in a top 10 is not a high bar. A metric that a constant
+function nearly passes is not measuring personalization.
+
+The columns that actually separate the two are Recall@100 and catalog reach. The
+model answers from 14.5% of the catalog at five seeds. Popularity answers from
+0.12%, which is to say it shows everyone the same few hundred films. That is the
+real result, and it is a much quieter claim than "84%".
+
+I now think the discipline is: **always publish the dumb baseline next to your
+model.** Not because it is humble, but because it tells you which of your metrics
+are load-bearing. Two of mine were not.
+
+## the query I never evaluated
+
+The bigger problem was structural. Training sorts every rating by timestamp and
+freezes the earliest 90% at a cutoff of November 5, 2020. Everything after that
+is truth to predict against. Standard, and it prevents the model from peeking at
+the future.
+
+It also means every movie in my evaluation had a trained embedding, because
+seeds were drawn from before the cutoff. Real visitors do the opposite. They seed
+with the film they watched last week.
+
+A movie released after the cutoff has no training positives, so its vector is
+whatever the initializer left there. Untrained noise. The nearest neighbors of
+noise are effectively random, which is exactly the pile of obscure titles I got.
+My offline protocol could not catch this, because in the offline protocol the
+situation never occurs. The evaluation was not wrong. It was answering a question
+nobody was asking.
+
+This is the failure mode I will look for first from now on: not "is the metric
+computed correctly" but "does the distribution of queries in the eval look
+anything like the distribution of queries in the product".
+
+## two fixes, kept separate
+
+The instinct is to reach for one change that makes recent movies work. I made two
+instead, and keeping them apart matters.
+
+**Evaluate on a holdout, deploy on everything.** The published metrics come from
+the temporal-holdout model, and they never move. The bundle the Go service
+actually loads is a second model trained on nearly the whole timeline, so films
+from 2021 through 2023 get real embeddings instead of noise. Training on all the
+data is the right call for serving and would be cheating in an evaluation, so
+those are now two artifacts with two purposes, not one artifact with a compromise
+baked in.
+
+**Cold-gated popularity.** The export writes one extra file: the count of
+positive training ratings per movie. From that the service derives a popularity
+score and, per seed, a warmth value based on how much support that movie actually
+had. The served score becomes the dot product plus a popularity term whose weight
+is proportional to how cold the seeds are. Warm seeds drive the weight to zero and
+get pure personalization. A cold seed gets the full popularity rescue, because a
+popular film is a much better guess than the model's noise.
+
+The weight uses the mean warmth across seeds, not the max or min. The taste query
+is an equal-weight average of the seed vectors, so if one seed is noise it has
+already polluted the query, and one warm seed should not be allowed to mask that.
+
+## what it cost, measured
+
+Leaning on popularity is not free, and I wanted the price in writing before
+shipping it. Applied globally, a popularity weight monotonically damages the
+honest metric: validation HitRate@10 falls from 0.838 at weight zero to 0.799 at
+weight 0.5.
+
+So the gate is the entire point. It confines that cost to the seeds where the
+model genuinely has nothing to say, and leaves everything else untouched. A
+visitor seeding Inception and The Matrix, both thoroughly warm, gets an
+unmodified result: The Dark Knight, Fight Club, the Lord of the Rings trilogy.
+Seeding Oppenheimer alone falls back to the canon. Seeding Oppenheimer together
+with Everything Everywhere All at Once, which is now warm, returns Arrival,
+Parasite, Dune, and Her, which is a genuinely good list.
+
+Model selection was done on the validation cohort only. Five candidate runs were
+scored there, and the winner was scored on the untouched 7,060-user test cohort
+exactly once. Validation HitRate@10 at five seeds was 0.8365 and test was 0.8407,
+so the held-out number is not a number I tuned toward.
+
+## the serving side is boring on purpose
+
+There is no approximate nearest neighbor index. The Go service verifies a hashed
+bundle at startup, widens the float16 vectors to float32, and does an exact
+dot-product scan across the full catalog with a bounded top-k heap, so it never
+allocates and sorts 89,585 scored items per request.
+
+Measured locally on an M4 Pro over 200 requests after 20 warmups, a known-user
+query is 4.0 ms at p50 and 5.6 ms at p95. An exact scan at this catalog size is
+fast enough that an ANN index would add a failure mode and an approximation for
+no user-visible gain. I would rather add that when the catalog forces it.
+
+## still broken
+
+- 35,591 of the 89,585 movies in the served bundle still have no positive
+  training interaction. The cold gate gives them a sensible fallback, but a
+  fallback is not a recommendation. Real text or metadata features are the fix,
+  and I have not built them.
+- MovieLens ratings stop in October 2023, so the newest films are thin no matter
+  how I split the data. Oppenheimer has zero support even in the serving model
+  and is carried entirely by the popularity blend. A fresher ratings dump is the
+  only real answer.
+- In-batch negatives still include unlabeled positives from other users'
+  histories, so the model is occasionally punished for being right. Explicit
+  positive masking and hard negatives are the next modeling round.
+- Films newer than the dataset are pulled in from TMDB and placed at the average
+  of their genres' centroids. It is a poor imitation of a content tower. It makes
+  them findable and coherent as a seed, and that is all it does.
+
+The full protocol, the reproduction commands, and the raw metrics files are in
+[the repository](https://github.com/RohanSi4/movie-recommender-shortlist), and
+the demo is [here](https://movie-reccomender-system-red.vercel.app). Seed it with
+something from this year and you will be exercising the path this whole note is
+about.

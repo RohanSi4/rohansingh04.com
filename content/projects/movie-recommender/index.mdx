@@ -90,6 +90,11 @@ last mile can undo a strong model if the data contract is wrong.
 - 4.0 ms median and 5.6 ms p95 locally for known-viewer requests
 - 28.8 million seen viewer-movie pairs available for history filtering
 
+I wrote up what those numbers do and do not prove in [my recommender scored 84%
+and still gave bad answers](/notes/cold-seeds): the popularity baseline nearly
+matches the headline metric, and the query that broke the model in production was
+one the offline protocol could not produce.
+
 Those measurements and their exact test protocol are committed with the code.
 CI runs the ML and export tests, Go tests, frontend build, browser flows, mobile
 checks, and accessibility checks.
