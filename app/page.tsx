@@ -11,18 +11,18 @@ import { socialImage } from "@/lib/metadata";
 export const metadata: Metadata = {
   title: { absolute: "Rohan Singh: projects, running, and more" },
   description:
-    "I'm Rohan, a UVA computer science student who likes making things around running, movies, music, travel, and whatever else I'm curious about.",
+    "I'm Rohan, a UVA computer science student and machine learning engineer intern at Expedia. I build recommender systems and the data pipelines behind them, usually for things I already care about: running, movies, music.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Rohan Singh: projects, running, and more",
-    description: "A UVA student making things he actually wants to use.",
+    description: "UVA CS student and ML engineer intern at Expedia, building recommender systems and the pipelines behind them.",
     url: "/",
     images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
     title: "Rohan Singh: projects, running, and more",
-    description: "A UVA student making things he actually wants to use.",
+    description: "UVA CS student and ML engineer intern at Expedia, building recommender systems and the pipelines behind them.",
     images: [socialImage],
   },
 };

@@ -3,10 +3,10 @@
   "title": "Shortlist",
   "tagline": "Pick a few favorites and get a movie mix built around your taste",
   "summary": "Pick one to five movies you already love and Shortlist builds a fresh set of recommendations from the overlap in your taste. I trained that exact flow, built the Go API, and shipped the full product.",
-  "outcome": "On an untouched 7,060-user test, the five-favorite flow reached 84.1% HitRate@10 and 0.331 Recall@100, compared with 73.8% and 0.228 for popularity.",
+  "outcome": "On 7,060 cold users held out by a global time cutoff and scored exactly once, the five-favorite flow reached 84.1% HitRate@10 and 0.331 Recall@100, against 73.8% and 0.228 for popularity on the identical users.",
   "role": "Built the retrieval model, Go serving system, and web app myself",
   "proofPoints": [
-    "84.1% HitRate@10 on an untouched 7,060-user five-favorite test",
+    "84.1% HitRate@10 on 7,060 cold users, held out by a global time cutoff and scored once",
     "0.331 Recall@100 versus 0.228 for popularity, about 45% higher",
     "Exact retrieval across 89,585 movies with a 4.0 ms local median"
   ],

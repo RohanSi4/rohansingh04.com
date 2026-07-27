@@ -53,11 +53,19 @@ public app asks a different question: what can the model learn from a handful of
 favorite movies? That was a useful model result, but it was not the right main
 claim for the product.
 
-I added a separate test that follows the real visitor flow. It freezes the data
-at one point in time, finds people with no earlier history, uses their earliest
-one, three, or five favorites as the input, and treats the movies they liked
-later as the answer. Validation and test users are split before model selection,
-so the final 7,060-user test stays untouched until the model is chosen.
+I added a separate test that follows the real visitor flow, and built it to be
+hard to fool. A single global time cutoff freezes the data, so nothing that
+happened after that moment can leak backward into training. The test users are
+drawn only from people who appear entirely after it, cold users the model has
+never seen in any form, and their earliest one, three, or five favorites become
+the input while the movies they liked later become the answer. Those cold users
+are split into a validation cohort, which absorbs every design decision, and a
+7,060-user test cohort that was scored exactly once. Popularity is given the
+identical users and the identical candidate set, so the comparison is like for
+like rather than a baseline set up to lose.
+
+That protocol is the part I would defend in an interview. A random split would
+let the model study a user's future and quietly inflate every number here.
 
 Training needed work too. User-balanced batches stop the most active viewers
 from taking over, repeated target movies are collapsed inside each batch, and a
