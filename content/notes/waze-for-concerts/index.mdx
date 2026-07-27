@@ -1,0 +1,87 @@
+---
+title: "waze, but for when the artist actually comes out"
+description: "A parked idea: crowdsourced stage times and live setlists at concerts, and why it belongs to Ticketmaster instead of me."
+date: "2026-07-26"
+tags: ["ideas", "product", "parked"]
+---
+
+People go to concerts and don't really know when the artist is coming out.
+Especially in rap, the artists typically come way later. You show up at the door
+time, you sit through openers you didn't pick, and you have no idea if the
+headliner is twenty minutes out or two hours out.
+
+So: an app where people click buttons like "the artist came out" and "this is
+the song they're playing," kinda like Waze. Everyone in the building is already
+holding a phone. A handful of taps from a few people in the crowd tells everyone
+else what is actually happening on stage, live.
+
+## the incentive
+
+Nobody taps buttons for free, so the incentive has to be real. The idea is to
+partner with apps like Ticketmaster or whatever and give people loyalty points
+for reporting. You're already in their ecosystem because you bought the ticket
+there. Points toward a future ticket, presale access, fee credit, something that
+costs the platform little and is worth something to a repeat concertgoer.
+
+## why I'm not building it
+
+You need a large audience for this to work at all, and marketing it will be hell
+and impossible. This would be much better for a Ticketmaster or a StubHub to
+build as a feature than for me to build as an app. They already have the users,
+they already have the loyalty program, and they already know who bought a ticket
+to which show.
+
+That is the whole thing, honestly. The idea is fine. The distribution is the
+product, and I don't have it.
+
+## the other limitations
+
+Writing this down properly, the audience problem is not the only one.
+
+**The density has to be per show, not overall.** Waze works because any given
+highway has thousands of drivers on it. Here you don't need a lot of users, you
+need a lot of users *at that specific venue on that specific night*. A million
+users spread across the country is worthless if four of them are at the show
+you're trying to get to.
+
+**The incentive and the audience are the same chicken and egg.** Ticketmaster
+won't attach a loyalty program to an app with no users, and the app can't get
+users without the loyalty program. You can't bootstrap past that from the
+outside, which is another way of saying the same thing: whoever already owns the
+loyalty program should build it.
+
+**There is almost nothing to do in the app.** A Waze hazard sits on the road for
+hours and every driver behind you needs it. "The artist is on" is one binary
+event that happens once a night and then the app has no job. Realistically
+someone opens this a few times a year. That is brutal for retention, and it
+makes the points economics awkward, because you're paying out for very few
+sessions per user.
+
+**Bad data is easy and hard to filter.** People will report the headliner is on
+to make the floor rush, or sit on it to keep their spot. Waze survives trolling
+on sheer volume of confirmations. At twelve users in a venue you cannot outvote
+anyone, and one wrong report sends people sprinting from the bar for nothing.
+
+**Venues might actively not want this.** Artists running late is often not an
+accident. Late sets sell bar drinks and merch and build the room. A tool that
+helps people skip the openers and walk in at the right moment cuts into that,
+and Ticketmaster's actual customers are the venues and promoters, not the fans.
+So the partner most able to build it might be the partner least motivated to.
+
+**Phones are at their worst exactly when you need them.** Cell service in a
+packed arena is terrible, your hands are full, and you're not pulling out your
+phone to tag a song in the middle of the set you paid to watch. The moment the
+data is most valuable is the moment it's hardest to collect.
+
+**Some of this already exists, just not live.** Setlist.fm has crowdsourced
+setlists for years. They land after the show instead of during it, which is the
+real gap, but it means the obvious contributor community is already somewhere
+else.
+
+## what would change my mind
+
+If I already had a large concertgoing audience for some other reason, this
+becomes a feature I'd ship in a weekend. That's the tell that it's a feature and
+not a company.
+
+Parking it here so it's written down.
