@@ -1,4 +1,7 @@
 const site = "https://rohansingh04.com";
+// The model service behind Shortlist. Every recommendation on that demo depends on
+// it, and it lives off-Vercel, so nothing else in this file would notice it dying.
+const shortlistApi = "https://moviereccomendersystem-uxol.onrender.com";
 const forbiddenCopy = /72[- ]?(tracks?|songs?)|demo catalog|offline demo|synthetic demo/i;
 const jsonMode = process.argv.includes("--json");
 
@@ -19,16 +22,44 @@ const checks = [
   { url: "https://movie-reccomender-system-red.vercel.app" },
   { url: "https://parking-shark.vercel.app" },
   { url: "https://health-recap.vercel.app" },
+  // The Shortlist frontend is a static shell on Vercel and returns 200 whether or
+  // not the model is reachable, so checking it proved almost nothing. The ML
+  // backend was not checked at all, which meant the "demo up" badge could be
+  // truthful while every recommendation on the page was failing. These two check
+  // the thing that actually breaks.
+  //
+  // The generous timeout is deliberate, not padding. This runs on a free tier that
+  // spins down when idle, and a measured cold start took 32s. Timing out at 15s
+  // would report a service that works as down; the honest failure is "did not
+  // answer at all", not "was asleep".
+  {
+    url: `${shortlistApi}/health`,
+    includes: ['"retrieval_ready":true', '"catalog_size":89585'],
+    timeoutMs: 60_000,
+  },
+  {
+    url: `${shortlistApi}/rank`,
+    method: "POST",
+    body: JSON.stringify({ movie_ids: [79132, 109487, 130219] }),
+    // Assert a real ranking came back, not just a 200 with an empty list.
+    includes: ['"strategy":"two_tower_taste_mix"', '"title"', '"score"'],
+    timeoutMs: 60_000,
+  },
 ];
 
-async function fetchWithRetry(url, attempts = 3) {
+async function fetchWithRetry(url, attempts = 3, options = {}) {
   let lastError;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
       const response = await fetch(url, {
         redirect: "follow",
-        signal: AbortSignal.timeout(15_000),
-        headers: { "user-agent": "rohansingh04-live-check/1.0" },
+        signal: AbortSignal.timeout(options.timeoutMs ?? 15_000),
+        method: options.method ?? "GET",
+        body: options.body,
+        headers: {
+          "user-agent": "rohansingh04-live-check/1.0",
+          ...(options.body ? { "content-type": "application/json" } : {}),
+        },
       });
       if (response.ok) return response;
       lastError = new Error(`${url} returned ${response.status}`);
@@ -44,7 +75,11 @@ async function fetchWithRetry(url, attempts = 3) {
 }
 
 async function runCheck(check) {
-  const response = await fetchWithRetry(check.url);
+  const response = await fetchWithRetry(check.url, check.attempts ?? 3, {
+    timeoutMs: check.timeoutMs,
+    method: check.method,
+    body: check.body,
+  });
   const contentType = response.headers.get("content-type") ?? "";
   const isText = contentType.includes("text") || contentType.includes("json");
   const body = isText ? await response.text() : "";
