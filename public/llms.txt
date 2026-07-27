@@ -7,7 +7,7 @@
 - [Marathon Prep Bot](https://rohansingh04.com/projects/marathon-prep-bot): TypeScript pipeline that turns more than 1,300 workouts into a private coaching system and a privacy-safe public dashboard.
 - [Signal](https://rohansingh04.com/projects/spotify-recommender): music discovery over the real Spotify catalog with explained picks and no login required.
 - [Shortlist](https://rohansingh04.com/projects/movie-recommender): pick up to five favorite movies and get a personal shortlist from a two-tower retriever over 87,585 titles. Its five-favorite flow reached 84.1% HitRate@10 and 0.331 Recall@100 on an untouched 7,060-user test.
-- [Health Recap](https://rohansingh04.com/projects/health-tracker-ios): native SwiftUI morning recap of sleep and movement with overlap-safe sleep math and 11 domain tests.
+- [Today](https://rohansingh04.com/projects/health-tracker-ios): native SwiftUI iPhone app for morning weight, gym logging, and the day's coach plan, with AES-256-GCM sync and 59 tests. It grew out of an earlier Health Recap sleep-and-movement app, which now lives in its Insights tab.
 - [Parking Shark](https://rohansingh04.com/projects/parking-shark): peer-to-peer parking marketplace built on a 13-table MySQL model with conflict-safe reservations.
 - [Personal Site](https://rohansingh04.com/projects/personal-site): this site, built with Next.js 16 and TypeScript, pulling live Spotify, GitHub, and fitness data.
 
@@ -15,6 +15,7 @@
 
 - [My marathon coach is a chat window](https://rohansingh04.com/notes/llm-marathon-coach): how he built a training system where an LLM writes the plans, a pipeline computes the numbers, and code keeps everyone honest.
 - [How this site is built, and who builds it](https://rohansingh04.com/notes/how-this-site-is-built): the stack, the design rules, the test suite that guards the truth, and the honest role AI agents play in maintaining it.
+- [Waze, but for when the artist actually comes out](https://rohansingh04.com/notes/waze-for-concerts): a parked idea for crowdsourced live stage times at concerts, and why distribution makes it a feature rather than a company.
 
 ## Pages
 

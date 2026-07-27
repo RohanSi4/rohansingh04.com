@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { getRunningDashboard, sanitizeTrainingPlan } from "@/lib/running";
@@ -5,6 +6,12 @@ import { setRunningDashboardKV } from "@/lib/kv-data";
 import type { RunningDashboard } from "@/lib/running";
 
 const MAX_SNAPSHOT_BYTES = 1_500_000;
+
+function matchesBearer(received: string, token: string): boolean {
+  const left = Buffer.from(received, "utf8");
+  const right = Buffer.from(`Bearer ${token}`, "utf8");
+  return left.length === right.length && timingSafeEqual(left, right);
+}
 
 function authorized(req: NextRequest): boolean {
   const auth = req.headers.get("authorization") ?? "";
@@ -14,7 +21,7 @@ function authorized(req: NextRequest): boolean {
     process.env.CRON_SECRET,
   ]
     .filter((token): token is string => Boolean(token))
-    .some((token) => auth === `Bearer ${token}`);
+    .some((token) => matchesBearer(auth, token));
 }
 
 function isDashboard(value: unknown): value is RunningDashboard {

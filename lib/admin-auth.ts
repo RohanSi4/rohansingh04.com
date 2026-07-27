@@ -1,4 +1,4 @@
-import { createHmac } from "crypto";
+import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 
 const COOKIE_NAME = "admin_token";
@@ -20,6 +20,21 @@ export function createAdminToken(): string {
   return Buffer.from(`${ts}:${sig}`).toString("base64url");
 }
 
+/** Length-safe constant-time compare, so we never leak a secret byte by byte. */
+export function safeEqual(a: string, b: string): boolean {
+  const left = Buffer.from(a, "utf8");
+  const right = Buffer.from(b, "utf8");
+  return left.length === right.length && timingSafeEqual(left, right);
+}
+
+/** Constant-time check of a submitted admin password against the configured one. */
+export function passwordMatches(submitted: unknown): boolean {
+  const expected = process.env.ADMIN_PASSWORD;
+  if (!expected) return false;
+  if (typeof submitted !== "string" || submitted.length === 0) return false;
+  return safeEqual(submitted, expected);
+}
+
 export function verifyAdminToken(token: string): boolean {
   try {
     const decoded = Buffer.from(token, "base64url").toString();
@@ -27,8 +42,10 @@ export function verifyAdminToken(token: string): boolean {
     if (colonIdx === -1) return false;
     const ts = decoded.slice(0, colonIdx);
     const sig = decoded.slice(colonIdx + 1);
-    if (Date.now() - parseInt(ts) > MAX_AGE_MS) return false;
-    return sign(ts) === sig;
+    const issuedAt = Number.parseInt(ts, 10);
+    if (!Number.isFinite(issuedAt)) return false;
+    if (Date.now() - issuedAt > MAX_AGE_MS) return false;
+    return safeEqual(sign(ts), sig);
   } catch {
     return false;
   }

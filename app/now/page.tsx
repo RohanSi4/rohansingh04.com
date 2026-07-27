@@ -13,6 +13,11 @@ export const metadata = pageMetadata({
 
 const STALE_DAYS = 90;
 
+// This page is otherwise fully static, which would freeze `daysSince` at build
+// time and stop the stale banner from ever firing. Re-render daily so the age
+// stays truthful even during a long gap between deploys.
+export const revalidate = 86400;
+
 export default async function NowPage() {
   const source = fs.readFileSync(
     path.join(process.cwd(), "content", "now.mdx"),

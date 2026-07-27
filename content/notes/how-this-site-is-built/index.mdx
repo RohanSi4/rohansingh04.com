@@ -17,7 +17,7 @@ CSS-first config. Type is Fraunces for headings, Geist for body, JetBrains
 Mono for data and labels. The globe on the [travel page](/globe) is React
 Three Fiber. Hosting is Vercel.
 
-The live parts pull from real sources through 15 API routes: Spotify for what
+The live parts pull from real sources through 16 API routes: Spotify for what
 I am playing, GitHub for what I am shipping, Apple Health data posted by an
 iOS Shortcut into Vercel KV, and a training payload published by my
 [marathon pipeline](/projects/marathon-prep-bot). Everything else is flat
@@ -36,7 +36,7 @@ what I made, the page is wrong.
 The part I actually recommend copying: the test suite protects facts, not
 just code.
 
-Unit tests cover the data and parsing layers, 61 at last count. Content
+Unit tests cover the data and parsing layers, 68 at last count. Content
 integrity tests fail the build if a screenshot goes missing, an internal
 route breaks, or a project's proof points drift from what the repos can back
 up. Playwright drives the real built site and runs axe accessibility checks

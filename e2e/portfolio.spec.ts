@@ -41,6 +41,7 @@ test("featured projects show current proof and working calls to action", async (
   await page.goto("/projects/health-tracker-ios");
   await expect(page.getByText(/native app, encrypted sync, and public\/private data contract/)).toBeVisible();
   await expect(page.getByText(/700\+ exercise catalog/)).toBeVisible();
+  await expect(page.getByText(/59 tests/)).toBeVisible();
   await expect(page.getByRole("link", { name: /try it/i })).toHaveAttribute("href", "/fitness");
   await expect(page.getByRole("link", { name: /see the code/i })).toHaveAttribute(
     "href",
@@ -130,8 +131,12 @@ test("fitness keeps the weekly plan compact until the expanded view is opened", 
 
   await expandedView.click();
   await expect(page.getByText("full week", { exact: true })).toBeVisible();
-  await expect(page.getByText("Bring cold water.", { exact: true })).toBeVisible();
-  await expect(page.getByText("Take gels around 35, 70, and 100 minutes.", { exact: true })).toBeVisible();
+  // Assert the structure, not the coaching prose. The plan is rewritten every
+  // week and renders from live KV when it is reachable, so any hardcoded note
+  // string rots immediately and only passed when KV was absent.
+  const expandedDays = page.locator("details ol > li");
+  await expect(expandedDays).toHaveCount(7);
+  await expect(expandedDays.first()).toBeVisible();
 
   const hasOverflow = await page.evaluate(
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth,

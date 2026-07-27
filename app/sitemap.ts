@@ -5,7 +5,13 @@ import { getAllNotes } from "@/lib/notes";
 const base = "https://rohansingh04.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const contentUpdated = new Date("2026-07-17");
+  // Floor date for pages that are not note-driven. The newest note always wins,
+  // so publishing a note refreshes the site-wide lastModified without a manual edit.
+  const notes = getAllNotes();
+  const contentFloor = "2026-07-26";
+  const contentUpdated = new Date(
+    notes[0]?.date && notes[0].date > contentFloor ? notes[0].date : contentFloor,
+  );
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: base, lastModified: contentUpdated, changeFrequency: "weekly", priority: 1 },
     { url: `${base}/fitness`, lastModified: contentUpdated, changeFrequency: "daily", priority: 0.9 },
@@ -26,7 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: project.featured ? 0.8 : 0.6,
   }));
 
-  const noteRoutes: MetadataRoute.Sitemap = getAllNotes().map((note) => ({
+  const noteRoutes: MetadataRoute.Sitemap = notes.map((note) => ({
     url: `${base}/notes/${note.slug}`,
     lastModified: new Date(note.date),
     changeFrequency: "monthly",
