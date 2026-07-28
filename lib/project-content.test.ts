@@ -143,4 +143,29 @@ describe("project portfolio content", () => {
     }
     expect(meta.githubUrl, "Marathon code must remain private").toBeNull();
   });
+
+  // The numbers on the Today card drifted badly before this existed: it showed
+  // "700+ exercises" and "38 native tests" while the same page's proof list said
+  // 252 and 173. Both are hand-written in different files, so nothing connected
+  // them and the build stayed green with the page contradicting itself.
+  it("keeps the Today visual card agreeing with its own proof points", () => {
+    const card = fs.readFileSync(
+      path.join(root, "components", "projects", "ProjectFeatureCard.tsx"),
+      "utf8",
+    );
+    const health = card.slice(card.indexOf("function HealthVisual"));
+    const proof = projectMeta("health-tracker-ios").proofPoints.join(" ");
+
+    const exercises = health.match(/\["(\d+)",\s*"hand-mapped exercises"\]/);
+    const tests = health.match(/\["(\d+)",\s*"native tests"\]/);
+    expect(exercises, "Today card lost its exercise count").not.toBeNull();
+    expect(tests, "Today card lost its test count").not.toBeNull();
+
+    expect(proof, "card exercise count is not in the proof points").toContain(
+      `${exercises![1]} hand-mapped exercises`,
+    );
+    expect(proof, "card test count is not in the proof points").toContain(
+      `${tests![1]} tests`,
+    );
+  });
 });

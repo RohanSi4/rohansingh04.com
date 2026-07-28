@@ -8,7 +8,7 @@
   "proofPoints": [
     "252 hand-mapped exercises with per-brand machine variants, prior-set defaults, flexible splits, and detailed muscle mapping",
     "AES-256-GCM coach sync, Keychain credentials, protected recovery, and consent-scoped public stats",
-    "HealthKit, WorkoutKit, App Intents, and 59 tests: 52 unit cases across persistence, security, plans, and mobility, plus 7 UI flows"
+    "HealthKit, WorkoutKit, App Intents, and 173 tests: 165 unit cases across persistence, security, plans, and mobility, plus 8 UI flows"
   ],
   "visual": "health",
   "tags": ["swiftui", "healthkit", "workoutkit", "security"],

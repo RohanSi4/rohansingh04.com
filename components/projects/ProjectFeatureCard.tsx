@@ -83,9 +83,9 @@ function MusicVisual() {
 
 function HealthVisual() {
   const facts = [
-    ["700+", "exercises"],
+    ["252", "hand-mapped exercises"],
     ["AES-256", "encrypted sync"],
-    ["38", "native tests"],
+    ["173", "native tests"],
   ];
   return (
     <div className="absolute inset-0 overflow-hidden bg-[#11291e]" aria-hidden="true">
