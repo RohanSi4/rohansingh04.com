@@ -6,7 +6,7 @@
   "outcome": "A signed iPhone app now links HealthKit, WorkoutKit, encrypted coach sync, and the live fitness dashboard without creating a second workout record.",
   "role": "Designed and built the native app, encrypted sync, and public/private data contract",
   "proofPoints": [
-    "700+ exercise catalog, prior-set defaults, flexible splits, and detailed muscle mapping",
+    "252 hand-mapped exercises with per-brand machine variants, prior-set defaults, flexible splits, and detailed muscle mapping",
     "AES-256-GCM coach sync, Keychain credentials, protected recovery, and consent-scoped public stats",
     "HealthKit, WorkoutKit, App Intents, and 59 tests: 52 unit cases across persistence, security, plans, and mobility, plus 7 UI flows"
   ],
