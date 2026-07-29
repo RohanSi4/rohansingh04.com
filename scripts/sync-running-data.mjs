@@ -377,7 +377,12 @@ function safePlanDetails(value) {
     .filter((detail) => typeof detail === "string")
     .map((detail) => detail.replace(/\*\*/g, "").replace(/\s+/g, " ").trim())
     .filter((detail) => detail.length > 0 && detail.length <= 180 && !forbidden.test(detail))
-    .slice(0, 6);
+    // THIRD copy of this cap, and the one that actually bit: it runs locally at
+    // publish time, so raising the other two (marathon-prep-bot's
+    // lib/public-plan.ts and lib/running.ts here) changed nothing — the seventh
+    // detail was already gone before the payload was ever POSTed. All three
+    // move together. See the duplication note in conciseTrainingPlan.
+    .slice(0, 7);
 }
 
 function conciseTrainingPlan(plan) {
