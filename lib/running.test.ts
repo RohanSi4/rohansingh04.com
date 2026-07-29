@@ -9,6 +9,8 @@ import {
   mergeLiveHealth,
   mergeLiveRuns,
   sanitizePlanDetails,
+  formatDuration,
+  type PublicBenchmark,
 } from "./running";
 
 describe("running dashboard snapshot", () => {
@@ -177,4 +179,29 @@ it("keeps all seven instructions of a fully specified long run", () => {
   ]);
   expect(details).toHaveLength(7);
   expect(details).toContain("Take a gel around 40 minutes.");
+});
+
+// Benchmarks reach the page as structured facts only. The coach's own labels carry
+// the reasoning ("maximal, positive split", HR readings, the cramp note) and must
+// never travel, which is why there is no text field here to scrub.
+it("publishes a benchmark as a shape with no free-text field", () => {
+  const benchmark: PublicBenchmark = {
+    date: "2026-07-29",
+    distanceName: "5K",
+    distanceMi: 3.11,
+    timeSeconds: 1264,
+    paceSecondsPerMile: 407,
+    kind: "time trial",
+    effort: "maximal",
+  };
+  expect(Object.keys(benchmark).sort()).toEqual([
+    "date", "distanceMi", "distanceName", "effort", "kind", "paceSecondsPerMile", "timeSeconds",
+  ]);
+  expect(formatDuration(benchmark.timeSeconds)).toBe("21:04");
+});
+
+it("formats a benchmark over an hour with hours, and under one without", () => {
+  expect(formatDuration(7204)).toBe("2:00:04");
+  expect(formatDuration(1264)).toBe("21:04");
+  expect(formatDuration(59)).toBe("0:59");
 });

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
+  formatDuration,
   formatPace,
   formatRunDate,
   fitnessTimeZone,
@@ -94,6 +95,7 @@ export default async function FitnessPage() {
   const combinedActivities = [...data.health.recentActivities, ...todayStrengthActivities]
     .sort((a, b) => b.date.localeCompare(a.date));
   const healthWithToday = { ...data.health, recentActivities: combinedActivities };
+  const benchmarks = data.benchmarks ?? [];
 
   return (
     <div className={styles.page}>
@@ -225,44 +227,48 @@ export default async function FitnessPage() {
         <MarathonMilestones weeks={data.weeks} trainingStart={data.race.trainingStart} />
       </section>
 
-      <section className={styles.aerobicSection} aria-labelledby="latest-title">
-        <div className={styles.aerobicCopy}>
-          <p>05 / latest long run</p>
-          <h2 id="latest-title">My latest long run.</h2>
-          <p>
-            This is the latest long run in the data. I&apos;m watching distance, pace,
-            and heart rate to see how the build is going without turning every run
-            into a test.
-          </p>
-          <div className={styles.aerobicRules}>
-            <div><span>distance</span><strong>{featuredRun.distanceMi.toFixed(1)} mi</strong></div>
-            <div><span>average heart rate</span><strong>{featuredRun.averageHeartRate ?? "n/a"} bpm</strong></div>
-            <div><span>time moving</span><strong>{featuredRun.movingMinutes} min</strong></div>
+      {benchmarks.length > 0 ? (
+        <section className={styles.section} aria-labelledby="benchmarks-title">
+          <div className={styles.sectionHeading}>
+            <div>
+              <p>05 / benchmarks</p>
+              <h2 id="benchmarks-title">What the clock says.</h2>
+            </div>
+            <p className={styles.sectionNote}>
+              Every training pace is keyed to these, not to a guess. A real timed effort
+              beats anything a model infers, so they get measured rather than estimated.
+            </p>
           </div>
-        </div>
-        <div className={styles.latestRunCard}>
-          <div className={styles.latestRunHeader}>
-            <span>long run</span>
-            <span>{formatRunDate(featuredRun.date, true)}</span>
-          </div>
-          <div className={styles.latestRunDistance}>
-            <strong>{featuredRun.distanceMi.toFixed(1)}</strong>
-            <span>miles</span>
-          </div>
-          <div className={styles.zoneBar} aria-hidden="true">
-            <span style={{ width: `${featuredRun.easyZonePct ?? 0}%` }} />
-          </div>
-          <div className={styles.latestRunStats}>
-            <div><span>pace</span><strong>{formatPace(featuredRun.paceSecondsPerMile)} /mi</strong></div>
-            <div><span>time</span><strong>{featuredRun.movingMinutes} min</strong></div>
-            <div><span>avg heart rate</span><strong>{featuredRun.averageHeartRate ?? "n/a"} bpm</strong></div>
-            <div><span>elevation</span><strong>{featuredRun.elevationFeet ?? "n/a"} ft</strong></div>
-          </div>
-          <p className={styles.runReadout}>
-            Conditions · {featuredRun.temperatureF ?? "n/a"}°F · {featuredRun.surface}
-          </p>
-        </div>
-      </section>
+          <ul className={styles.benchmarkGrid}>
+            {benchmarks.map((benchmark) => (
+              <li className={styles.benchmarkCard} key={`${benchmark.date}-${benchmark.distanceName}`}>
+                <div className={styles.benchmarkTop}>
+                  <span>{benchmark.distanceName}</span>
+                  <span>{benchmark.kind}</span>
+                </div>
+                <strong className={styles.benchmarkTime}>{formatDuration(benchmark.timeSeconds)}</strong>
+                <div className={styles.benchmarkStats}>
+                  <div><span>pace</span><strong>{formatPace(benchmark.paceSecondsPerMile)} /mi</strong></div>
+                  <div><span>effort</span><strong>{benchmark.effort}</strong></div>
+                  <div><span>date</span><strong>{formatRunDate(benchmark.date, true)}</strong></div>
+                </div>
+              </li>
+            ))}
+            <li className={`${styles.benchmarkCard} ${styles.benchmarkLongRun}`}>
+              <div className={styles.benchmarkTop}>
+                <span>longest run</span>
+                <span>this build</span>
+              </div>
+              <strong className={styles.benchmarkTime}>{data.totals.longestRunMiles.toFixed(1)} mi</strong>
+              <div className={styles.benchmarkStats}>
+                <div><span>latest long run</span><strong>{featuredRun.distanceMi.toFixed(1)} mi</strong></div>
+                <div><span>pace</span><strong>{formatPace(featuredRun.paceSecondsPerMile)} /mi</strong></div>
+                <div><span>avg heart rate</span><strong>{featuredRun.averageHeartRate ?? "n/a"} bpm</strong></div>
+              </div>
+            </li>
+          </ul>
+        </section>
+      ) : null}
 
       <section className={styles.section} aria-labelledby="activity-title">
         <div className={styles.sectionHeading}>
@@ -296,23 +302,6 @@ export default async function FitnessPage() {
           ))}
           </tbody>
         </table>
-      </section>
-
-      <section className={styles.pipeline} aria-labelledby="bigger-goal-title">
-        <div className={styles.pipelineIntro}>
-          <p>07 / the bigger goal</p>
-          <h2 id="bigger-goal-title">The marathon isn&apos;t the whole point.</h2>
-          <p>
-            I&apos;m focused on Richmond right now, but I don&apos;t want fitness to become
-            one race. I want enough endurance and strength to play sports, hike, try
-            new things, and feel good doing it.
-          </p>
-        </div>
-        <ol className={styles.pipelineSteps}>
-          <li><span>01</span><div><strong>run</strong><p>Keep enough endurance to enjoy distance, races, and being outside.</p></div></li>
-          <li><span>02</span><div><strong>lift</strong><p>Stay strong, durable, and balanced instead of only chasing mileage.</p></div></li>
-          <li><span>03</span><div><strong>play</strong><p>Basketball, golf, hikes, or whatever sounds fun with friends.</p></div></li>
-        </ol>
       </section>
 
       <section className={`${styles.pipeline} ${styles.pipelineSingle}`} aria-labelledby="template-title">

@@ -403,6 +403,55 @@ function conciseTrainingPlan(plan) {
   };
 }
 
+// The coach sends benchmarks as structured facts only — no labels, no notes, no free
+// text of any kind — so this validates shape and drops anything that does not fit,
+// rather than trying to scrub prose that should never have been on the wire.
+const BENCHMARK_KINDS = new Set(["time trial", "race", "solo effort"]);
+const BENCHMARK_EFFORTS = new Set(["maximal", "submaximal"]);
+
+function safeBenchmarks(value) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((entry) => entry && typeof entry === "object")
+    .filter((entry) =>
+      /^\d{4}-\d{2}-\d{2}$/.test(entry.date)
+      && typeof entry.distanceName === "string" && entry.distanceName.length <= 24
+      && Number.isFinite(entry.distanceMi) && entry.distanceMi > 0
+      && Number.isFinite(entry.timeSeconds) && entry.timeSeconds > 0
+      && Number.isFinite(entry.paceSecondsPerMile) && entry.paceSecondsPerMile > 0
+      && BENCHMARK_KINDS.has(entry.kind)
+      && BENCHMARK_EFFORTS.has(entry.effort))
+    .map((entry) => ({
+      date: entry.date,
+      distanceName: entry.distanceName,
+      distanceMi: entry.distanceMi,
+      timeSeconds: Math.round(entry.timeSeconds),
+      paceSecondsPerMile: Math.round(entry.paceSecondsPerMile),
+      kind: entry.kind,
+      effort: entry.effort,
+    }))
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 4);
+}
+
+async function runningBenchmarks() {
+  if (process.env.RUNNING_DASHBOARD_BENCHMARKS) {
+    try {
+      return safeBenchmarks(JSON.parse(process.env.RUNNING_DASHBOARD_BENCHMARKS));
+    } catch {
+      return [];
+    }
+  }
+  // Same fallback shape as the plan: a publish that does not carry benchmarks must
+  // not silently wipe the ones already live.
+  try {
+    const previous = JSON.parse(await readFile(outputPath, "utf8"));
+    return safeBenchmarks(previous.benchmarks);
+  } catch {
+    return [];
+  }
+}
+
 async function runningPlan() {
   if (process.env.RUNNING_DASHBOARD_PLAN) {
     try {
@@ -563,6 +612,7 @@ async function main() {
   const currentWeekStart = mondayFor(today);
   const currentWeek = weeks.find((week) => week.weekStart === currentWeekStart) ?? weeks.at(-1);
   const trainingPlan = await runningPlan();
+  const benchmarks = await runningBenchmarks();
 
   const snapshot = {
     schemaVersion: 2,
@@ -591,6 +641,7 @@ async function main() {
     yearlyHistory,
     recentRuns,
     trainingPlan,
+    benchmarks,
     health: buildHealthSummary(activities, sourceGeneratedAt),
   };
 

@@ -34,6 +34,21 @@ export type PublicRun = {
   easyZonePct: number | null;
 };
 
+/**
+ * A measured effort the training paces are keyed to. Every field is a structured
+ * fact derived by the coach from its own benchmark table — no label, no note, no
+ * free text — so there is nothing here that needs scrubbing before it renders.
+ */
+export type PublicBenchmark = {
+  date: string;
+  distanceName: string;
+  distanceMi: number;
+  timeSeconds: number;
+  paceSecondsPerMile: number;
+  kind: "time trial" | "race" | "solo effort";
+  effort: "maximal" | "submaximal";
+};
+
 export type PublicPlanDay = {
   date: string;
   dayLabel: string;
@@ -133,8 +148,22 @@ export type RunningDashboard = {
   yearlyHistory: RunningYear[];
   recentRuns: PublicRun[];
   trainingPlan: PublicTrainingPlan | null;
+  /** Optional: snapshots published before benchmarks existed do not carry it. */
+  benchmarks?: PublicBenchmark[];
   health: HealthSummary;
 };
+
+/** h:mm:ss for anything an hour or longer, m:ss below that. */
+export function formatDuration(totalSeconds: number): string {
+  const rounded = Math.max(0, Math.round(totalSeconds));
+  const hours = Math.floor(rounded / 3600);
+  const minutes = Math.floor((rounded % 3600) / 60);
+  const seconds = rounded % 60;
+  const pad = (value: number) => value.toString().padStart(2, "0");
+  return hours > 0
+    ? `${hours}:${pad(minutes)}:${pad(seconds)}`
+    : `${minutes}:${pad(seconds)}`;
+}
 
 export function getStaticRunningDashboard(): RunningDashboard {
   const dashboard = snapshot as unknown as RunningDashboard;

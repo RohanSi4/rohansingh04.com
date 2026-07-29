@@ -44,9 +44,7 @@
 .raceCardTop,
 .raceCardBottom,
 .sectionHeading > div > p,
-.aerobicCopy > p:first-child,
 .pipelineIntro > p:first-child,
-.latestRunHeader,
 .chartFooter,
 .runTableHead,
 .dataFooter {
@@ -153,9 +151,7 @@
 }
 
 .goalStrip span,
-.metric p,
-.latestRunStats span,
-.aerobicRules span {
+.metric p {
   color: var(--muted);
   font-size: 0.65rem;
   text-transform: uppercase;
@@ -934,7 +930,6 @@
 }
 
 .sectionHeading > div > p,
-.aerobicCopy > p:first-child,
 .pipelineIntro > p:first-child {
   margin-bottom: 0.8rem;
   color: var(--run-orange);
@@ -942,7 +937,6 @@
 }
 
 .sectionHeading h2,
-.aerobicCopy h2,
 .pipelineIntro h2 {
   font-family: var(--font-fraunces), serif;
   font-size: clamp(2.4rem, 5vw, 4.2rem);
@@ -1152,15 +1146,6 @@
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--run-orange) 14%, transparent);
 }
 
-.aerobicSection {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(380px, 1.1fr);
-  gap: clamp(2rem, 7vw, 7rem);
-  align-items: center;
-  padding: clamp(5rem, 11vw, 9rem) clamp(0rem, 3vw, 2rem);
-}
-
-.aerobicCopy > p:not(:first-child),
 .pipelineIntro > p:not(:first-child) {
   max-width: 34rem;
   margin-top: 1.5rem;
@@ -1168,92 +1153,73 @@
   line-height: 1.75;
 }
 
-.aerobicRules {
+/* Benchmarks. Same ink-card language as the long-run feature this replaced, but as a
+   compact grid of equals: these are peers, and the page is shorter for showing them
+   side by side instead of giving one effort a full two-column section. */
+.benchmarkGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.25rem;
   margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
+  padding: 0;
+  list-style: none;
 }
 
-.aerobicRules div,
-.latestRunStats div {
+.benchmarkCard {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-}
-
-.aerobicRules strong,
-.latestRunStats strong {
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 0.82rem;
-  font-weight: 500;
-}
-
-.latestRunCard {
-  padding: clamp(1.5rem, 4vw, 2.5rem);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
   border-radius: 1.2rem;
   background: var(--run-ink);
   color: var(--run-cream);
-  box-shadow: 1.5rem 1.5rem 0 color-mix(in srgb, var(--accent) 13%, transparent);
+  box-shadow: 0.75rem 0.75rem 0 color-mix(in srgb, var(--accent) 13%, transparent);
 }
 
-.latestRunHeader {
+/* The long run is context, not a timed benchmark, so it reads as a quieter card. */
+.benchmarkLongRun {
+  background: color-mix(in srgb, var(--run-ink) 82%, var(--run-cream));
+}
+
+.benchmarkTop {
   display: flex;
   justify-content: space-between;
-  color: color-mix(in srgb, var(--run-cream) 60%, transparent);
-  font-size: 0.61rem;
-}
-
-.latestRunDistance {
-  display: flex;
-  align-items: baseline;
   gap: 0.75rem;
-  margin-top: 2.5rem;
+  color: color-mix(in srgb, var(--run-cream) 60%, transparent);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.61rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
-.latestRunDistance strong {
+.benchmarkTime {
+  margin-top: 1.5rem;
   color: var(--run-orange);
   font-family: var(--font-jetbrains-mono), monospace;
-  font-size: clamp(4rem, 9vw, 7rem);
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
   font-weight: 500;
-  letter-spacing: -0.09em;
-  line-height: 0.85;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
 }
 
-.latestRunDistance span {
-  font-family: var(--font-fraunces), serif;
-  font-size: 1.2rem;
-  font-style: italic;
-}
-
-.zoneBar {
-  height: 0.55rem;
-  margin-top: 2rem;
-  overflow: hidden;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--run-cream) 13%, transparent);
-}
-
-.zoneBar span { display: block; height: 100%; border-radius: inherit; background: var(--run-orange); }
-
-.latestRunStats {
+.benchmarkStats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: 0.55rem;
+  margin-top: auto;
+  padding-top: 1.5rem;
+  font-size: 0.72rem;
 }
 
-.latestRunStats span { color: color-mix(in srgb, var(--run-cream) 55%, transparent); }
+.benchmarkStats div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
 
-.runReadout {
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid color-mix(in srgb, var(--run-cream) 14%, transparent);
-  color: color-mix(in srgb, var(--run-cream) 60%, transparent);
+.benchmarkStats span { color: color-mix(in srgb, var(--run-cream) 55%, transparent); }
+
+.benchmarkStats strong {
   font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 0.65rem;
+  font-weight: 500;
 }
 
 .runTable {
@@ -1527,21 +1493,6 @@
   max-width: 62ch;
 }
 
-.pipelineSteps { counter-reset: pipeline; }
-
-.pipelineSteps li {
-  display: grid;
-  grid-template-columns: 2.25rem 1fr;
-  gap: 1rem;
-  padding: 1.2rem 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.pipelineSteps li:last-child { border: 0; }
-.pipelineSteps li > span { color: var(--run-orange); font-family: var(--font-jetbrains-mono), monospace; font-size: 0.68rem; }
-.pipelineSteps strong { display: block; margin-bottom: 0.3rem; font-family: var(--font-jetbrains-mono), monospace; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
-.pipelineSteps p { color: var(--muted); font-size: 0.82rem; line-height: 1.5; }
-
 .dataFooter {
   display: flex;
   justify-content: space-between;
@@ -1561,8 +1512,11 @@
   .raceCard { min-height: 430px; }
   .raceDistance { margin-top: 2rem; }
   .metrics { grid-template-columns: repeat(2, 1fr); }
-  .todayHeading, .todayGrid, .sectionHeading, .aerobicSection, .pipeline, .milestones { grid-template-columns: 1fr; }
-  .aerobicSection { gap: 3rem; }
+.todayHeading,
+.todayGrid,
+.sectionHeading,
+.pipeline,
+.milestones { grid-template-columns: 1fr; }
   .pipeline { gap: 2rem; }
   .milestoneTrack {
     min-width: 0;
@@ -1638,10 +1592,6 @@
   .chartActions { width: 100%; align-items: flex-start; }
   .legend { width: 100%; }
   .chartFooter { flex-direction: column; }
-  .aerobicSection { padding-inline: 0.5rem; }
-  .aerobicRules { grid-template-columns: 1fr 1fr; }
-  .latestRunCard { box-shadow: 0.65rem 0.65rem 0 color-mix(in srgb, var(--accent) 13%, transparent); }
-  .latestRunStats { grid-template-columns: repeat(2, 1fr); }
   .runTable { border-radius: 0.8rem; }
   .runTableHead { display: none; }
   .runRow { grid-template-columns: 0.75fr 1.1fr 0.9fr 0.8fr; gap: 0.6rem; min-height: 4.5rem; padding: 0.75rem 1rem; }
