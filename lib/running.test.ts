@@ -161,3 +161,20 @@ describe("running formatters", () => {
     expect(fitnessTimeZone(new Date("2026-08-30T12:00:00Z"))).toBe("America/New_York");
   });
 });
+
+// Two independent 6-caps (here and in the coach's lib/public-plan.ts) meant a
+// seven-instruction long run silently lost its fueling line on arrival, even
+// after the upstream cap was raised. They have to move together.
+it("keeps all seven instructions of a fully specified long run", () => {
+  const details = sanitizePlanDetails([
+    "Keep the long run conversational, with heart rate at or below 148 bpm.",
+    "Target 10:00 to 10:30 per mile.",
+    "Run outdoors in the morning.",
+    "Do 4 x 20 second relaxed strides, with full walk recovery. Hold cadence around 180 on them.",
+    "Complete upper body lift #2.",
+    "Bring cold water.",
+    "Take a gel around 40 minutes.",
+  ]);
+  expect(details).toHaveLength(7);
+  expect(details).toContain("Take a gel around 40 minutes.");
+});

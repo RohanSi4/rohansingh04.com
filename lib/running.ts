@@ -75,7 +75,11 @@ export function sanitizePlanDetails(value: unknown): string[] {
     .filter((detail): detail is string => typeof detail === "string")
     .map((detail) => detail.replace(/\*\*/g, "").replace(/\s+/g, " ").trim())
     .filter((detail) => detail.length > 0 && detail.length <= 180 && !forbidden.test(detail))
-    .slice(0, 6);
+    // Must stay in sync with the coach's own cap in marathon-prep-bot
+    // lib/public-plan.ts. Two independent 6-caps meant raising only the
+    // upstream one changed nothing: a seven-instruction long run still lost
+    // its fueling line here, silently, on arrival.
+    .slice(0, 7);
 }
 
 export function sanitizeTrainingPlan(plan: PublicTrainingPlan | null): PublicTrainingPlan | null {
