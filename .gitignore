@@ -43,3 +43,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# Claude Code local settings (machine-specific; the audit backup holds credentials)
+.claude/settings.local.json
+.claude/*.bak-*
