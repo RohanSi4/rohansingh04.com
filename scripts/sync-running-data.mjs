@@ -5,6 +5,7 @@ import { readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
+import { MAX_PLAN_DETAILS, MAX_PLAN_DETAIL_LENGTH } from "../lib/plan-limits.mjs";
 
 const MILES_PER_METER = 0.000621371;
 const FEET_PER_METER = 3.28084;
@@ -376,13 +377,9 @@ function safePlanDetails(value) {
   return value
     .filter((detail) => typeof detail === "string")
     .map((detail) => detail.replace(/\*\*/g, "").replace(/\s+/g, " ").trim())
-    .filter((detail) => detail.length > 0 && detail.length <= 180 && !forbidden.test(detail))
-    // THIRD copy of this cap, and the one that actually bit: it runs locally at
-    // publish time, so raising the other two (marathon-prep-bot's
-    // lib/public-plan.ts and lib/running.ts here) changed nothing — the seventh
-    // detail was already gone before the payload was ever POSTed. All three
-    // move together. See the duplication note in conciseTrainingPlan.
-    .slice(0, 7);
+    .filter((detail) =>
+      detail.length > 0 && detail.length <= MAX_PLAN_DETAIL_LENGTH && !forbidden.test(detail))
+    .slice(0, MAX_PLAN_DETAILS);
 }
 
 function conciseTrainingPlan(plan) {

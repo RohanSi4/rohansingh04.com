@@ -1,4 +1,5 @@
 import snapshot from "@/content/running-dashboard.json";
+import { MAX_PLAN_DETAILS, MAX_PLAN_DETAIL_LENGTH } from "./plan-limits.mjs";
 import { getHealthKV, getRunningDashboardKV } from "./kv-data";
 import {
   genericActivityName,
@@ -89,12 +90,9 @@ export function sanitizePlanDetails(value: unknown): string[] {
   return value
     .filter((detail): detail is string => typeof detail === "string")
     .map((detail) => detail.replace(/\*\*/g, "").replace(/\s+/g, " ").trim())
-    .filter((detail) => detail.length > 0 && detail.length <= 180 && !forbidden.test(detail))
-    // Must stay in sync with the coach's own cap in marathon-prep-bot
-    // lib/public-plan.ts. Two independent 6-caps meant raising only the
-    // upstream one changed nothing: a seven-instruction long run still lost
-    // its fueling line here, silently, on arrival.
-    .slice(0, 7);
+    .filter((detail) =>
+      detail.length > 0 && detail.length <= MAX_PLAN_DETAIL_LENGTH && !forbidden.test(detail))
+    .slice(0, MAX_PLAN_DETAILS);
 }
 
 export function sanitizeTrainingPlan(plan: PublicTrainingPlan | null): PublicTrainingPlan | null {
