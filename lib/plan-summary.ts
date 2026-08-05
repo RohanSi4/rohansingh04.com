@@ -39,6 +39,16 @@ export function summarizePlanDayText(value: string): string {
   if (upper.test(supportText) && !includesSkippedTask(supportText, upper)) tasks.push("upper body lift");
   if (lower.test(supportText) && !includesSkippedTask(supportText, lower)) tasks.push("lower body lift");
   if (/\bcircuit\b/i.test(supportText) && !includesSkippedTask(supportText, /\bcircuit\b/i)) tasks.push("circuit");
+  // Swimming entered the plan 2026-08-05. Both this file and
+  // scripts/sync-running-data.mjs re-derive the summary from the coach text, so a
+  // vocabulary gap HERE silently deletes a task the coach already published
+  // correctly - which is exactly what happened to the first swim day. The
+  // negation check is adjacency-based on purpose: the swim prescription itself
+  // says "no hard sets", and a clause-level test would negate every swim.
+  const swimRe = /\bswim(?:ming)?\b/i;
+  const swimNegated = /\bno\s+swim(?:ming)?/i.test(supportText);
+  if (swimRe.test(supportText) && !includesSkippedTask(supportText, swimRe) && !swimNegated) tasks.push("swim");
+
 
   if (!runWasSkipped) {
     const hasWalk = /\bwalk(?:ing)?\b/i.test(supportText);
