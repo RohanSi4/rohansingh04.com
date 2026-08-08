@@ -44,6 +44,11 @@ describe("private fitness sync contract", () => {
     expect(parseEncryptedFitnessBatch(batch)).toEqual(batch);
   });
 
+  it("accepts authenticated schema 2 envelopes during the phone migration", () => {
+    const upgraded = { ...batch, schemaVersion: 2 as const };
+    expect(parseEncryptedFitnessBatch(upgraded)).toEqual(upgraded);
+  });
+
   it("rejects private fields leaking through the public summary", () => {
     const unsafe = structuredClone(batch) as unknown as Record<string, unknown>;
     const summaries = unsafe.publicStrength as Array<Record<string, unknown>>;
