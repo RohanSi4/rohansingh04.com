@@ -1,4 +1,5 @@
-export const FITNESS_SYNC_SCHEMA_VERSION = 1 as const;
+export const FITNESS_SYNC_SCHEMA_VERSIONS = [1, 2] as const;
+export type FitnessSyncSchemaVersion = (typeof FITNESS_SYNC_SCHEMA_VERSIONS)[number];
 
 export const strengthKinds = [
   "upper",
@@ -33,7 +34,7 @@ export type PublicWeightTrend = {
 };
 
 export type EncryptedFitnessBatch = {
-  schemaVersion: typeof FITNESS_SYNC_SCHEMA_VERSION;
+  schemaVersion: FitnessSyncSchemaVersion;
   batchId: string;
   deviceId: string;
   createdAt: string;
@@ -144,7 +145,9 @@ function isPublicWeightTrend(value: unknown): value is PublicWeightTrend {
 }
 
 export function parseEncryptedFitnessBatch(value: unknown): EncryptedFitnessBatch | null {
-  if (!isRecord(value) || value.schemaVersion !== FITNESS_SYNC_SCHEMA_VERSION) return null;
+  if (!isRecord(value)
+    || !FITNESS_SYNC_SCHEMA_VERSIONS.includes(value.schemaVersion as FitnessSyncSchemaVersion)
+  ) return null;
   if (!hasOnlyKeys(value, [
     "schemaVersion",
     "batchId",

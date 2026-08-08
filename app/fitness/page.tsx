@@ -15,7 +15,7 @@ import TrainingHistoryChart from "./TrainingHistoryChart";
 import { WeeklyPlan } from "./WeeklyPlan";
 import styles from "./fitness.module.css";
 import { socialImage } from "@/lib/metadata";
-import { getPublicStrengthKV, getPublicWeightKV } from "@/lib/kv-data";
+import { getPublicStrengthKV } from "@/lib/kv-data";
 import { strengthWeekSummary } from "@/lib/fitness-sync";
 import { StrengthSnapshot } from "./StrengthSnapshot";
 
@@ -54,10 +54,9 @@ function daysBetween(start: string, end: string): number {
 }
 
 export default async function FitnessPage() {
-  const [data, strength, weight] = await Promise.all([
+  const [data, strength] = await Promise.all([
     getRunningDashboard(),
     getPublicStrengthKV(),
-    getPublicWeightKV(),
   ]);
   const latestRun = data.recentRuns[0];
   const featuredRun = data.recentRuns.find(
@@ -199,7 +198,6 @@ export default async function FitnessPage() {
 
       <StrengthSnapshot
         sessions={strength}
-        weight={weight}
         weekStart={data.currentWeek.weekStart}
         today={today}
       />

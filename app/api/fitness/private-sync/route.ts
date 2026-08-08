@@ -33,6 +33,9 @@ export async function POST(req: NextRequest) {
   if (!matchesBearer(req, process.env.FITNESS_SYNC_WRITE_TOKEN)) {
     return noStore({ error: "unauthorized" }, { status: 401 });
   }
+  if (!(req.headers.get("content-type") ?? "").toLowerCase().startsWith("application/json")) {
+    return noStore({ error: "content type must be application/json" }, { status: 415 });
+  }
   const declaredSize = Number(req.headers.get("content-length") ?? 0);
   if (declaredSize > MAX_REQUEST_BYTES) {
     return noStore({ error: "batch too large" }, { status: 413 });
@@ -55,10 +58,20 @@ export async function POST(req: NextRequest) {
     return noStore({ error: "fitness sync timestamp outside allowed window" }, { status: 400 });
   }
 
-  const accepted = await setPrivateFitnessBatchIfNewer(batch);
+  // Older phone builds may still include this retired plaintext field. Strip it
+  // before persistence so exact body weight only exists inside the encrypted
+  // payload, even during the migration window.
+  const { publicWeight: _retiredPublicWeight, ...privateBatch } = batch;
+
+  // Keep retirement cleanup outside the acceptance branch. If an earlier
+  // request stored the private batch but failed while deleting this legacy
+  // key, an idempotent retry must still remove the exposed value. Run the
+  // deletion before any new private state is committed so failures stay safe
+  // to retry.
+  await setPublicWeightKV(null);
+  const accepted = await setPrivateFitnessBatchIfNewer(privateBatch);
   if (accepted) {
     await setPublicStrengthKV(batch.publicStrength);
-    await setPublicWeightKV(batch.publicWeight ?? null);
     revalidatePath("/fitness");
   }
   return noStore({
