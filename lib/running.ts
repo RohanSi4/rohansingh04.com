@@ -70,10 +70,28 @@ export type PublicTrainingPlan = {
   completions?: Record<string, string[]> | null;
 };
 
+// Days before weekStart that the coach may legitimately send. When next week's plan
+// is written before that week starts, the coach BRIDGES the remaining days of the
+// current week so the app still has an entry for TODAY. A hard `date < weekStart`
+// clip discarded them: on 2026-08-09 the Aug 10-16 plan went live with no card for
+// Aug 9, so his phone showed nothing for today — the same silent outage the coach's
+// bridging logic exists to prevent, recreated on this side of the wire.
+//
+// This constant is duplicated in scripts/sync-running-data.mjs, which applies the
+// same window before POSTing. plan-summary-parity.test.ts pins them together.
+export const MAX_PLAN_BRIDGE_DAYS = 7;
+
+function shiftDate(date: string, days: number): string {
+  const value = new Date(`${date}T12:00:00Z`);
+  value.setUTCDate(value.getUTCDate() + days);
+  return value.toISOString().slice(0, 10);
+}
+
 export function getPlanWeekDays(plan: PublicTrainingPlan): PublicPlanDay[] {
   const uniqueDays = new Map<string, PublicPlanDay>();
+  const earliest = plan.weekStart ? shiftDate(plan.weekStart, -MAX_PLAN_BRIDGE_DAYS) : null;
   for (const day of plan.days) {
-    if (plan.weekStart && day.date < plan.weekStart) continue;
+    if (earliest && day.date < earliest) continue;
     if (plan.weekEnd && day.date > plan.weekEnd) continue;
     uniqueDays.set(day.date, {
       ...day,

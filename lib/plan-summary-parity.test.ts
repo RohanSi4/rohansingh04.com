@@ -62,3 +62,39 @@ describe("the two plan summarizers", () => {
     }
   });
 });
+
+// ─── The bridge window must match on both sides of the wire ──────────────────
+// When next week's plan is written before that week begins, the coach BRIDGES the
+// remaining days of the current week so the app still has a card for today. Both
+// copies clipped anything before weekStart, so on 2026-08-09 the Aug 10-16 plan
+// published with no Aug 9 entry and his phone showed nothing for today. Fixing one
+// copy alone changes nothing: the script clips before POSTing and lib/running.ts
+// clips again on read, so the stricter of the two always wins.
+describe("plan bridge window", () => {
+  it("is the same constant in the exporter script and lib/running.ts", async () => {
+    const { MAX_PLAN_BRIDGE_DAYS } = await import("./running");
+    const scriptValue = mjs.match(/MAX_BRIDGE_DAYS\s*=\s*(\d+)/)?.[1];
+    expect(scriptValue, "the exporter must define MAX_BRIDGE_DAYS").toBeDefined();
+    expect(Number(scriptValue)).toBe(MAX_PLAN_BRIDGE_DAYS);
+  });
+
+  it("neither copy still hard-clips at weekStart", () => {
+    expect(mjs).not.toMatch(/day\.date\s*<\s*plan\.weekStart/);
+  });
+
+  it("keeps a bridged day and still drops a genuinely stale one", async () => {
+    const { getPlanWeekDays } = await import("./running");
+    const day = (date: string) => ({ date, dayLabel: date, text: "Easy 4mi", isKeyDay: false, details: [] });
+    const days = getPlanWeekDays({
+      heading: "Weekly fitness plan",
+      weekStart: "2026-08-10",
+      weekEnd: "2026-08-16",
+      prescribedMiles: 38,
+      days: [day("2026-07-01"), day("2026-08-09"), day("2026-08-10"), day("2026-08-17")],
+    });
+    const dates = days.map((d) => d.date);
+    expect(dates).toContain("2026-08-09");  // the bridge
+    expect(dates).not.toContain("2026-07-01"); // stale
+    expect(dates).not.toContain("2026-08-17"); // past weekEnd
+  });
+});

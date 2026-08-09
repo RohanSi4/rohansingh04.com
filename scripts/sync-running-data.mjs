@@ -392,10 +392,21 @@ function safePlanDetails(value) {
     .slice(0, MAX_PLAN_DETAILS);
 }
 
+// How many days before weekStart the coach may legitimately send. When next week's
+// plan is written before that week begins, the coach BRIDGES the remaining days of
+// the current week so the app still has an entry for today. A hard `date <
+// weekStart` clip threw those away, so on 2026-08-09 the plan for Aug 10-16
+// published with no card for Aug 9 at all — the athlete's phone showed nothing for
+// today. That is the same silent outage the bridging logic was written to prevent,
+// recreated on this side of the wire. The window still rejects genuinely stale
+// dates; it just stops treating a deliberate bridge as garbage.
+const MAX_BRIDGE_DAYS = 7;
+
 function conciseTrainingPlan(plan) {
   const days = new Map();
+  const earliest = plan.weekStart ? addDays(plan.weekStart, -MAX_BRIDGE_DAYS) : null;
   for (const day of plan.days) {
-    if (plan.weekStart && day.date < plan.weekStart) continue;
+    if (earliest && day.date < earliest) continue;
     if (plan.weekEnd && day.date > plan.weekEnd) continue;
     days.set(day.date, {
       ...day,
