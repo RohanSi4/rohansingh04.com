@@ -85,7 +85,7 @@ function HealthVisual() {
   const facts = [
     ["255", "hand-mapped exercises"],
     ["AES-256", "encrypted sync"],
-    ["217", "native tests"],
+    ["unit + UI", "automated checks"],
   ];
   return (
     <div className="absolute inset-0 overflow-hidden bg-[#11291e]" aria-hidden="true">

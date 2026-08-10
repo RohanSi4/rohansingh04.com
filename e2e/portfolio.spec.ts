@@ -4,9 +4,9 @@ import path from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-// Read the counts rather than repeating them. Hardcoding "700+ exercise
-// catalog" and "59 tests" here meant every honest correction to those numbers
-// broke CI, so the suite failed on the commit that made the page MORE accurate.
+// Read durable proof from project metadata rather than repeating it. The exercise
+// catalog is a product fact; suite counts are intentionally omitted because they
+// change whenever coverage grows.
 const todayProof: string = JSON.parse(
   fs.readFileSync(
     path.join(process.cwd(), "content", "projects", "health-tracker-ios", "meta.json"),
@@ -60,7 +60,7 @@ test("featured projects show current proof and working calls to action", async (
   await page.goto("/projects/health-tracker-ios");
   await expect(page.getByText(/native app, encrypted sync, and public\/private data contract/)).toBeVisible();
   await expect(page.getByText(proofNumber(/\d+ hand-mapped exercises/)).first()).toBeVisible();
-  await expect(page.getByText(proofNumber(/\d+ tests/)).first()).toBeVisible();
+  await expect(page.getByText(/unit and UI automation/i).first()).toBeVisible();
   await expect(page.getByRole("link", { name: /try it/i })).toHaveAttribute("href", "/fitness");
   await expect(page.getByRole("link", { name: /see the code/i })).toHaveAttribute(
     "href",

@@ -8,7 +8,7 @@
   "proofPoints": [
     "More than 1,300 workouts processed across history going back to 2022",
     "AES-256-GCM sync joins private iPhone logs with HealthFit without giving the website the decryption key",
-    "236 tests plus live plan validation protect the data and every seven-day publish"
+    "Automated validation covers the data pipeline and every seven-day plan publish"
   ],
   "visual": "fitness",
   "tags": ["typescript", "data", "security", "fitness"],
