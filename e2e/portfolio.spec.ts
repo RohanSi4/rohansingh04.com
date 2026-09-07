@@ -55,6 +55,7 @@ test("current bio reflects the return to Charlottesville after Expedia", async (
   await expect(page.getByText("Charlottesville, VA").first()).toBeVisible();
   await expect(page.getByText("CS student at UVA")).toBeVisible();
   await expect(page.getByText(/back in Charlottesville after a summer/)).toBeVisible();
+  await expect(page.getByText(/graduating December 2026/)).toBeVisible();
 
   await page.goto("/history");
   await expect(page.getByText("jun 2026 - aug 2026")).toBeVisible();

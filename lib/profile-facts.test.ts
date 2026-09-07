@@ -16,7 +16,7 @@ describe("current profile facts", () => {
     expect(site.currentLocation).toBe("Charlottesville, VA");
     expect(site.currentChapter).toBe("fall 2026");
     expect(site.currentRole).toEqual({ title: "CS student", org: "UVA" });
-    expect(site.graduationDate).toBe("2027-05");
+    expect(site.graduationDate).toBe("2026-12");
   });
 
   it("keeps Expedia completed while preserving San Jose as historical context", () => {

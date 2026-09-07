@@ -23,7 +23,7 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-5 pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© {year} Rohan Singh · UVA computer science · graduating May 2027</p>
+          <p>© {year} Rohan Singh · UVA computer science · graduating December 2026</p>
           <nav aria-label="Footer links" className="flex flex-wrap items-center gap-x-5 gap-y-3">
             <a href="mailto:rohan.singh04@outlook.com" className="inline-flex min-h-11 items-center transition-colors hover:text-fg">
               email

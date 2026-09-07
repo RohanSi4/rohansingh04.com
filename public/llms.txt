@@ -1,6 +1,6 @@
 # Rohan Singh
 
-> Personal site of Rohan Singh, a computer science student at the University of Virginia (BSCS, Data Science minor, May 2027) and former machine learning engineering intern at Expedia Group. He builds data pipelines, ML-backed products, and tools he actually uses.
+> Personal site of Rohan Singh, a computer science student at the University of Virginia (BSCS, Data Science minor, December 2026) and former machine learning engineering intern at Expedia Group. He builds data pipelines, ML-backed products, and tools he actually uses.
 
 ## Projects
 
