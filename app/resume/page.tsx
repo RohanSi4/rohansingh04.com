@@ -93,7 +93,7 @@ export default function ResumePage() {
             >
               download PDF <span aria-hidden="true">↓</span>
             </a>
-            <p className="font-mono text-[10px] text-muted">PDF updated July 2026</p>
+            <p className="font-mono text-[10px] text-muted">PDF updated September 2026</p>
           </div>
         </div>
 

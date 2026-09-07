@@ -5,7 +5,7 @@
   { "code": "AR", "name": "Arkansas", "visited": false, "photos": [], "cities": [], "visitedDate": null },
   {
     "code": "CA", "name": "California", "visited": true,
-    "notes": "spending summer 2026 in San Jose", "photos": [], "cities": ["San Jose"], "visitedDate": "2026-06"
+    "notes": "summer 2026 in San Jose", "photos": [], "cities": ["San Jose"], "visitedDate": "2026-06"
   },
   {
     "code": "CO", "name": "Colorado", "visited": true,

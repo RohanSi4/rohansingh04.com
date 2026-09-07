@@ -11,18 +11,18 @@ import { socialImage } from "@/lib/metadata";
 export const metadata: Metadata = {
   title: { absolute: "Rohan Singh: projects, running, and more" },
   description:
-    "I'm Rohan, a UVA computer science student and machine learning engineer intern at Expedia. I build recommender systems and the data pipelines behind them, usually for things I already care about: running, movies, music.",
+    "I'm Rohan, a UVA computer science student and former machine learning engineering intern at Expedia. I build recommender systems and the data pipelines behind them, usually for things I already care about: running, movies, music.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "Rohan Singh: projects, running, and more",
-    description: "UVA CS student and ML engineer intern at Expedia, building recommender systems and the pipelines behind them.",
+    description: "UVA CS student and former Expedia ML engineering intern, building recommender systems and the pipelines behind them.",
     url: "/",
     images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
     title: "Rohan Singh: projects, running, and more",
-    description: "UVA CS student and ML engineer intern at Expedia, building recommender systems and the pipelines behind them.",
+    description: "UVA CS student and former Expedia ML engineering intern, building recommender systems and the pipelines behind them.",
     images: [socialImage],
   },
 };
@@ -57,11 +57,7 @@ export default async function HomePage() {
       "https://github.com/RohanSi4",
       "https://linkedin.com/in/rohansingh4",
     ],
-    jobTitle: "Machine Learning Engineer Intern",
-    worksFor: {
-      "@type": "Organization",
-      name: "Expedia Group",
-    },
+    jobTitle: "Computer Science Student",
     affiliation: {
       "@type": "CollegeOrUniversity",
       name: "University of Virginia",
@@ -82,8 +78,8 @@ export default async function HomePage() {
             I like making things I actually want to use.
           </h1>
           <p className="mt-7 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-            I&apos;m a computer science student at UVA, spending this summer in San Jose
-            working on machine learning at Expedia. Most of my projects start with
+            I&apos;m a computer science student at UVA, back in Charlottesville after a
+            summer working on machine learning at Expedia. Most of my projects start with
             something I&apos;m already into: running, movies, music, or a problem that keeps
             bugging me.
           </p>
@@ -104,7 +100,7 @@ export default async function HomePage() {
               </div>
               <div className="border-t border-border bg-bg p-4 sm:border-t-0">
                 <dt className="text-xs text-muted">{site.currentChapter}</dt>
-                <dd className="mt-1 text-sm font-medium text-fg">ML at {site.currentRole.org}</dd>
+                <dd className="mt-1 text-sm font-medium text-fg">{site.currentRole.title} at {site.currentRole.org}</dd>
               </div>
               <div className="border-t border-border bg-bg p-4 sm:border-t-0">
                 <dt className="text-xs text-muted">training for</dt>
