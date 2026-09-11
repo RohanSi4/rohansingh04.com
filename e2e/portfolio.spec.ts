@@ -14,6 +14,15 @@ const todayProof: string = JSON.parse(
   ),
 ).proofPoints.join(" ");
 
+const marathonProof: string = JSON.parse(
+  fs.readFileSync(
+    path.join(process.cwd(), "content", "projects", "marathon-prep-bot", "meta.json"),
+    "utf8",
+  ),
+).proofPoints.join(" ");
+const archiveCount = marathonProof.match(/More than ([\d,]+) workouts/)?.[1];
+if (!archiveCount) throw new Error("Marathon metadata must include the archive workout count");
+
 function proofNumber(pattern: RegExp): string {
   const match = todayProof.match(pattern);
   if (!match) throw new Error(`meta.json proof points no longer contain ${pattern}`);
@@ -64,7 +73,7 @@ test("current bio reflects the return to Charlottesville after Expedia", async (
 test("featured projects show current proof and working calls to action", async ({ page }) => {
   await page.goto("/projects/marathon-prep-bot");
   await expect(page.getByText("Solo builder and the runner using it every week")).toBeVisible();
-  await expect(page.getByText("1,300+", { exact: true })).toBeVisible();
+  await expect(page.getByText(`${archiveCount}+`, { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: /try it/i })).toHaveAttribute("href", "/fitness");
   await expect(page.getByText(/working code stays private/i)).toBeVisible();
 

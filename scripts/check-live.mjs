@@ -1,3 +1,5 @@
+import { pathToFileURL } from "node:url";
+
 const site = "https://rohansingh04.com";
 // The model service behind Shortlist. Every recommendation on that demo depends on
 // it, and it lives off-Vercel, so nothing else in this file would notice it dying.
@@ -5,10 +7,12 @@ const shortlistApi = "https://moviereccomendersystem-uxol.onrender.com";
 const forbiddenCopy = /72[- ]?(tracks?|songs?)|demo catalog|offline demo|synthetic demo/i;
 const jsonMode = process.argv.includes("--json");
 
-const checks = [
+export const checks = [
   { url: `${site}/`, includes: ["Today", "quick morning weight"] },
   { url: `${site}/projects`, includes: ["Marathon Prep Bot", "Shortlist", "Today"] },
-  { url: `${site}/projects/marathon-prep-bot`, includes: ["More than 1,300 workouts", "From a workout to a useful week"] },
+  // Check project identity and its working integration, not changing archive
+  // counts or marketing headings. Editorial changes are not downtime.
+  { url: `${site}/projects/marathon-prep-bot`, includes: ["Marathon Prep Bot", "HealthFit", "/fitness"] },
   { url: `${site}/projects/health-tracker-ios`, includes: ["255 hand-mapped exercises", "what becomes live on the site"] },
   { url: `${site}/projects/spotify-recommender`, includes: ["Spotify's real catalog", "five invited listeners"] },
   { url: `${site}/resume`, includes: ["selected projects", "Marathon Prep Bot", "Today"] },
@@ -74,7 +78,7 @@ async function fetchWithRetry(url, attempts = 3, options = {}) {
   throw lastError;
 }
 
-async function runCheck(check) {
+export async function runCheck(check) {
   const response = await fetchWithRetry(check.url, check.attempts ?? 3, {
     timeoutMs: check.timeoutMs,
     method: check.method,
@@ -99,24 +103,30 @@ async function runCheck(check) {
   return response;
 }
 
-if (jsonMode) {
-  const results = [];
-  for (const check of checks) {
-    try {
-      const response = await runCheck(check);
-      results.push({ url: check.url, ok: true, status: response.status });
-    } catch (error) {
-      const status = typeof error?.liveCheckStatus === "number" ? error.liveCheckStatus : null;
-      results.push({ url: check.url, ok: false, status });
-      console.error(`fail ${check.url}: ${error?.message ?? error}`);
+async function main() {
+  if (jsonMode) {
+    const results = [];
+    for (const check of checks) {
+      try {
+        const response = await runCheck(check);
+        results.push({ url: check.url, ok: true, status: response.status });
+      } catch (error) {
+        const status = typeof error?.liveCheckStatus === "number" ? error.liveCheckStatus : null;
+        results.push({ url: check.url, ok: false, status });
+        console.error(`fail ${check.url}: ${error?.message ?? error}`);
+      }
     }
+    console.log(JSON.stringify({ generatedAt: new Date().toISOString(), results }, null, 2));
+    process.exitCode = results.every((result) => result.ok) ? 0 : 1;
+  } else {
+    for (const check of checks) {
+      const response = await runCheck(check);
+      console.log(`ok ${response.status} ${check.url}`);
+    }
+    console.log(`live check passed for ${checks.length} URLs`);
   }
-  console.log(JSON.stringify({ generatedAt: new Date().toISOString(), results }, null, 2));
-  process.exitCode = results.every((result) => result.ok) ? 0 : 1;
-} else {
-  for (const check of checks) {
-    const response = await runCheck(check);
-    console.log(`ok ${response.status} ${check.url}`);
-  }
-  console.log(`live check passed for ${checks.length} URLs`);
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  await main();
 }
