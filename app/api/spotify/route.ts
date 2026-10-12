@@ -154,7 +154,10 @@ export async function GET() {
     return NextResponse.json(await getNowPlaying(), {
       headers: { "Cache-Control": RESPONSE_CACHE_CONTROL },
     });
-  } catch {
+  } catch (error) {
+    // Without this a revoked refresh token was indistinguishable from an outage:
+    // the 503 body is deliberately generic, so the reason has to reach the logs.
+    console.error("[spotify]", error instanceof Error ? error.message : error);
     return NextResponse.json(
       { error: "spotify unavailable" },
       { status: 503, headers: { "Cache-Control": "no-store" } },
