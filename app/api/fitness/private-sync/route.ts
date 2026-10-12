@@ -5,8 +5,6 @@ import { isFitnessBatchFresh, parseEncryptedFitnessBatch } from "@/lib/fitness-s
 import {
   getPrivateFitnessBatches,
   setPrivateFitnessBatchIfNewer,
-  setPublicStrengthKV,
-  setPublicWeightKV,
 } from "@/lib/kv-data";
 
 export const runtime = "nodejs";
@@ -58,21 +56,14 @@ export async function POST(req: NextRequest) {
     return noStore({ error: "fitness sync timestamp outside allowed window" }, { status: 400 });
   }
 
-  // Older phone builds may still include this retired plaintext field. Strip it
-  // before persistence so exact body weight only exists inside the encrypted
-  // payload, even during the migration window.
-  const { publicWeight: _retiredPublicWeight, ...privateBatch } = batch;
-
-  // Keep retirement cleanup outside the acceptance branch. If an earlier
-  // request stored the private batch but failed while deleting this legacy
-  // key, an idempotent retry must still remove the exposed value. Run the
-  // deletion before any new private state is committed so failures stay safe
-  // to retry.
-  await setPublicWeightKV(null);
-  const accepted = await setPrivateFitnessBatchIfNewer(privateBatch);
-  if (accepted) {
-    await setPublicStrengthKV(batch.publicStrength);
+  let accepted: boolean;
+  try {
+    accepted = await setPrivateFitnessBatchIfNewer(batch);
+    // Retry invalidation even for duplicate uploads: the prior attempt may have
+    // committed successfully before cache invalidation failed.
     revalidatePath("/fitness");
+  } catch {
+    return noStore({ error: "fitness sync unavailable; retry upload" }, { status: 503 });
   }
   return noStore({
     ok: true,

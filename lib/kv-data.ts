@@ -6,11 +6,11 @@ import statesJson from "../content/states.json";
 import { addSeedPhotos } from "./travel";
 import {
   normalizePublicStrengthSessions,
-  shouldAcceptFitnessBatch,
   type EncryptedFitnessBatch,
   type PublicStrengthSession,
   type PublicWeightTrend,
 } from "./fitness-sync";
+import { commitFitnessBatch } from "./fitness-storage";
 
 const PLACE_PHOTO_SEED_KEY = "places:photo-seed:v1";
 const PRIVATE_FITNESS_BATCH_KEY = "fitness:private:latest:v1";
@@ -88,10 +88,7 @@ export async function setBestStreakKV(n: number): Promise<void> {
 export async function setPrivateFitnessBatchIfNewer(
   batch: EncryptedFitnessBatch,
 ): Promise<boolean> {
-  const current = await kv.get<EncryptedFitnessBatch>(PRIVATE_FITNESS_BATCH_KEY);
-  if (!shouldAcceptFitnessBatch(batch, current)) return false;
-  await kv.set(PRIVATE_FITNESS_BATCH_KEY, batch);
-  return true;
+  return commitFitnessBatch(kv, batch);
 }
 
 export async function getPrivateFitnessBatches(_limit = 1): Promise<EncryptedFitnessBatch[]> {

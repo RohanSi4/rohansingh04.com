@@ -44,6 +44,11 @@ Spotify API ──────────┘
 
 Requirements: Node.js 20+ and pnpm.
 
+The fitness storage integration tests use an isolated Redis Unix socket, with
+network listening and persistence disabled. Install Redis (`brew install redis`
+on macOS) to run them locally. They are required in CI and skipped locally when
+Redis is unavailable; they never connect to the production database.
+
 ~~~bash
 pnpm install
 cp .env.example .env.local
