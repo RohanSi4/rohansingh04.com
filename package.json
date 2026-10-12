@@ -22,7 +22,7 @@
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.6.1",
     "@vercel/kv": "^3.0.0",
-    "next": "16.3.4",
+    "next": "16.3.8",
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
@@ -45,7 +45,9 @@
   "pnpm": {
     "overrides": {
       "postcss": "^8.5.23",
-      "undici": "^6.28.0",
+      "sharp": "^0.35.5",
+      "source-map-js": "^1.2.2",
+      "undici": "^6.28.1",
       "vite": "^8.2.1"
     }
   }
