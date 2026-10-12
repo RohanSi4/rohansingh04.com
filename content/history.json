@@ -10,11 +10,11 @@
     "summary": "Real-time incentive decisioning, causal measurement, and ML serving for the OneKey loyalty program on the Membership & Engagement team.",
     "bullets": [
       "Built a FastAPI prototype for OneKey, a 100M+ member rewards program, with live profiles and safe fallbacks",
-      "Proved a +0.95pp booking lift in a placebo-clean study of 321k members, then replicated the dollar-lift result",
+      "Measured the program's first randomized causal readout on a live holdout: +6.6% relative booking lift at p<0.001",
       "Designed a typed reward API adopted by two sibling services, isolating clients from model changes",
       "Defined a 27-field train/serve contract from 112 model features and verified live intent-data backfill",
-      "Replay-tested 500k records across a 100-test suite, catching eligibility, timeout, and schema failures before demo",
-      "Queried 12.9M daily Trino rows to validate assignment and derive leakage-safe booking and redemption features"
+      "Replay-tested the reward decision path, catching eligibility, timeout, and schema failures before demo",
+      "Validated experiment assignment and derived leakage-safe booking and redemption features with Trino SQL"
     ]
   },
   {
