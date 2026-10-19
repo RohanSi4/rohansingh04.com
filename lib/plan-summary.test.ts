@@ -26,6 +26,11 @@ describe("public plan summaries", () => {
     )).toBe("rest");
   });
 
+  it("keeps a run with no stated distance as a run, not rest", () => {
+    expect(summarizePlanDayText("run")).toBe("run");
+    expect(summarizePlanDayText("run + lower body lift")).toBe("run + lower body lift");
+  });
+
   it("keeps rest-day work concise", () => {
     expect(summarizePlanDayText("Rest + LOWER #2 + circuit")).toBe(
       "rest + lower body lift + circuit",

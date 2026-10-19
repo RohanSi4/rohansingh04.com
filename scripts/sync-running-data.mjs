@@ -369,6 +369,9 @@ function concisePlanDayText(value) {
     tasks.push(`${optional ? "optional " : ""}${planMilesLabel(run[1])} mile run`);
   } else if (/\brest\b/i.test(text) || runWasSkipped) {
     tasks.push("rest");
+  } else if (/\b(?:run|running)\b/i.test(supportText)) {
+    // Mirrors lib/plan-summary.ts: a bare "run" is a run, not the "rest" default.
+    tasks.push("run");
   }
 
   const upper = /\b(?:UPPER\s*#[12]|upper body lift)\b/i;
