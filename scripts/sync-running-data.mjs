@@ -371,7 +371,9 @@ function concisePlanDayText(value) {
     tasks.push("rest");
   } else if (/\b(?:run|running)\b/i.test(supportText)) {
     // Mirrors lib/plan-summary.ts: a bare "run" is a run, not the "rest" default.
-    tasks.push("run");
+    const bareRun = supportText.match(/\b(?:run|running)\b/i);
+    const optional = /\boptional\b/i.test(supportText.slice(0, bareRun?.index ?? 0));
+    tasks.push(`${optional ? "optional " : ""}run`);
   }
 
   const upper = /\b(?:UPPER\s*#[12]|upper body lift)\b/i;

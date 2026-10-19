@@ -36,7 +36,9 @@ export function summarizePlanDayText(value: string): string {
     // The coach publishes a bare "run" when it cannot tell which number is the
     // session total. Falling through to the "rest" default turned the Oct 22 2026
     // goal-pace session into a rest day on the live page.
-    tasks.push("run");
+    const bareRun = supportText.match(/\b(?:run|running)\b/i);
+    const optional = /\boptional\b/i.test(supportText.slice(0, bareRun?.index ?? 0));
+    tasks.push(`${optional ? "optional " : ""}run`);
   }
 
   const upper = /\b(?:UPPER\s*#[12]|upper body lift)\b/i;
