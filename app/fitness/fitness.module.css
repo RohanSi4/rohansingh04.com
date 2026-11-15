@@ -132,6 +132,12 @@
   line-height: 1.7;
 }
 
+.heroIntro a {
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .goalStrip {
   position: relative;
   z-index: 1;
@@ -244,6 +250,13 @@
   font-size: 0.67rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+}
+
+/* After race day the ring closes and holds the chip time, which is three times as
+   many digits as a day count, so it drops a size to stay inside the ring. */
+.countdownFinished strong {
+  font-size: 1.35rem;
+  letter-spacing: -0.03em;
 }
 
 .raceCardBottom {
