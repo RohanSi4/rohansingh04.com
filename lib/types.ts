@@ -93,6 +93,19 @@ export type HistoryEntry = {
   bullets?: string[];
 };
 
+// races.json entry shape: finished races, newest first on /fitness
+export type RaceResult = {
+  id: string;
+  name: string;
+  date: string; // YYYY-MM-DD
+  location: string;
+  distance: string;
+  chipTime: string; // official chip time, H:MM:SS
+  goalTime: string | null;
+  summary: string;
+  noteSlug: string | null; // race recap in content/notes
+};
+
 // places.json entry shape
 export type Place = {
   id: string;

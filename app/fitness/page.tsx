@@ -9,6 +9,7 @@ import {
 } from "@/lib/running";
 import { FitnessMetric } from "./FitnessMetric";
 import { MarathonMilestones } from "./MarathonMilestones";
+import { RaceResults } from "./RaceResults";
 import { SyncStatus } from "./SyncStatus";
 import { TodayPlan } from "./TodayPlan";
 import TrainingHistoryChart from "./TrainingHistoryChart";
@@ -16,6 +17,7 @@ import { WeeklyPlan } from "./WeeklyPlan";
 import styles from "./fitness.module.css";
 import { socialImage } from "@/lib/metadata";
 import { getPublicStrengthKV } from "@/lib/kv-data";
+import { getRaces } from "@/lib/content";
 import { strengthWeekSummary } from "@/lib/fitness-sync";
 import { StrengthSnapshot } from "./StrengthSnapshot";
 
@@ -95,6 +97,7 @@ export default async function FitnessPage() {
     .sort((a, b) => b.date.localeCompare(a.date));
   const healthWithToday = { ...data.health, recentActivities: combinedActivities };
   const benchmarks = data.benchmarks ?? [];
+  const races = getRaces();
 
   return (
     <div className={styles.page}>
@@ -225,11 +228,13 @@ export default async function FitnessPage() {
         <MarathonMilestones weeks={data.weeks} trainingStart={data.race.trainingStart} />
       </section>
 
+      <RaceResults races={races} />
+
       {benchmarks.length > 0 ? (
         <section className={styles.section} aria-labelledby="benchmarks-title">
           <div className={styles.sectionHeading}>
             <div>
-              <p>05 / benchmarks</p>
+              <p>06 / benchmarks</p>
               <h2 id="benchmarks-title">What the clock says.</h2>
             </div>
             <p className={styles.sectionNote}>
@@ -271,7 +276,7 @@ export default async function FitnessPage() {
       <section className={styles.section} aria-labelledby="activity-title">
         <div className={styles.sectionHeading}>
           <div>
-            <p>06 / recent activity</p>
+            <p>07 / recent activity</p>
             <h2 id="activity-title">What I&apos;ve been doing.</h2>
           </div>
           <p className={styles.sectionNote}>
@@ -304,7 +309,7 @@ export default async function FitnessPage() {
 
       <section className={`${styles.pipeline} ${styles.pipelineSingle}`} aria-labelledby="template-title">
         <div className={styles.pipelineIntro}>
-          <p>07 / try it yourself</p>
+          <p>08 / try it yourself</p>
           <h2 id="template-title">Want to try the coach yourself?</h2>
           <p>
             This page runs on the same setup I use for my own training. I made a
