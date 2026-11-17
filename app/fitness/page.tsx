@@ -9,6 +9,8 @@ import {
 } from "@/lib/running";
 import { FitnessMetric } from "./FitnessMetric";
 import { MarathonMilestones } from "./MarathonMilestones";
+import { RaceResults } from "./RaceResults";
+import { raceStatus } from "./race-status";
 import { SyncStatus } from "./SyncStatus";
 import { TodayPlan } from "./TodayPlan";
 import TrainingHistoryChart from "./TrainingHistoryChart";
@@ -16,6 +18,7 @@ import { WeeklyPlan } from "./WeeklyPlan";
 import styles from "./fitness.module.css";
 import { socialImage } from "@/lib/metadata";
 import { getPublicStrengthKV } from "@/lib/kv-data";
+import { getRaces } from "@/lib/content";
 import { strengthWeekSummary } from "@/lib/fitness-sync";
 import { StrengthSnapshot } from "./StrengthSnapshot";
 
@@ -95,6 +98,10 @@ export default async function FitnessPage() {
     .sort((a, b) => b.date.localeCompare(a.date));
   const healthWithToday = { ...data.health, recentActivities: combinedActivities };
   const benchmarks = data.benchmarks ?? [];
+  const races = getRaces();
+  const status = raceStatus(today, data.race.date, races);
+  const finished = status.phase === "finished";
+  const result = status.phase === "finished" ? status.result : null;
 
   return (
     <div className={styles.page}>
@@ -105,43 +112,64 @@ export default async function FitnessPage() {
             <span className={styles.eyebrowRule} />
             <SyncStatus generatedAt={data.generatedAt} />
             <span className={styles.eyebrowRule} />
-            <span>current goal: richmond</span>
+            <span>{finished ? "last race: richmond" : "current goal: richmond"}</span>
           </div>
           <p className={styles.kicker}>running, lifting, and whatever gets me moving.</p>
           <h1>
-            Training for
+            {finished ? "Ran" : "Training for"}
             <br />
             <em>my first marathon.</em>
           </h1>
-          <p className={styles.heroIntro}>
-            Right now I&apos;m training for Richmond. After that, I still want to run,
-            lift, play pickup, and say yes when friends want to do something active.
-            This page is where I keep track of all of it.
-          </p>
+          {finished ? (
+            <p className={styles.heroIntro}>
+              Richmond is done{result ? `, ${result.chipTime} on the chip` : ""}. I still
+              want to run, lift, play pickup, and say yes when friends want to do
+              something active. This page is where I keep track of all of it.
+              {result?.noteSlug ? (
+                <>
+                  {" "}
+                  <Link href={`/notes/${result.noteSlug}`}>read the race recap →</Link>
+                </>
+              ) : null}
+            </p>
+          ) : (
+            <p className={styles.heroIntro}>
+              Right now I&apos;m training for Richmond. After that, I still want to run,
+              lift, play pickup, and say yes when friends want to do something active.
+              This page is where I keep track of all of it.
+            </p>
+          )}
           <div className={styles.goalStrip}>
             <div>
-              <span>current goal</span>
+              <span>{finished ? "last race" : "current goal"}</span>
               <strong>{data.race.name}</strong>
             </div>
             <div>
               <span>race day</span>
               <strong>{formatRunDate(data.race.date, true)}</strong>
             </div>
-            <div>
-              <span>time goal</span>
-              <strong>sub {data.race.goalTime.slice(0, 4)}</strong>
-            </div>
+            {result ? (
+              <div>
+                <span>chip time</span>
+                <strong>{result.chipTime}</strong>
+              </div>
+            ) : (
+              <div>
+                <span>time goal</span>
+                <strong>sub {data.race.goalTime.slice(0, 4)}</strong>
+              </div>
+            )}
           </div>
         </div>
 
-        <aside className={styles.raceCard} aria-label="Current fitness goal">
+        <aside className={styles.raceCard} aria-label={finished ? "Latest race result" : "Current fitness goal"}>
           <div className={styles.raceCardTop}>
-            <span>current focus</span>
+            <span>{finished ? "finished" : "current focus"}</span>
             <span>richmond, va</span>
           </div>
           <div className={styles.raceDistance}>26.2</div>
           <p className={styles.raceName}>{data.race.name}</p>
-          <div className={styles.countdown}>
+          <div className={finished ? `${styles.countdown} ${styles.countdownFinished}` : styles.countdown}>
             <svg viewBox="0 0 110 110" aria-hidden="true">
               <circle className={styles.ringTrack} cx="55" cy="55" r="46" />
               <circle
@@ -150,17 +178,24 @@ export default async function FitnessPage() {
                 cy="55"
                 r="46"
                 strokeDasharray={circumference}
-                strokeDashoffset={ringOffset}
+                strokeDashoffset={finished ? 0 : ringOffset}
               />
             </svg>
-            <div>
-              <strong>{daysToRace}</strong>
-              <span>days out</span>
-            </div>
+            {finished ? (
+              <div>
+                <strong>{result ? result.chipTime : "done"}</strong>
+                <span>{result ? "chip time" : "finished"}</span>
+              </div>
+            ) : (
+              <div>
+                <strong>{daysToRace}</strong>
+                <span>days out</span>
+              </div>
+            )}
           </div>
           <div className={styles.raceCardBottom}>
             <span>right now</span>
-            <strong>marathon training</strong>
+            <strong>{finished ? "between races" : "marathon training"}</strong>
           </div>
         </aside>
       </section>
@@ -225,11 +260,13 @@ export default async function FitnessPage() {
         <MarathonMilestones weeks={data.weeks} trainingStart={data.race.trainingStart} />
       </section>
 
+      <RaceResults races={races} />
+
       {benchmarks.length > 0 ? (
         <section className={styles.section} aria-labelledby="benchmarks-title">
           <div className={styles.sectionHeading}>
             <div>
-              <p>05 / benchmarks</p>
+              <p>06 / benchmarks</p>
               <h2 id="benchmarks-title">What the clock says.</h2>
             </div>
             <p className={styles.sectionNote}>
@@ -271,7 +308,7 @@ export default async function FitnessPage() {
       <section className={styles.section} aria-labelledby="activity-title">
         <div className={styles.sectionHeading}>
           <div>
-            <p>06 / recent activity</p>
+            <p>07 / recent activity</p>
             <h2 id="activity-title">What I&apos;ve been doing.</h2>
           </div>
           <p className={styles.sectionNote}>
@@ -304,7 +341,7 @@ export default async function FitnessPage() {
 
       <section className={`${styles.pipeline} ${styles.pipelineSingle}`} aria-labelledby="template-title">
         <div className={styles.pipelineIntro}>
-          <p>07 / try it yourself</p>
+          <p>08 / try it yourself</p>
           <h2 id="template-title">Want to try the coach yourself?</h2>
           <p>
             This page runs on the same setup I use for my own training. I made a

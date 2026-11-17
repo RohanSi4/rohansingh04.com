@@ -4,6 +4,7 @@ import type {
   HistoryEntry,
   Place,
   ProjectMeta,
+  RaceResult,
   SiteConfig,
   StateEntry,
 } from "./types";
@@ -21,6 +22,13 @@ export function getSiteConfig(): SiteConfig {
 
 export function getHistory(): HistoryEntry[] {
   return readJson<HistoryEntry[]>("history.json");
+}
+
+/** Finished races, newest first. */
+export function getRaces(): RaceResult[] {
+  return readJson<RaceResult[]>("races.json").sort((a, b) =>
+    b.date.localeCompare(a.date)
+  );
 }
 
 export async function getPlaces(): Promise<Place[]> {

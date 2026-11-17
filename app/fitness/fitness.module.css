@@ -132,6 +132,12 @@
   line-height: 1.7;
 }
 
+.heroIntro a {
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .goalStrip {
   position: relative;
   z-index: 1;
@@ -244,6 +250,13 @@
   font-size: 0.67rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+}
+
+/* After race day the ring closes and holds the chip time, which is three times as
+   many digits as a day count, so it drops a size to stay inside the ring. */
+.countdownFinished strong {
+  font-size: 1.35rem;
+  letter-spacing: -0.03em;
 }
 
 .raceCardBottom {
@@ -1221,6 +1234,37 @@
   font-family: var(--font-jetbrains-mono), monospace;
   font-weight: 500;
 }
+
+/* Race results borrow the benchmark card. auto-fill keeps the empty tracks, so one
+   finished race reads as a card instead of stretching into a full-width banner. */
+.raceResultGrid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+}
+
+.raceResultName {
+  margin-top: 1.25rem;
+  font-family: var(--font-fraunces), serif;
+  font-size: 1.2rem;
+  font-weight: 540;
+  letter-spacing: -0.02em;
+}
+
+.raceResultSummary {
+  margin-top: 0.6rem;
+  color: color-mix(in srgb, var(--run-cream) 72%, transparent);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.raceResultLink {
+  margin-top: 0.5rem;
+  color: var(--run-orange);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: color 150ms ease;
+}
+
+.raceResultLink:hover { color: var(--run-cream); }
 
 .runTable {
   display: block;
